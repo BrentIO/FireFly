@@ -62,6 +62,9 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { 
+                    text: 'Home Assistant'
+                  },
+                  { 
                     text: 'Troubleshooting'
                   },
                   {
@@ -107,6 +110,9 @@ export default defineConfig({
                 text: 'Documentation and Support',
                 collapsed: true,
                 items: [
+                  { 
+                    text: 'Home Assistant'
+                  },
                   { 
                     text: 'Troubleshooting'
                   },
