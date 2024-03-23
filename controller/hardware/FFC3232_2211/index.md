@@ -1,5 +1,8 @@
-# About
-Intended for rack-mounting solution, this controller model was a test bed for software development and manufacturing. 
+# FFC33232-2211
+
+## Description
+
+This controller model was a test bed for software development and manufacturing.
 
 **Status:** Unreleased
 
@@ -12,10 +15,12 @@ Intended for rack-mounting solution, this controller model was a test bed for so
 **Power Input**
 - Minimum: 10.5VDC
 - Recommended: 12VDC 3A
-- Maximum: 26VDC 
+- Maximum: 26VDC
+
+**Form Factor:** Rack Mount
 
 
-# I2C Addresses
+## I2C Addresses
 
 | Address | Usage | Notes |
 | ------- | ----- | ----- |
@@ -35,24 +40,24 @@ Intended for rack-mounting solution, this controller model was a test bed for so
 | 0x3C    | OLED Display | Variable, check display configuration |
 
 
-# Inputs
+## Inputs
 
 - 4 banks of 8-RJ45 connectors without LEDs
 - 9VDC output (one per bank of 8-RJ45 connectors) to pins 4 & 5
 
 
-# Outputs
+## Outputs
 
 - 16 double-stack 90 degree 5.08mm pluggable terminal block
 - 9VDC output pins 1 & 2
 
 
-# Network
+## Network
 
 Network connectivity is via Ethernet using a W5500 chipset featuring an RJ45 connector with status LEDs.
 
 
-# Bill of Materials
+## Bill of Materials
 
 Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
@@ -81,7 +86,14 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 | Power Supply: 9VDC                | Texas Instruments     | LM2940S-9.0/NOPB          | LCSC/JLCPCB       | C134005                           |                   | |
 
 
-# Known Issues and Defects
+## Reference Designs
+None
+
+## 3D Printed Parts
+None
+
+
+## Known Issues and Defects
 
 The following are known issues (and in some cases their improvements) with this hardware.
 - Inoperative Ethernet due to poor design and missing SCSn
