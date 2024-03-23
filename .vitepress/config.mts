@@ -85,7 +85,7 @@ export default defineConfig({
           },
           { 
             text: 'Client',
-            link: '/client/',
+            collapsed: false,
             items: [
               {
                 text: 'Hardware',
