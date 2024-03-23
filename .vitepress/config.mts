@@ -5,51 +5,125 @@ export default defineConfig({
   title: "Project FireFly",
   description: "Software-defined lighting",
   base: '/FireFly/',
+  cleanUrls: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' }
+      { 
+        text: 'Home', 
+        link: '/getting_started'
+      }
     ],
 
-    sidebar: [
+    sidebar:
       {
-        text: 'Getting Started', link: 'getting_started'
-      },
-      {
-        text: 'Hardware',
-        items: [
-          { text: 'Versions', link: '/hardware/' },
-          { text: 'Reference Designs (TODO)' },
-          { text: '3D Printed Cases (TODO)'},
-          { text: 'High Voltage Relays', link: '/hardware/relays'},
-
-        ]
-      },
-      {
-        text: 'Software',
-        items: [
-          { text: 'Hardware Registration and Configuration Firmware', link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Hardware-Registration-and-Configuration' },
-          { text: 'Controller Firmware', link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Controller' }
-        ]
-      },
-      {
-        text: 'Documentation and Support',
-        items: [
-          { text: 'Troubleshooting' },
-          { text: 'Abbreviations and Failure Reasons', link: '/support/abbreviations_and_failure_reasons' },
-          { text: 'OLED Screens' }
-        ]
-      },
-      {
-        text: 'Development Environment',
-        items: [
-          { text: 'IDE Configuration', link: '/ide_configuration' }
-        ]
-      },
-    ],
-
+        '/':[
+          { 
+            text: 'Controller',
+            collapsed: false,
+            link: '/controller/',
+            items: [
+              {
+                text: 'Hardware',
+                collapsed: true,
+                link: '/controller/hardware/',
+                items: [
+                  { 
+                    text: 'Versions',
+                    collapsed: true,
+                    items:[
+                      {
+                        text: 'FFC3232-2211',
+                        link: '/controller/hardware/FFC3232_2211/'
+                      },
+                    ]
+                  },
+                  {
+                    text: 'High Voltage Relays',
+                    link: '/controller/hardware/relays'
+                  },
+                ]
+              },
+              {
+                text: 'Software',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Hardware Registration and Configuration Firmware',
+                    link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Hardware-Registration-and-Configuration'
+                  },
+                  { text: 'Controller Firmware',
+                    link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Controller'
+                  }
+                ]
+              },
+              {
+                text: 'Documentation and Support',
+                collapsed: true,
+                items: [
+                  { 
+                    text: 'Troubleshooting'
+                  },
+                  {
+                    text: 'Abbreviations',
+                    link: '/controller/support/abbreviations'
+                  },
+                  {
+                    text: 'Failure Reason Codes',
+                    link: '/controller/support/failure_reason_codes'
+                  },
+                  {
+                    text: 'OLED Screens'
+                  }
+                ]
+              },
+              {
+                text: 'Development Environment',
+                link: '/controller/development_environment'
+              },
+            ]
+          },
+          { 
+            text: 'Client',
+            link: '/client/',
+            items: [
+              {
+                text: 'Hardware',
+                collapsed: true,
+                items: [
+                  { 
+                    text: 'Versions',
+                    collapsed: true,
+                    items:[]
+                  }
+                ]
+              },
+              {
+                text: 'Software',
+                collapsed: true,
+                items: []
+              },
+              {
+                text: 'Documentation and Support',
+                collapsed: true,
+                items: [
+                  { 
+                    text: 'Troubleshooting'
+                  },
+                ]
+              },
+              {
+                text: 'Development Environment'
+              },
+            ]
+          }
+        ],
+    },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/BrentIO/FireFly-Controller' }
+      {
+        icon: 'github',
+        link: 'https://github.com/BrentIO/FireFly-Controller'
+      }
     ]
   }
 })
