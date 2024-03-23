@@ -76,7 +76,8 @@ export default defineConfig({
                     link: '/controller/support/failure_reason_codes'
                   },
                   {
-                    text: 'OLED Screens'
+                    text: 'OLED Screens',
+                    link: '/controller/support/OLED_screens/'
                   }
                 ]
               },
