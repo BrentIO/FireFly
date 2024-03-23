@@ -1,17 +1,17 @@
-
+# Controller Development Environment
 This guide will explain how to install and configure VSCode for use with arduino-cli. It assumes the Arduino plug-in has already been installed in VSCode.
 
-# Installing and Configuring arduino-cli
+## Installing and Configuring arduino-cli
 
 Using arduino-cli is more flexible and reliable than the IDE.
 
-## Install Arduino CLI
+### Install Arduino CLI
 
 Instructions are available at https://arduino.github.io/arduino-cli/latest/. Essentially:
 `brew update`
 `brew install arduino-cli`
 
-## Post Installation
+### Post Installation
 
 Initialize the installation:
 `arduino-cli config init`
@@ -20,15 +20,15 @@ Initialize the installation:
 Enable unsafe installation so that local zip files can be installed:
 `arduino-cli config set library.enable_unsafe_install true`
 
-## Updating Arduino CLI
+### Updating Arduino CLI
 
 To update an existing installation of Arduino CLI:
 `brew update`
 `brew upgrade arduino-cli`
 
-# Installing and Updating ESP Core
+## Installing and Updating ESP Core
 
-## Install
+### Install
 
 Add the ESP32 board manager packages:
 `arduino-cli config set board_manager.additional_urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
@@ -50,14 +50,14 @@ Expect:
 | esp32:esp32 | 2.0.11 | 2.0.11 | esp32 |
 
 
-## Updating
+### Updating
  Uninstall the current ESP core:
 `arduino-cli core uninstall esp32:esp32`
 
 Specify the version number to upgrade the ESP to 2.0.11:
 `arduino-cli core install esp32:esp32@2.0.11`
 
-# Installing and Configuring Libraries
+## Installing and Configuring Libraries
 Check the libraries to ensure no libraries are installed:
 `arduino-cli lib list`
 
@@ -68,7 +68,7 @@ No libraries installed.
 If there are any installed libraries, uninstall them before proceeding.
   
 
-### Download required libraries
+#### Download required libraries
 Download each library below as a zip file.
 
 | Library | Version | URL |
@@ -95,7 +95,7 @@ Install each library above using the following command:
 `arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip`
 
 
-# Add Custom Board to boards.txt
+## Add Custom Board to boards.txt
 
 The board must be added to the boards.txt file, found in the Espressif ESP Core version-specific folder. The stub for the custom board is included in the Hardware-Registration-and-Configuration project.
 
@@ -115,14 +115,14 @@ Steps:
 5. Flash the Hardware-Registration-and-Configuration.ino project.
 
 
-# Visual Studio IDE Configuration
+## Visual Studio IDE Configuration
 
  To use Visual Studio Code to compile FireFly-Controller, several files must be modified, all of which are located in `/.vscode/`. The folder may be hidden, but the file should be created automatically by VSCode.
 
-## c_cpp_properties.json
+### c_cpp_properties.json
 No changes should be required for this file, as it is generated automatically.
 
-## settings.json
+### settings.json
 ```
 {
 	"arduino.commandPath": "arduino-cli",
@@ -133,7 +133,7 @@ No changes should be required for this file, as it is generated automatically.
 }
 ```
 
-## arduino.json
+### arduino.json
 Contents of this file control the data sent to the compiler, and *do not* affect IntelliSense. IntelliSense is updated automatically from the compiler's output.
 
 Example File Contents:
@@ -154,12 +154,12 @@ Example File Contents:
 }
 ```
 
-### board
+#### board
 Defines the custom board configured in the Custom Boards section, above: 
 `esp32:esp32:firefly_controller`
 
 
-### build.extra_flags
+#### build.extra_flags
 **`ASYNCWEBSERVER_REGEX`** Allows regex paths in the URL.
 
 **`PRODUCT_HEX`** This configuration indicates the hardware product ID expressed as a hexadecimal and is required. If it is not included, the compiler will trigger an error. Change the `0x08062305` value in the example shown above to match the actual hardware product ID, with `0x` prefixed. This allows for a product ID beginning with zero.
@@ -201,14 +201,14 @@ You must also include the parent directory of FireFly-Controller using the `-I/m
 	---> ...
 ```
 
-## Troubleshooting
+### Troubleshooting
 
-### Uploads won't work
+#### Uploads won't work
 
 If the upload function does not work, but the application compiles correctly, re-select the port on the bottom right side of the screen.
 
 
-# Partitions
+## Partitions
 FireFly Controller uses a custom board, typically using the ESP32 WROVER-E Module featuring 16MB flash storage (ESP32-WROVER-E-N16R8).  It uses a custom partition, `partitions.csv`, adjacent to the .ino file.
 
 The custom partition table will is defined as:
@@ -223,14 +223,14 @@ The custom partition table will is defined as:
 | www | data | spiffs | 0xD10000 | 0x2E0000 |
 | coredump | data | coredump | 0xFF0000 | 0x10000 |
 
-## `config` partition
+### `config` partition
 Data stored within this partition contains configuration data for the controller itself, such as its identity and I/O configuration.  It should never be flashed and should only be formatted by the Hardware Registration and Configuration application.  It is ineligible to receive OTA updates.  The partition size is 512KB.
 
-## `www` partition
+### `www` partition
 Files stored on this partition are used for web user interface or other blobs of data.  It _is_ eligible for OTA updates, and therefore data stored on this partition will be lost during an OTA update of the partition.  The partition size is 2.875MB.
 
 
-### Flashing `www` partition with 16MB Chip
+#### Flashing `www` partition with 16MB Chip
 
 Size (see table above) = `0x2E0000`.  To create the image:
 
@@ -240,5 +240,3 @@ Size (see table above) = `0x2E0000`.  To create the image:
 Location (see table above) = `0xD10000`.  To flash the image:
 
 `~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/littlefs-16mb.bin`
-
- 
