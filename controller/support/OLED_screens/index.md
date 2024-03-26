@@ -38,9 +38,11 @@ Displays the network controller information.  Which network controller type is d
 ### WiFi Detail
 WiFi detail will only be displayed if the hardware supports WiFi and it was compiled with WiFi support.
 
-AP name is a concatenation of `FireFly-` and the last six characters of the MAC address.
+AP name is a concatenation of `FireFly-` and the last six characters of the _base_ MAC address.
 
-The MAC address will reflect the MAC address of the SoftAP broadcasting.  A total number of clients connected will be shown.
+The MAC address displayed is the MAC address of the _SoftAP_.
+
+A total number of clients connected will be shown.
 
 ![WiFi](./images/wifi.svg)
 
@@ -48,7 +50,9 @@ The MAC address will reflect the MAC address of the SoftAP broadcasting.  A tota
 ### Ethernet Detail
 Ethernet detail will only be displayed if the hardware supports Ethernet and it was compiled with Ethernet support.
 
-The MAC address will reflect the MAC address of the Ethernet controller.  Connection speed and duplex are displayed.
+The MAC address displayed is the MAC address of the Ethernet controller.
+
+Connection speed and duplex are displayed.
 
 ![Ethernet](./images/ethernet.svg)
 
