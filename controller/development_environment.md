@@ -179,7 +179,9 @@ Defines the custom board configured in the Custom Boards section, above:
 > [!IMPORTANT]  
 > `CORE_DEBUG_LEVEL` should be set to `0` for production builds.
 
-You must also include the parent directory of FireFly-Controller using the `-I/my/path/to/project/FireFly-Controller` parameter. The folder structure should look like this:
+You must also include the parent directory of FireFly-Controller using the `-I/my/path/to/project/FireFly-Controller` parameter. Note that abbreviated file paths using `~` (for instance, `~/project/FireFly-Controller`) will **not** work properly.
+
+The folder structure should look like this:
 
 ```
 /my/path/to/project/FireFly-Controller
