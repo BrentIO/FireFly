@@ -18,7 +18,7 @@ Displays until the controller has booted.
 
 
 ## Event Log
-Displays the four most recent events from the event log.
+Displays the four most recent events from the event log, with the newest event on the bottom of the screen.
 
 ### Intro
 ![Event Log Intro](./images/event_log_intro.svg)
