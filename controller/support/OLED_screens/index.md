@@ -86,6 +86,8 @@ Displays error information, if it exists.  If there are no errors present, this 
 
 While errors are present, the OLED will not sleep, and return to this screen after a period of inactivity.
 
+Errors are displayed with the newest error on the bottom of the screen.
+
 ### Intro
 ![Error Intro](./images/error_intro.svg)
 
