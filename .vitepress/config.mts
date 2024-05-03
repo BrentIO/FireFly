@@ -20,7 +20,7 @@ export default defineConfig({
         '/':[
           { 
             text: 'Controller',
-            collapsed: false,
+            collapsed: true,
             link: '/controller/',
             items: [
               {
@@ -49,15 +49,19 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   {
-                    text: 'Hardware Registration and Configuration Firmware',
-                    link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Hardware-Registration-and-Configuration'
+                    text: 'Hardware Registration and Configuration Application',
+                    collapsed: true,
+                    link: '/controller/software/hardware_registration_and_configuration/index.md',
+                    items:[
                       { 
                         text: 'API Reference',
                         link: '/controller/software/hardware_registration_and_configuration/api_reference'
                       },
+                    ]
                   },
-                  { text: 'Controller Firmware',
-                    link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Controller'
+                  { 
+                    text: 'Download Firmware from GitHub',
+                    link: 'https://github.com/BrentIO/FireFly-Controller/releases'
                   }
                 ]
               },
@@ -72,6 +76,10 @@ export default defineConfig({
                     text: 'Troubleshooting'
                   },
                   {
+                    text: 'OLED Screens',
+                    link: '/controller/support/OLED_screens/'
+                  },
+                  {
                     text: 'Abbreviations',
                     link: '/controller/support/abbreviations'
                   },
@@ -79,10 +87,6 @@ export default defineConfig({
                     text: 'Failure Reason Codes',
                     link: '/controller/support/failure_reason_codes'
                   },
-                  {
-                    text: 'OLED Screens',
-                    link: '/controller/support/OLED_screens/'
-                  }
                 ]
               },
               {
@@ -93,7 +97,7 @@ export default defineConfig({
           },
           { 
             text: 'Client',
-            collapsed: false,
+            collapsed: true,
             items: [
               {
                 text: 'Hardware',
