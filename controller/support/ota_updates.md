@@ -9,7 +9,7 @@ While the device is performing any type of OTA update, the [OLED display](/contr
 ## OTA Update Service
 The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device automatically.  By default, the controller will check for OTA updates once per day and upon reboot.  Both http and https protocols are supported, provided a certificate for the website has been uploaded to the [certificates storage](/controller/support/certificate_management).
 
-The OTA Update Service configuration is stored in the `config` partition as a simple JSON file.  It can be saved and deleted, but not updated.
+The OTA Update Service configuration is stored in the [`config` partition](/controller/support/partitions) as a simple JSON file.  It can be saved and deleted, but not updated.
 
 When the web server payload specifies both an application and SPIFFS update, the SPIFFS are updated first, then the application.  The web server should respond to the GET request with a formatted payload as an array ([see examples below](#example-web-server-response-payloads)).  Optionally, the list of software versions can be curated based on the hardware product ID and/or device UUID.  The controller will send custom headers to identify the device in the GET request to the web server:
 | Header Name | Example Value | Description |
