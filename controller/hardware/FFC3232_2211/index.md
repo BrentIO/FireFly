@@ -95,7 +95,7 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 ## Reference Designs
 None/Unreleased
 
-[![PCB Top](./pcb-top.png)](./pcb-top.png)
+[![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2211/pcb-top.png)
 
 ## 3D Printed Parts
 None/Unreleased
