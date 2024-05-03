@@ -49,6 +49,34 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   {
+                    text: 'Controller Application',
+                    collapsed: true,
+                    link: '/controller/software/controller/index.md',
+                    items:[                  
+                      { 
+                        text: 'Power Supply Configuration',
+                      },
+                      { 
+                        text: 'Circuit Configuration',
+                      },
+                      { 
+                        text: 'Input Configuration',
+                      },
+                      { 
+                        text: 'Output Configuration',
+                      },
+                      { 
+                        text: 'Action Configuration',
+                      },
+                      { 
+                        text: 'MQTT Configuration',
+                      },
+                      { 
+                        text: 'API Reference',
+                      },
+                    ]
+                  },
+                  {
                     text: 'Hardware Registration and Configuration Application',
                     collapsed: true,
                     link: '/controller/software/hardware_registration_and_configuration/index.md',
