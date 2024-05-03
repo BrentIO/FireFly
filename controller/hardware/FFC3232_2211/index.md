@@ -20,6 +20,10 @@ This controller model was a test bed for software development and manufacturing.
 **Form Factor:** Rack Mount
 
 
+## MCU
+Espressif Systems ESP32-WROVER-E-N16R8 with 16MB Flash Storage
+
+
 ## I2C Addresses
 
 | Address | Usage | Notes |
@@ -49,12 +53,14 @@ This controller model was a test bed for software development and manufacturing.
 ## Outputs
 
 - 16 double-stack 90 degree 5.08mm pluggable terminal block
-- 9VDC output pins 1 & 2
+- 9VDC output pins 1 & 2.  :warning: See [Known Issues and Defects](#known-issues-and-defects) because this pinout changed after this version.
 
 
 ## Network
 
 Network connectivity is via Ethernet using a W5500 chipset featuring an RJ45 connector with status LEDs.
+
+WiFi is not enabled.
 
 
 ## Bill of Materials
@@ -87,12 +93,12 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
 
 ## Reference Designs
-None
+None/Unreleased
 
 [![PCB Top](./pcb-top.png)](./pcb-top.png)
 
 ## 3D Printed Parts
-None
+None/Unreleased
 
 
 ## Known Issues and Defects
