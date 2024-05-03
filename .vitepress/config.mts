@@ -102,6 +102,10 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { 
+                    text: 'Certificate Management',
+                    link: '/controller/support/certificate_management'
+                  },
+                  { 
                     text: 'Home Assistant'
                   },
                   { 
