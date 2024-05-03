@@ -1,3 +1,4 @@
+# High Voltage Relays
 FireFly controller supports both binary (on/off) and proportional (dimming) to be configured on every output port.
 
 ::: warning Check with local ordinances
