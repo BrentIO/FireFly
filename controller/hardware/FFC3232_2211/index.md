@@ -89,6 +89,8 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 ## Reference Designs
 None
 
+[![PCB Top](./pcb-top.png)](./pcb-top.png)
+
 ## 3D Printed Parts
 None
 
