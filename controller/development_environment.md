@@ -215,7 +215,7 @@ The folder structure should look like this:
 	---> Controller.ino
 	---> ...
 -> Hardware-Registration-and-Configuration
-	---> data
+	---> www
 		-----> auxillary_data.json
 		-----> ...
 	---> Hardware-Registration-and-Configuration.ino
