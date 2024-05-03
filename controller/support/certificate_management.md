@@ -229,6 +229,8 @@ The certificates will be output to the working directory.  The certificate with 
 ## Adding Certificates
 To add a certificate, go to the controller's IP address (which can be obtained from the OLED), then click Certificates.  Choose the root CA and click Upload.
 
+> [!NOTE]  
+> The filename is limited to 31 characters or less, including the file extension.
 
 > [!IMPORTANT]  
 > Storage space on the config partition is very limited.  Only upload the root CA's required for your operation.
