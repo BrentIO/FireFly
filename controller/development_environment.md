@@ -8,39 +8,56 @@ Using arduino-cli is more flexible and reliable than the IDE.
 ### Install Arduino CLI
 
 Instructions are available at https://arduino.github.io/arduino-cli/latest/. Essentially:
-`brew update`
-`brew install arduino-cli`
+```bash
+brew update
+brew install arduino-cli
+```
 
 ### Post Installation
 
 Initialize the installation:
-`arduino-cli config init`
+```bash
+arduino-cli config init
+```
 
 
 Enable unsafe installation so that local zip files can be installed:
-`arduino-cli config set library.enable_unsafe_install true`
+```bash
+arduino-cli config set library.enable_unsafe_install true
+```
 
 ### Updating Arduino CLI
 
 To update an existing installation of Arduino CLI:
-`brew update`
-`brew upgrade arduino-cli`
+```bash
+brew update
+brew upgrade arduino-cli
+```
+
 
 ## Installing and Updating ESP Core
 
 ### Install
 
 Add the ESP32 board manager packages:
-`arduino-cli config set board_manager.additional_urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
+```bash
+arduino-cli config set board_manager.additional_urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+```
 
 Update the index:
-`arduino-cli core update-index`
+```bash
+arduino-cli core update-index
+```
 
 Install ESP32 core, version 2.0.11:
-`arduino-cli core install esp32:esp32@2.0.11`
+```bash
+arduino-cli core install esp32:esp32@2.0.11
+```
 
 Verify the installation was successful, and optionally remove any other cores:
-`arduino-cli core list`
+```bash
+arduino-cli core list
+```
 
 Expect:
 
@@ -52,14 +69,20 @@ Expect:
 
 ### Updating
  Uninstall the current ESP core:
-`arduino-cli core uninstall esp32:esp32`
+ ```bash
+ arduino-cli core uninstall esp32:esp32
+ ```
 
 Specify the version number to upgrade the ESP to 2.0.11:
-`arduino-cli core install esp32:esp32@2.0.11`
+```bash
+arduino-cli core install esp32:esp32@2.0.11
+```
 
 ## Installing and Configuring Libraries
 Check the libraries to ensure no libraries are installed:
-`arduino-cli lib list`
+```bash
+arduino-cli lib list
+```
 
 Expect:
 ```
@@ -92,8 +115,9 @@ Download each library below as a zip file.
 | Regexp | 0.1.1 | https://github.com/nickgammon/Regexp |
 
 Install each library above using the following command:
-`arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip`
-
+```bash
+arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
+```
 
 ## Add Custom Board to boards.txt
 
@@ -104,9 +128,10 @@ Steps:
 1. Close Visual Studio Code
 
 2. Merge the sub custom board into the main boards file. Example for ESP Core version 2.0.11:
-`cp ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.original.txt`
-
-	`cat ./Hardware-Registration-and-Configuration/boards.txt >> ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt`
+```bash
+cp ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.original.txt
+cat ./Hardware-Registration-and-Configuration/boards.txt >> ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt
+```
 
 3. Open Visual Studio Code. Select the board labeled `P5 Software FireFly Controller`.
 
@@ -123,7 +148,7 @@ Steps:
 No changes should be required for this file, as it is generated automatically.
 
 ### settings.json
-```
+```json
 {
 	"arduino.commandPath": "arduino-cli",
 	"arduino.useArduinoCli": true,
@@ -137,7 +162,7 @@ No changes should be required for this file, as it is generated automatically.
 Contents of this file control the data sent to the compiler, and *do not* affect IntelliSense. IntelliSense is updated automatically from the compiler's output.
 
 Example File Contents:
-```
+```json
 {
 	"sketch": "Hardware-Registration-and-Configuration.ino",
 	"configuration": "FlashFreq=80,PartitionScheme=default,UploadSpeed=921600,DebugLevel=none,EraseFlash=none",
@@ -236,9 +261,12 @@ Files stored on this partition are used for web user interface or other blobs of
 
 Size (see table above) = `0x2E0000`.  To create the image:
 
-`~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x2E0000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/data ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/littlefs-16mb.bin`
+```bash
+~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x2E0000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
+```
 
 
 Location (see table above) = `0xD10000`.  To flash the image:
 
-`~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/littlefs-16mb.bin`
+```bash
+~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
