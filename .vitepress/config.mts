@@ -106,6 +106,10 @@ export default defineConfig({
                     link: '/controller/support/certificate_management'
                   },
                   { 
+                    text: 'OTA Updates',
+                    link: '/controller/support/ota_updates'
+                  },
+                  { 
                     text: 'Home Assistant'
                   },
                   { 
