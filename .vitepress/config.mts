@@ -113,6 +113,10 @@ export default defineConfig({
                     text: 'Home Assistant'
                   },
                   { 
+                    text: 'Event and Error Logs',
+                    link: '/controller/support/event_and_error_logs'
+                  },
+                  { 
                     text: 'Partitions',
                     link: '/controller/support/partitions'
                   },
