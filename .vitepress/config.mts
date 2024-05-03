@@ -51,6 +51,10 @@ export default defineConfig({
                   {
                     text: 'Hardware Registration and Configuration Firmware',
                     link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Hardware-Registration-and-Configuration'
+                      { 
+                        text: 'API Reference',
+                        link: '/controller/software/hardware_registration_and_configuration/api_reference'
+                      },
                   },
                   { text: 'Controller Firmware',
                     link: 'https://github.com/BrentIO/FireFly-Controller/tree/main/Controller'
