@@ -11,14 +11,8 @@ FireFly Controller is designed to be operational all by itself.  The "other half
 ## Application Software
 FireFly Controller features two applications contained within this repository, the Hardware Registration and Configuration application, and the main Controller application.
 
-## Hardware Registration and Configuration Application
-The Hardware Registration and Configuration is for use with new, unprogrammed boards -- essentially factory use.  The application provides both a web interface and underlying API calls used by the web interface.
+### Hardware Registration and Configuration Application
+The [Hardware Registration and Configuration](/controller/software/hardware_registration_and_configuration/) is for use with new, unprogrammed boards -- essentially factory use.  The application provides both a web interface and underlying API calls used by the web interface.
 
-The application's primary functions are:
-- Set the device's [partition scheme](/controller/development_environment#partitions)
-- Set the external EEPROM with identity information
-- Hardware quality assurance
-- Register the hardware with the cloud service for remote backup of configuration data <Badge type="warning" text="TODO" />
-
-## Controller Application
+### Controller Application
 The main application for production use that accepts input from a physical switch and can, optionally, send PWM voltage to an output.  It also supports HTTP <Badge type="warning" text="TODO" /> and MQTT <Badge type="warning" text="TODO" /> for inputs from external sources, such as a home automation system.  Inputs sensed will raise events via MQTT for use in a home automation system.  FireFly Controller is designed to be paired with FireFly Clients.
