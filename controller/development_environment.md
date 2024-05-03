@@ -99,11 +99,11 @@ Download each library below as a zip file.
 | Adafruit_BusIO | 1.14.1 | https://github.com/adafruit/Adafruit_BusIO |
 | Adafruit-GFX-Library | 1.11.5 | https://github.com/adafruit/Adafruit-GFX-Library |
 | Adafruit_SSD1306 | 2.5.7 | https://github.com/adafruit/Adafruit_SSD1306 |
-| ArduinoJson | 6.20.1 | https://github.com/bblanchon/ArduinoJson |
+| ArduinoJson | 6.21.5 | https://github.com/bblanchon/ArduinoJson |
 | BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
 | BrentIO_AsyncWebServer_ESP32_W5500 | 2024.3.1 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
 | BrentIO_ESP Async WebServer | 2024.3.2 | https://github.com/BrentIO/ESPAsyncWebServer |
-| BrentIO_esp32FOTA | 2024.3.1 | https://github.com/BrentIO/esp32FOTA |
+| BrentIO_esp32FOTA | 2024.5.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
 | Ethernet | 2.0.2 | https://github.com/arduino-libraries/Ethernet |
