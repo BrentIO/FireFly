@@ -254,3 +254,28 @@ Location (see table above) = `0xD10000`.  To flash the image:
 
 ```bash
 ~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xD10000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/www.bin
+```
+
+
+#### Flashing `config` partition with 16MB Chip
+
+::: danger DATA LOSS MAY OCCUR
+This will destory any user-defined configuration!
+:::
+
+Size (see table above) = `0x80000`.  To create the image:
+
+```bash
+~/Library/Arduino15/packages/esp32/tools/mklittlefs/3.0.0-gnu12-dc7f933/mklittlefs -s 0x80000 -c ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
+```
+
+Location (see table above) = `0xC90000`.  To flash the image:
+
+```bash
+~/Library/Arduino15/packages/esp32/tools/esptool_py/4.5.1/esptool --chip esp32 --port "/dev/tty.SLAB_USBtoUART" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 16MB 0xC90000 ~/GitHub/P5Software/FireFly-Controller/Hardware-Registration-and-Configuration/config.bin
+```
+
+## Adding a new hardware version
+Hardware configurationsk are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations.  Each hardware model is defined in `hardware.h`.
+
+Additionally, the peripheral information must be added to `./www/auxillary_data.json` file.  Adding the product HEX and the product ID to the auxillary_data.json file will add it to the Product ID drop down in the Identification area of the configuration.
