@@ -1,4 +1,4 @@
-# Over the Air (OTA) Updates
+# Over-the-Air (OTA) Updates
 FireFly Controller supports OTA updates for both the firmware and SPIFFS (`www` partition).  Data stored on the `config` partition is never updatable over OTA.
 
 > [!IMPORTANT]  
