@@ -101,6 +101,10 @@ export default defineConfig({
                     text: 'Home Assistant'
                   },
                   { 
+                    text: 'Partitions',
+                    link: '/controller/support/partitions'
+                  },
+                  { 
                     text: 'Troubleshooting'
                   },
                   {
