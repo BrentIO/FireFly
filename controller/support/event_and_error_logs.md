@@ -40,7 +40,7 @@ Error Events have a lifecycle and can be cleared from the log if the error condi
 The maximum number of errors that will be kept in the log is configurable at compile time and is common with the Event Log, using `hardware.h` with variable `EVENT_LOG_MAXIMUM_ENTRIES`.
 
 ### Behavior from Error Logging
-When an event is entered into the Event Log with type `LOG_LEVEL_ERROR`, an error is automatically entered separately into the Event Log.
+When an event is entered into the Event Log with type `LOG_LEVEL_ERROR`, an error is automatically entered separately into the Error Log.
 
 ### Clearing an Error
 An error can be cleared from the Error Log by calling `resolveError()` with the exact text of the error that should be cleared.
