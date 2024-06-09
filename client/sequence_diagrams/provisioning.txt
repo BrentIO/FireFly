@@ -1,0 +1,46 @@
+title Client Provisioning
+
+participant "Client" as client
+
+participant "Controller" as ctl
+ctl->ctl: Provisioned boot initiated
+ctl->ctl: SoftAP Setup
+
+client->client: Unprovisioned boot initiated
+
+
+database "Controller Integrated DB" as db
+
+client->ctl: Connect to predefined SSID
+
+ctl->db: Verifies client MAC address is known
+db->ctl: Success
+ctl->client: Connection Established
+
+group #b4b4b4 No matching MAC address 
+db->ctl:No match
+ctl-xclient: Disconnect
+client->client: Timeout
+client->client: Infinite Wait
+end
+
+client->ctl: DHCP lease request
+ctl->client: DHCP lease response
+
+client->ctl: HTTP GET /client/{uuid}
+ctl->db: GET client
+db->ctl: Client config
+
+group #ede7b4 Redirect
+ctl->client: HTTP/301
+note over client #e3d236: External URL called
+end
+
+ctl->client: HTTP/200: Client config
+group #b4b4b4 No matching uuid
+db->ctl:No match
+ctl->client: HTTP/404
+client->client: Infinite Wait
+end
+
+client->client: Connect to WiFi
