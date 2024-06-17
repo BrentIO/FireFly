@@ -187,7 +187,7 @@ Defines the custom board configured in the Custom Boards section, above:
 #### build.extra_flags
 **`ASYNCWEBSERVER_REGEX`** Allows regex paths in the URL.
 
-**`-DLFS_NAME_MAX=64`** Makes the maximum LittleFS filename to be 64 characters instead of the default 32
+**`LFS_NAME_MAX=64`** Makes the maximum LittleFS filename to be 64 characters instead of the default (32).
 
 **`PRODUCT_HEX`** This configuration indicates the hardware product ID expressed as a hexadecimal and is required. If it is not included, the compiler will trigger an error. Change the `0x08062305` value in the example shown above to match the actual hardware product ID, with `0x` prefixed. This allows for a product ID beginning with zero.
 
