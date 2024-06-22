@@ -121,6 +121,10 @@ export default defineConfig({
                     link: '/controller/support/partitions'
                   },
                   { 
+                    text: 'Performance Testing',
+                    link: '/controller/support/performance_testing'
+                  },
+                  { 
                     text: 'Troubleshooting'
                   },
                   {
