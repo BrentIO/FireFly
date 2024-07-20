@@ -139,6 +139,10 @@ export default defineConfig({
                     text: 'Failure Reason Codes',
                     link: '/controller/support/failure_reason_codes'
                   },
+                  {
+                    text: 'Tag Usage',
+                    link: '/controller/support/tag_usage'
+                  },
                 ]
               },
               {
