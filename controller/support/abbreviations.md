@@ -16,4 +16,5 @@ Abbreviations that can be found in the event log or error display are documented
 | Err prt `#` < 1 | The port number specified is less than 1 |
 | Err out `#` > max | The output number specified in the controller's JSON is greater than the number of outputs defined for the controller |
 | Err out `#` < 1 | The output number specified is less than 1 |
+| Err out `#` no id | The output number specified is missing the required `id` field in the JSON configuration |
 | In prt `#` ch `#` inv act | Input port `#` channel `#` has an invalid action and the action will be ignored |
