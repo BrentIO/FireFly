@@ -110,7 +110,8 @@ export default defineConfig({
                     link: '/controller/support/ota_updates'
                   },
                   { 
-                    text: 'Home Assistant'
+                    text: 'Home Assistant MQTT Auto Discovery',
+                    link: '/controller/support/mqtt_auto_discovery'
                   },
                   { 
                     text: 'Event and Error Logs',
