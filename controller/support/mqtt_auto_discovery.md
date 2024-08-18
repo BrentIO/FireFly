@@ -83,7 +83,7 @@ Sample state topic for an update:
     "installed_version": "2024.8.2",
     "latest_version":"2024.12.1",
     "title":"App Release 2024.12.1",
-    "release_summary":"Great new features and a few defects were fixed.  Enjoy!",
+    "release_summary":"We added awesome new features!",
     "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1"
 }
 ```
