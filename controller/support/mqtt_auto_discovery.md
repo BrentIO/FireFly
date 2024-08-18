@@ -10,11 +10,39 @@ For example, port 7 channel 2 is a normally open input button that is defiend in
 > The input port and channel must be configured on the controller for the controller to emit an MQTT message about its state chagne.  If no input is configured in the controller's configuration, the state change will not raise an MQTT message.
 
 
+## Message Sequence during Boot
+
+During the boot process, the controller will execute the following MQTT actions after making a connection to the broker:
+- Controller is added
+    - Update
+    - Start Time
+    - IP Address
+- Availability for all controller entites is set to `ONLINE`
+- Controller entity states are set to their current values
+- Each output is created
+    - Availability is set to `ONLINE`
+    - State is updated to its current value
+    - Command topic is subscribed
+- Each input is created
+    - Availability is set to `ONLINE`
+    - State is updated to its current value
+
+
+## Retained Messages and Last Will & Testament
+
+Most entities are retrieved from MQTT because of the retained message flag being enabled, with few exceptions.  All outputs retrieve their last known status from MQTT.
+
+In the event the controller loses connectivity, the MQTT Last Will & Testament will set the availability of all entities to unknown and their state to the default value of `OFF`
+
+
 ## Controller
 
 Each controller will be defined as a device and will contain information about the status of the controller.  Examples are below for a controller with a UUID `673be2c4-87cc-41e1-bb4e-96367161b02f` and MAC address `DE:AD:BE:EF:FE:ED`.
 
 ### Firmware Updates
+Indicates if a firmware update is available.  If so, the firmware update can be launched from MQTT by sending the `payload_install` value to the `command_topic`.
+
+> Note: This does not retain the last value from MQTT.
 
 Topic: 
 ```text
@@ -62,6 +90,10 @@ Sample state topic for an update:
 
 
 ### Start Time
+
+Start Time is the time the controller booted, in epoch seconds.  If NTP isn't available at boot time, the payload is updated when NTP is able to determine the approximate boot time.
+
+
 Topic: 
 ```text
 homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-start-time/config
@@ -96,6 +128,8 @@ Example Payload:
 
 
 ### IP Address
+Current IP address in dot notation.
+
 Topic: 
 ```text
 homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address/config
@@ -129,6 +163,10 @@ Example Payload:
 
 
 ### Error Count
+The current number of errors in the error log.
+
+> Note: This does not retain the last value from MQTT.
+
 Topic: 
 ```text
 homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors/config
