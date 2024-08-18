@@ -1,9 +1,9 @@
-# MQTT Auto Discovery Messages for Home Assistant
+# Home Assistant Auto Discovery
 
-The integration to Home Assistant is done via MQTT Auto Discovery.  The benefit of auto discovery is that no additional software needs to be configured in Home Assistant for it to work.
+The integration to Home Assistant is done via MQTT auto discovery.  The benefit of auto discovery is that no additional software needs to be configured in Home Assistant for it to work.
 
 ::: info Why aren't inputs included in auto discovery?
-Home Assistant auto discovery is only provided with the output information, not input message events, like a button press.  You can [read more about automating with inputs](./inputs).
+Home Assistant auto discovery is only provided with the output information, not input message events, like a button press.  You can [read more about automating with inputs using MQTT](./inputs).
 :::
 
 

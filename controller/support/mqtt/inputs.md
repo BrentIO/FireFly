@@ -1,4 +1,4 @@
-# Automation using Controller Inputs
+# Automating with Input Events using MQTT
 
 Unlike with controller sensors and outputs, inputs (such as button presses) are not included in auto discovery.
 

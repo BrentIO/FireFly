@@ -110,15 +110,15 @@ export default defineConfig({
                     link: '/controller/support/ota_updates'
                   },
                   { 
-                    text: 'MQTT and Home Assistant Auto Discovery',
+                    text: 'Home Assistant Auto Discovery and MQTT',
                     collapsed: true,
                     items:[
                       {
-                        text: 'Home Assistant MQTT Auto Discovery',
+                        text: 'Home Assistant Auto Discovery',
                         link: '/controller/support/mqtt/auto_discovery'
                       },
                       {
-                        text: 'Automating with Input Events',
+                        text: 'Automating with Input Events using MQTT',
                         link: '/controller/support/mqtt/inputs'
                       }
                     ]
