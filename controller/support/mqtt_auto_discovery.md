@@ -56,7 +56,6 @@ Example Payload:
     "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
     "icon": "mdi:update",
-    "retain": true,
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
@@ -181,7 +180,6 @@ Example Payload:
     "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors",
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors",
     "icon": "mdi:alert",
-    "retain": true,
     "entity_category": "diagnostic",
     "device": {
         "identifiers": [
