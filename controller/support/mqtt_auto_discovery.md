@@ -107,6 +107,7 @@ Example Payload:
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start",
     "icon": "mdi:clock",
     "retain": true,
+    "entity_category": "diagnostic",
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
@@ -143,6 +144,7 @@ Example Payload:
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address",
     "icon": "mdi:ip",
     "retain": true,
+    "entity_category": "diagnostic",
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
@@ -180,6 +182,7 @@ Example Payload:
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors",
     "icon": "mdi:alert",
     "retain": true,
+    "entity_category": "diagnostic",
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
