@@ -53,7 +53,7 @@ Example Payload:
 Sample state topic for an update:
 ```json
 {
-    "installed_version": "2024.8.1",
+    "installed_version": "2024.8.2",
     "latest_version":"2024.12.1",
     "title":"App Release 2024.12.1",
     "release_summary":"Great new features and a few defects were fixed.  Enjoy!",
