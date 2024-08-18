@@ -3,7 +3,7 @@
 The integration to Home Assistant is done via MQTT Auto Discovery.  The benefit of Auto Discovery is that no additional software needs to be configured in Home Assistant for it to work.  
 
 
-Home Assistant Auto Discovery is only provided with the circuit information, not input message events, like a button press.  However, because the input button press is broadcast over MQTT, the event can be read by other listeners, like Node Red.  This allows Node Red to perform multiple actions not known to the Controller when a button is pressed.  The controller will emit a message on an input port channel state change even if no output actions are defined.
+Home Assistant Auto Discovery is only provided with the output information, not input message events, like a button press.  However, because the input button press is broadcast over MQTT, the event can be read by other listeners, like Node Red.  This allows Node Red to perform multiple actions not known to the Controller when a button is pressed.  The controller will emit a message on an input port channel state change even if no output actions are defined.
 
 For example, port 7 channel 2 is a normally open input button that is defiend in the controller's configuration file.  It has no output actions associated to the input channel.  When the button is pressed, the controller will raise an MQTT message to a pre-defined topic.  When the button is released, the controller will raise another MQTT message on the same topic.  Home Assistant (and optionally Node Red) can listen for the button press or release MQTT messages to perform multiple actions that are otherwise unknown to the controller, such as turning off all lights in the house, changing the HVAC temperature to a defined setting, and arming the alarm panel to night mode.
 
@@ -24,56 +24,140 @@ homeassistant/update/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f/config
 Example Payload:
 ```json
 {
+    "name": "Update",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
+    "icon": "mdi:update",
+    "retain": true,
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
             "DE:AD:BE:EF:FE:ED"
         ],
+        "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
-        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
         "model": "FF1235-9901",
         "hw_version": "FF1235-9901",
-        "name": "FireFly Controller Upstairs",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
     },
-    "name": "Update",
-    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
-    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/state",
-    "icon": "mdi:update"
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/availability",
+    "command_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/set",
+    "payload_install": "do-update"
+
 }
 ```
+
+Sample state topic for an update:
+```json
+{
+    "installed_version": "2024.8.1",
+    "latest_version":"2024.12.1",
+    "title":"App Release 2024.12.1",
+    "release_summary":"Great new features and a few defects were fixed.  Enjoy!",
+    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1"
+}
+```
+
 
 ### Start Time
 Topic: 
 ```text
-homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f/config
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-start-time/config
 ```
 
 Example Payload:
 ```json
 {
-    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/time_start/state",
     "name": "Start Time",
-    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f_time_start",
-    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f_time_start",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start",
+    "icon": "mdi:clock",
+    "retain": true,
     "device": {
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f",
             "DE:AD:BE:EF:FE:ED"
         ],
+        "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
-        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
         "model": "FF1235-9901",
         "hw_version": "FF1235-9901",
-        "name": "FireFly Controller Upstairs",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
     },
-    "icon": "mdi:clock",
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/time-start/state",
     "value_template": "{{ ( value | int ) | timestamp_utc }}",
-    "enabled_by_default": false
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/time-start/availability"
+}
+```
+
+
+### IP Address
+Topic: 
+```text
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address/config
+```
+
+Example Payload:
+```json
+{
+    "name": "IP Address",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address",
+    "icon": "mdi:ip",
+    "retain": true,
+    "device": {
+        "identifiers": [
+            "673be2c4-87cc-41e1-bb4e-96367161b02f",
+            "DE:AD:BE:EF:FE:ED"
+        ],
+        "name": "FireFly Controller Upstairs",
+        "manufacturer": "P5 Software, LLC",
+        "model": "FF1235-9901",
+        "hw_version": "FF1235-9901",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2024.8.2",
+        "suggested_area": "Tech Room"
+    },
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/ip-address/state",
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/ip-address/availability"
+}
+```
+
+
+### Error Count
+Topic: 
+```text
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors/config
+```
+
+Example Payload:
+```json
+{
+    "name": "Error Count",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-count-errors",
+    "icon": "mdi:alert",
+    "retain": true,
+    "device": {
+        "identifiers": [
+            "673be2c4-87cc-41e1-bb4e-96367161b02f",
+            "DE:AD:BE:EF:FE:ED"
+        ],
+        "name": "FireFly Controller Upstairs",
+        "manufacturer": "P5 Software, LLC",
+        "model": "FF1235-9901",
+        "hw_version": "FF1235-9901",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2024.8.2",
+        "suggested_area": "Tech Room"
+    },
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/count-errors/state",
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/count-errors/availability"
 }
 ```
 
@@ -108,20 +192,22 @@ Payload:
 ```json
 {
     "name": "Recessed Lights",
-    "unique_id": "FireFly_C999",
-    "object_id": "FireFly_C999",
+    "unique_id": "FireFly-C999",
+    "object_id": "FireFly-C999",
+    "icon": "mdi:light-recessed",
+    "retain": true,
     "device": {
         "identifiers": [
-            "FireFly_C999"
+            "FireFly-C999"
         ],
+        "name": "Recessed Lights C999",
         "model": "DR2220D20U",
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "name": "Recessed Lights C999",
         "suggested_area": "Kitchen"
     },
-    "icon": "mdi:light-recessed",
     "command_topic": "FireFly/C999/set",
-    "state_topic": "FireFly/C999/state"
+    "state_topic": "FireFly/C999/state",
+    "availability_topic": "FireFly/C999/availability"
 }
 ```
 
@@ -137,6 +223,7 @@ Circuit 888 is a variable brightness light in the bedroom.  The controller's con
             "id": "C888",
             "name": "Reading Lights",
             "area": "Bedroom",
+            "type": "VARIABLE",
             "icon": "wall-sconce"
         }
     }
@@ -152,35 +239,35 @@ Payload:
 ```json
 {
     "name": "Reading Lights",
-    "unique_id": "FireFly_C888",
-    "object_id": "FireFly_C888",
+    "unique_id": "FireFly-C888",
+    "object_id": "FireFly-C888",
+    "icon": "mdi:wall-sconce",
+    "retain": true,
+    "on_command_type": "brightness",
+    "brightness_scale": 100,
     "device": {
         "identifiers": [
-            "FireFly_C888"
+            "FireFly-C888"
         ],
+        "name": "Reading Lights C888",
         "model": "PMP2425W",
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "name": "Reading Lights C888",
         "suggested_area": "Bedroom"
     },
-    "icon": "mdi:wall-sconce",
     "command_topic": "FireFly/C888/set",
     "state_topic": "FireFly/C888/state",
-    "on_command_type": "brightness",
     "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
-    "brightness_scale": 100,
-    "brightness_command_topic" : "FireFly/C888/set",
-    "brightness_state_topic": "FireFly/C888/state"
+    "brightness_command_topic": "FireFly/C888/set",
+    "brightness_state_topic": "FireFly/C888/state",
+    "availability_topic": "FireFly/C888/availability"
 }
 ```
-
-
 
 
 | Field | Data Source |
 | ----- | ----------- |
 | `name` | Outputs -> `name` |
-| `unqiue_id` | Concatenation of hard-coded "FireFly_" + Outputs -> `id` |
+| `unqiue_id` | Concatenation of hard-coded "FireFly-" + Outputs -> `id` |
 | `object_id` | `unique_id` |
 | `device` -> `identifiers` | `unique_id` |
 | `device` -> `model` | Linked relay's `model`.  If not set, this field is not populated |
@@ -188,6 +275,9 @@ Payload:
 | `device` -> `name` | Concatenation of Outputs -> `name`, single space, and Outputs -> `id` |
 | `device` -> `suggested_area` | Outputs -> `area` |
 | `icon` | Concatenation of hard-coded "mdi:" + Outputs -> `icon`, which must be a valid MDI icon |
+| `on_command_type` | Hard-coded `brightness` when the output `type` = `VARIABLE` |
+| `state_value_template` | Hard-coded `{% if value\|int > 0 %}ON{% else %}OFF{% endif %}` when the output `type` = `VARIABLE` |
+| `brightness_scale` | Hard-coded `100` when the output `type` = `VARIABLE` |
 | Topic names | Concatenation of hard-coded "FireFly/",  Outputs -> `id`, and the topic |
 
 
