@@ -18,3 +18,8 @@ Abbreviations that can be found in the event log or error display are documented
 | Out prt `#` < 1 | The output number specified is less than 1 |
 | Out prt `#` no id | The output number specified is missing the required `id` field in the JSON configuration |
 | Out parse err `error`| There was an ArduinoJSON parsing failure when trying to read the controller's `outputs` section of the configuration file with `error` specified |
+| MQTT conn timeout | MQTT connection timeout |
+| MQTT conn lost | MQTT connection lost |
+| MQTT conn fail | MQTT connection failed |
+| MQTT conn disconnect | MQTT connection disconnected |
+| MQTT bad creds | MQTT bad credentials |
