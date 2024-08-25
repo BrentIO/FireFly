@@ -200,7 +200,6 @@ Example auto discovery payload:
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
         "model": "FF1235-9901",
-        "hw_version": "FF1235-9901",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
@@ -266,7 +265,6 @@ Example auto discovery payload:
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
         "model": "FF1235-9901",
-        "hw_version": "FF1235-9901",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
@@ -313,7 +311,6 @@ Example auto discovery payload:
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
         "model": "FF1235-9901",
-        "hw_version": "FF1235-9901",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
@@ -357,7 +354,6 @@ Example auto discovery payload:
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
         "model": "FF1235-9901",
-        "hw_version": "FF1235-9901",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
@@ -402,7 +398,6 @@ Example auto discovery payload for the `center` temperature sensor:
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
         "model": "FF1235-9901",
-        "hw_version": "FF1235-9901",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
