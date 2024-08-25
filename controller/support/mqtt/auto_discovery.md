@@ -393,8 +393,7 @@ Example auto discovery payload:
     "unit_of_measurement": "°C",
     "device": {
         "identifiers": [
-            "673be2c4-87cc-41e1-bb4e-96367161b02f",
-            "DE:AD:BE:EF:FE:ED"
+            "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
         "name": "FireFly Controller Upstairs",
         "manufacturer": "P5 Software, LLC",
