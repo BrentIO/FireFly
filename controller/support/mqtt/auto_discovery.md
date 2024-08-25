@@ -8,7 +8,7 @@ Home Assistant auto discovery is only provided with the output information, not 
 
 
 ::: info What does FireFly use for the Home Assistant Auto Discovery topic?
-FireFly uses the default topic root of `homeassistant` for auto discovery.  You can configure this inside the MQTT settings.  There is a maximum length of <Badge type="warning" text="TODO" /> `TBD` for the topic root.
+FireFly uses the default topic root of `homeassistant` for auto discovery.  You can configure this inside the MQTT settings.  There is a maximum length of 24 for the topic root.  It should _not_ include a trailing `/`.
 :::
 
 ## MQTT Message Sequences
