@@ -379,19 +379,19 @@ Example state payload:
 
 
 ### Temperature
-The current temperature reading from the controller.
+The current temperature reading from one of the sensors on the controller.  Each sensor is added as its own entry, if the controller features one or more temperature sensors.
 
-Example auto discovery topic:
+Example auto discovery topic for the `center` temperature sensor:
 ```text
-homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature/config
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature-center/config
 ```
 
-Example auto discovery payload:
+Example auto discovery payload for the `center` temperature sensor:
 ```json
 {
-    "name": "Temperature",
-    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature",
-    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature",
+    "name": "Center",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature-center",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-temperature-center",
     "icon": "mdi:thermometer",
     "device_class": "temperature",
     "unit_of_measurement": "°C",
@@ -407,14 +407,14 @@ Example auto discovery payload:
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
     },
-    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/temperature/state",
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/temperature/center/state",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
 
-Example state topic:
+Example state topic for the `center` temperature sensor:
 ```text
-FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/temperature/state
+FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/temperature/center/state
 ```
 
 Example state payload:
