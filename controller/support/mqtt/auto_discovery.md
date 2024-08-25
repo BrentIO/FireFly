@@ -173,7 +173,7 @@ In the event the controller loses connectivity, the MQTT Last Will & Testament w
 
 ## Controller
 
-Each controller will be defined as a device and will contain information about the status of the controller.  Examples are below for a controller with a UUID `673be2c4-87cc-41e1-bb4e-96367161b02f`.
+Each controller will be defined as a device and will contain information about the status of the controller.  Examples are below for a controller with a UUID `673be2c4-87cc-41e1-bb4e-96367161b02f` and MAC address `DE:AD:BE:EF:FE:ED`.
 
 ### Firmware Updates
 Indicates if a firmware update is available.  If so, the firmware update can be launched from MQTT by sending the `payload_install` value to the `command_topic`.
