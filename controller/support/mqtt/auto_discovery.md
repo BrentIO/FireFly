@@ -329,6 +329,50 @@ Example state payload:
 ```
 
 
+### MAC Address
+
+Current ethernet MAC address in colon notation.
+
+Example auto discovery topic:
+```text
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-mac-address/config
+```
+
+Example auto discovery payload:
+```json
+{
+    "name": "MAC Address",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-mac-address",
+    "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-mac-address",
+    "icon": "mdi:ethernet",
+    "entity_category": "diagnostic",
+    "device": {
+        "identifiers": [
+            "673be2c4-87cc-41e1-bb4e-96367161b02f"
+        ],
+        "name": "FireFly Controller Upstairs",
+        "manufacturer": "P5 Software, LLC",
+        "model": "FF1235-9901",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2024.8.2",
+        "suggested_area": "Tech Room"
+    },
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/mac-address/state",
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
+}
+```
+
+Example state topic:
+```text
+FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/mac-address/state
+```
+
+Example state payload:
+```text
+DE:AD:BE:EF:FE:ED
+```
+
+
 ### Error Count
 The current number of errors in the error log.
 
