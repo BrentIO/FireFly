@@ -256,7 +256,6 @@ Example auto discovery payload:
     "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start",
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start",
     "icon": "mdi:clock",
-    "retain": true,
     "entity_category": "diagnostic",
     "device": {
         "identifiers": [
@@ -302,7 +301,6 @@ Example auto discovery payload:
     "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address",
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-ip-address",
     "icon": "mdi:ip",
-    "retain": true,
     "entity_category": "diagnostic",
     "device": {
         "identifiers": [
@@ -452,7 +450,6 @@ Example auto discovery payload:
     "unique_id": "FireFly-C999",
     "object_id": "FireFly-C999",
     "icon": "mdi:light-recessed",
-    "retain": true,
     "device": {
         "identifiers": [
             "FireFly-C999"
@@ -528,7 +525,6 @@ Example auto discovery payload:
     "unique_id": "FireFly-C888",
     "object_id": "FireFly-C888",
     "icon": "mdi:wall-sconce",
-    "retain": true,
     "on_command_type": "brightness",
     "brightness_scale": 100,
     "device": {
