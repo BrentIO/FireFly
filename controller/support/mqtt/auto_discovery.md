@@ -246,7 +246,7 @@ Start Time is the time the controller booted, in epoch seconds.  If NTP isn't av
 
 Example auto discovery topic:
 ```text
-homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-start-time/config
+homeassistant/sensor/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-time-start/config
 ```
 
 Example auto discovery payload:
