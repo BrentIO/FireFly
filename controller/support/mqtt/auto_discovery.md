@@ -48,7 +48,7 @@ group #c2efff setup()
     end
 
     group #c2efff Start Time
-        ctl->mqtt: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
         mqtt->ha: Publish Auto Discovery\n--Sensor--
         ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
         ha-->ha: Create Start Time\n--Sensor--
@@ -59,7 +59,7 @@ group #c2efff setup()
     end
 
     group #c2efff IP Address
-        ctl->mqtt: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
         mqtt->ha: Publish Auto Discovery\n--Sensor--
         ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
         ha-->ha: Create IP Address\n--Sensor--
@@ -70,7 +70,7 @@ group #c2efff setup()
     end
 
     group #c2efff Error Count
-        ctl->mqtt: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
         mqtt->ha: Publish Auto Discovery\n--Sensor--
         ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
         ha-->ha: Create Error Count\n--Sensor--
@@ -81,7 +81,7 @@ group #c2efff setup()
     end
 
     group #c2efff Temperature
-        ctl->mqtt: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
         mqtt->ha: Publish Auto Discovery\n--Sensor--
         ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
         ha-->ha: Create Temperature\n--Sensor--
@@ -98,7 +98,7 @@ group #c2efff setup()
     ha->ha: Temperature <color: #0000ff>""Value""</color>\n--Sensor--
 
     group #c2efff For Each Output
-        ctl->mqtt: Publish Auto Discovery\n--Light/Fan/Switch--
+        ctl->mqtt: Publish Auto Discovery\n--Light/Fan/Switch--\n--Retained--
         mqtt->ha: Publish Auto Discovery\n--Light/Fan/Switch--
         ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
         ctl->mqtt: Subscribe Command Topic
