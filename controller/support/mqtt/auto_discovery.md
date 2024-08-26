@@ -68,6 +68,17 @@ group #c2efff setup()
         ha->mqtt: Subscribe State Topic
         mqtt->ha: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
     end
+    
+    group #c2efff MAC Address
+        ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
+        mqtt->ha: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
+        ha-->ha: Create MAC Address\n--Sensor--
+        ha->ha: MAC Address <color:#808080>""Unavailable""</color>\n--Sensor--
+        ha->mqtt: Subscribe Availability Topic
+        ha->mqtt: Subscribe State Topic
+        mqtt->ha: Publish State: <color: #0000ff>""Value""</color>\n--Retained--
+    end
 
     group #c2efff Error Count
         ctl->mqtt: Publish Auto Discovery\n--Sensor--\n--Retained--
@@ -94,6 +105,7 @@ group #c2efff setup()
     ctl->mqtt: Publish Availability: <color:#green>""online""</color>\n--Retained--
     ha->ha: Start Time <color: #0000ff>""Value""</color>\n--Sensor--
     ha->ha: IP Address <color: #0000ff>""Value""</color>\n--Sensor--
+    ha->ha: MAC Address <color: #0000ff>""Value""</color>\n--Sensor--
     ha->ha: Error Count <color: #0000ff>""Value""</color>\n--Sensor--
     ha->ha: Temperature <color: #0000ff>""Value""</color>\n--Sensor--
 
