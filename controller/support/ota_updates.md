@@ -1,13 +1,10 @@
 # Over-the-Air (OTA) Updates
 FireFly Controller supports OTA updates for both the firmware and SPIFFS (`www` partition).  Data stored on the `config` partition is never updatable over OTA.
 
-> [!IMPORTANT]  
-> When the device reboots, it will check for a newer version of firmware which may create an update loop.
-
 While the device is performing any type of OTA update, the [OLED display](/controller/support/OLED_screens/#ota-update) will indicate the percentage complete.  Additionally, events will be written to the [Event Log](/controller/support/event_and_error_logs).
 
 ## OTA Update Service
-The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device automatically.  By default, the controller will check for OTA updates once per day and upon reboot.  Both http and https protocols are supported, provided a certificate for the website has been uploaded to the [certificates storage](/controller/support/certificate_management).
+The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device.  By default, the controller will check for OTA updates once per day and 30 seconds after a reboot.  Both http and https protocols are supported, provided a certificate for the website has been uploaded to the [certificates storage](/controller/support/certificate_management).
 
 The OTA Update Service configuration is stored in the [`config` partition](/controller/support/partitions) as a simple JSON file.  It can be saved and deleted, but not updated.
 
