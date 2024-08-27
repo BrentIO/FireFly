@@ -14,6 +14,18 @@ When the web server payload specifies both an application and SPIFFS update, the
 | product_id | FFC0806-2305 | Hardware Product ID |
 | uuid | 7a060b6b-dc2f-4d10-ba9e-6109f788cd95 | Device UUID |
 
+## Response Payloads
+
+The fields included in the response are:
+
+| Field | Usage |
+| ----- | ----- |
+| `type` | Matches the `APPLICATION_NAME` definition at compile time, typically `FireFly Controller` |
+| `version` | The version number of the file being described in the `url` or `spiffs` binary |
+| `url` | URL of the application binary |
+| `spiffs` | URL of the SPIFFS binary |
+
+
 
 ### Example Web Server Response Payloads
 
@@ -21,7 +33,7 @@ Application-only update
 ```json
 [
     {
-        "type": "HW Reg and Config",
+        "type": "FireFly Controller",
         "version": "2024.5.2",
         "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin",
     }
@@ -32,7 +44,7 @@ SPIFFS-only update
 ```json
 [
     {
-        "type": "Controller",
+        "type": "FireFly Controller",
         "version": "2024.3.21",
         "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin"
     }
@@ -43,13 +55,13 @@ Combined Application and SPIFFS update
 ```json
 [
     {
-        "type": "HW Reg and Config",
+        "type": "FireFly Controller",
         "version": "2024.5.2",
         "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin",
         "spiffs": "https://server.myhost.com/hwreg/spiffs_2024.5.2.bin"
     },
     {
-        "type": "Controller",
+        "type": "FireFly Controller",
         "version": "2024.3.21",
         "url": "https://server.myhost.com/controller/app_2024.3.21.bin",
         "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin"
