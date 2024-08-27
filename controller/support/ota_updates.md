@@ -35,7 +35,7 @@ Application-only update
     {
         "type": "FireFly Controller",
         "version": "2024.5.2",
-        "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin",
+        "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin"
     }
 ]
 ```
