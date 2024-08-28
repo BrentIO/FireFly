@@ -23,13 +23,18 @@ When the web server payload specifies both an application and SPIFFS update, the
 
 The fields included in the response are:
 
-| Field | Usage |
-| ----- | ----- |
-| `type` | Matches the `APPLICATION_NAME` definition at compile time, typically `FireFly Controller` |
-| `version` | The version number of the file being described in the `url` or `spiffs` binary |
-| `url` | URL of the application binary |
-| `spiffs` | URL of the SPIFFS binary |
+| Field | Usage | Recommended Maximum Length |
+| ----- | ----- | -------------------------- |
+| `type` | Matches the `APPLICATION_NAME` definition at compile time, typically `FireFly Controller` | 20 |
+| `version` | The version number of the file being described in the `url` or `spiffs` binary | 10 |
+| `url` | URL of the application binary | 60 |
+| `spiffs` | URL of the SPIFFS binary | 60 |
+| `title` | Optional, a short title for the new release version, used by Home Assistant | 30 |
+| `release_summary` | Optional, URL for release notes, used by Home Assistant | 75 |
 
+::: info Recommended maximum lengths
+The recommended maximum lengths reflect the total maximum size of the object that has been tested.  Shortening some fields can allow for others to be slightly longer.  For example, if your URL is only 20 characters in length, you could add 40 characters to your release summary.
+:::
 
 
 ### Example Web Server Response Payloads
@@ -40,7 +45,10 @@ Application-only update
     {
         "type": "FireFly Controller",
         "version": "2024.5.2",
-        "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin"
+        "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin",
+        "title": "App release 2024.5.2",
+        "release_summary": "We added awesome new features!",
+        "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.5.2"
     }
 ]
 ```
@@ -51,7 +59,10 @@ SPIFFS-only update
     {
         "type": "FireFly Controller",
         "version": "2024.3.21",
-        "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin"
+        "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin",
+        "title": "App release 2024.3.21",
+        "release_summary": "We added awesome new features!",
+        "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.3.21"
     }
 ]
 ```
@@ -63,13 +74,19 @@ Combined Application and SPIFFS update
         "type": "FireFly Controller",
         "version": "2024.5.2",
         "url": "https://server.myhost.com/hwreg/app_2024.5.2.bin",
-        "spiffs": "https://server.myhost.com/hwreg/spiffs_2024.5.2.bin"
+        "spiffs": "https://server.myhost.com/hwreg/spiffs_2024.5.2.bin",
+        "title": "App release 2024.5.2",
+        "release_summary": "We added awesome new features!",
+        "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.5.2"
     },
     {
         "type": "FireFly Controller",
         "version": "2024.3.21",
         "url": "https://server.myhost.com/controller/app_2024.3.21.bin",
-        "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin"
+        "spiffs": "https://server.myhost.com/controller/spiffs_2024.3.21.bin",
+        "title": "App release 2024.3.21",
+        "release_summary": "We added awesome new features!",
+        "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.3.21"
     }
 ]
 ```
