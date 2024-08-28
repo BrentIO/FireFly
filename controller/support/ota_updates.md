@@ -1,4 +1,9 @@
 # Over-the-Air (OTA) Updates
+
+::: info Why can't I go directly to the latest version?
+OTA update will always go to the _next_ firmware release, not the latest.  This may be necessary to perform changes to the underlying file structures, introduced only in certain versions.  For example, if you are running version 1, and the latest release is version 4, you must update to version 2, then version 3, and finally version 4.  You cannot directly upgrade from version 1 to version 4.
+:::
+
 FireFly Controller supports OTA updates for both the firmware and SPIFFS (`www` partition).  Data stored on the `config` partition is never updatable over OTA.
 
 While the device is performing any type of OTA update, the [OLED display](/controller/support/OLED_screens/#ota-update) will indicate the percentage complete.  Additionally, events will be written to the [Event Log](/controller/support/event_and_error_logs).
