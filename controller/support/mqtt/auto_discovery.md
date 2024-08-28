@@ -200,8 +200,9 @@ Each controller will be defined as a device and will contain information about t
 ### Firmware Updates
 Indicates if a firmware update is available.  If so, the firmware update can be launched from MQTT by sending the `payload_install` value to the `command_topic`.
 
-> Note: This does not retain the last value from MQTT.
-> Note: The availability topic for this entity is different than other entities.  The availability will be set to `offline` when the external system is unavailable or returns a non-200 response code.
+::: info Availability topic is different for this entity
+The availability topic is different for the `Firmware Update` entity than for other entities.  For the update entity to not be marked `unavailable`, both the standard controller availability _and_ the update's availability must be `online`.  This allows for the `Firmware Update` entity to indicate if the update availability service is operational.
+:::
 
 Example auto discovery topic: 
 ```text
@@ -226,6 +227,15 @@ Example auto discovery payload:
         "sw_version": "2024.8.2",
         "suggested_area": "Tech Room"
     },
+    "availability": [
+        {
+            "topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/availability"
+        },
+        {
+            "topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
+        }
+    ],
+    "availability_mode": "all",
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/state",
     "command_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/set",
     "payload_install": "do-update"

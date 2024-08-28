@@ -104,7 +104,7 @@ Download each library below as a zip file.
 | BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
 | BrentIO_AsyncWebServer_ESP32_W5500 | 2024.7.1 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
 | BrentIO_ESP Async WebServer | 2024.7.1 | https://github.com/BrentIO/ESPAsyncWebServer |
-| BrentIO_esp32FOTA | 2024.8.1 | https://github.com/BrentIO/esp32FOTA |
+| BrentIO_esp32FOTA | 2024.8.2 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
 | BrentIO_PubSubClient | 2024.8.2 | https://github.com/BrentIO/pubsubclient |
