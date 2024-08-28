@@ -201,7 +201,7 @@ homeassistant/update/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f/config
 Example auto discovery payload:
 ```json
 {
-    "name": "Update",
+    "name": "Firmware",
     "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
     "object_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update",
     "icon": "mdi:update",
