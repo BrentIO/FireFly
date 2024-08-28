@@ -217,7 +217,6 @@ Example auto discovery payload:
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/state",
-    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/availability",
     "command_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/set",
     "payload_install": "do-update"
 }
