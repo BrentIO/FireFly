@@ -37,12 +37,12 @@ group #c2efff setup()
     ctl->mqtt: Connect()\n--Will Topic: ""FireFly//{UUID}///availability""\nWill QoS: ""2""\nWill Retain: ""True""\nWill Message: ""offline""
 
     group #c2efff Update
-        ctl->mqtt: Publish Auto Discovery\n--Sensor--
-        mqtt->ha: Publish Auto Discovery\n--Sensor--
+        ctl->mqtt: Publish Auto Discovery\n--Update--\n--Retained--
+        mqtt->ha: Publish Auto Discovery\n--Update--\n--Retained--
         ctl->mqtt: Subscribe Command Topic
         ha-->ha: Create MQTT Device
-        ha-->ha: Create Update\n--Sensor--
-        ha->ha: Update <color:#808080>""Unavailable""</color>\n--Sensor--
+        ha-->ha: Create Firmware Update\n--Update--
+        ha->ha: Firmware Update <color:#808080>""Unavailable""</color>\n--Update--
         ha->mqtt: Subscribe Availability Topic
         ha->mqtt: Subscribe State Topic
     end
@@ -133,27 +133,25 @@ end
 
 group #fffba8 loop()
     ctl->(5)ctl: Check for Update\n--Timer Elapsed--
-    ctl->mqtt: Publish Availability (Update): <color:#green>""online""</color>\n--Retained
-    mqtt->ha: Publish Availability (Update): <color:#green>""online""</color>\n--Retained
-    ha->ha:Update <color: #0000ff>""Value""</color> or ""Unknown""\n--Sensor--
-    ctl->mqtt: Publish State (Update): JSON
-    mqtt->ha: Publish State (Update): JSON
-    ha->ha:Update ""Up-to-date""\n--Sensor--
+    ctl->mqtt: Publish Firmware Update Service Availability: <color:#green>""online""</color>
+    mqtt->ha: Publish Firmware Update Service Availability: <color:#green>""online""</color>
+    ha->ha:Firmware Update <color: #0000ff>""online""</color>\n--Update--
+    group #808080 Update Server Unavailable #white
+        ctl-x(5)ctl: Check for Update\n--Timer Elapsed--
+        ctl->mqtt: Publish Firmware Update Service Availability: <color:#red>""offline""</color>
+        mqtt->ha: Publish Firmware Update Service Availability: <color:#red>""offline""</color>
+        ha->ha:Firmware Update <color:#808080>""Unavailable""</color>\n--Update--
+    end
+    ctl->mqtt: Publish Firmware Update State: JSON\n--Update--
+    mqtt->ha: Publish Firmware Update State: JSON\n--Update--
+    ha->ha:Firmware ""Up-to-date""\n--Update--
     group #808080 Update Available #white
-        ha->ha:Update <color:#0000ff>""Update available""</color>\n--Sensor--
+        ha->ha:Update <color:#0000ff>""Available""</color>\n--Update--
     end
     ctl->ctl: Temperature Event\n--Change Threshold Exceeded--
     ctl->mqtt: Publish State (Temperature): <color: #0000ff>""Value""</color>\n--Retained--
     mqtt->ha: Publish State (Temperature): <color: #0000ff>""Value""</color>\n--Retained--
     ha->ha: Temperature <color: #0000ff>""Value""</color>\n--Sensor--
-end
-
-
-group #808080 Update Server Unavailable #white
-    ctl-x(5)ctl: Check for Update
-    ctl->mqtt: Publish Availability (Update): <color:#red>""offline""</color>\n--Retained
-    mqtt->ha: Publish Availability (Update): <color:#red>""offline""</color>\n--Retained
-    ha->ha: Update <color:#808080>""Unavailable""</color>\n--Sensor--
 end
 
 
@@ -170,6 +168,18 @@ group #808080 Error Logged #white
     ctl->mqtt: Publish State (Error Count): <color: #0000ff>""Value""</color>\n--Retained--
     mqtt->ha: Publish State (Error Count): <color: #0000ff>""Value""</color>\n--Retained--
     ha->ha: Error Count <color: #0000ff>""Value""</color>\n--Sensor--
+end
+
+group #808080 Network or MQTT Connection Failure #white
+    ctl-xmqtt: Connection lost
+    mqtt->ha: Last Will and Testament: <color: #red>""offline""</color>\n--""FireFly//{UUID}///availability""--\n--Retained--
+    ha->ha:Firmware Update <color:#808080>""Unavailable""</color>\n--Update--
+    ha->ha: Start Time <color:#808080>""Unavailable""</color>\n--Sensor--
+    ha->ha: IP Address <color:#808080>""Unavailable""</color>\n--Sensor--
+    ha->ha: MAC Address <color:#808080>""Unavailable""</color>\n--Sensor--
+    ha->ha: Error Count <color:#808080>""Unavailable""</color>\n--Sensor--
+    ha->ha: Temperature <color:#808080>""Unavailable""</color>\n--Sensor--
+    ha->ha: Output <color:#808080>""Unavailable""</color>\n--Light/Fan/Switch--
 end
 ```
 
