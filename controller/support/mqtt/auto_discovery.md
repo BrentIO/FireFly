@@ -195,7 +195,7 @@ Indicates if a firmware update is available.  If so, the firmware update can be 
 
 Example auto discovery topic: 
 ```text
-homeassistant/update/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f/config
+homeassistant/update/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-update/config
 ```
 
 Example auto discovery payload:
