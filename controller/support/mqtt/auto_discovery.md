@@ -537,6 +537,7 @@ Example auto discovery payload:
     },
     "command_topic": "FireFly/C999/set",
     "state_topic": "FireFly/C999/state",
+    "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
