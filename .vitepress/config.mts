@@ -198,6 +198,17 @@ export default defineConfig({
                 text: 'Development Environment'
               },
             ]
+          },
+          { 
+            text: 'Configurator',
+            link: '/configurator/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Development Environment',
+                link: '/configurator/development_environment/'
+              }
+            ]
           }
         ],
     },
