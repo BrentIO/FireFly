@@ -664,8 +664,6 @@ OFF
 | `unqiue_id` | Concatenation of hard-coded "FireFly-" + Outputs -> `id` |
 | `object_id` | `unique_id` |
 | `device` -> `identifiers` | `unique_id` |
-| `device` -> `manufacturer` | Linked relay's `manufacturer` |
-| `device` -> `model` | Linked relay's `model` |
 | `device` -> `via_device` | Controller's UUID |
 | `device` -> `name` | Concatenation of Outputs -> `name`, single space, and Outputs -> `id` |
 | `device` -> `suggested_area` | Outputs -> `area` |
