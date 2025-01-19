@@ -530,8 +530,6 @@ Example auto discovery payload:
             "FireFly-C999"
         ],
         "name": "Recessed Lights C999",
-        "manufacturer": "Crydom",
-        "model": "DR2220D20U",
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "suggested_area": "Kitchen"
     },
@@ -608,8 +606,6 @@ Example auto discovery payload:
             "FireFly-C888"
         ],
         "name": "Reading Lights C888",
-        "manufacturer": "Crydom",
-        "model": "PMP2425W",
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "suggested_area": "Bedroom"
     },
