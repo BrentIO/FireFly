@@ -110,10 +110,11 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
 [![PCB Bottom](./pcb-bottom.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/pcb-bottom.png)
 
+
 ## 3D Printed Parts
 None/Unreleased
 
-## Known Issues and Defects
+## ⚠️ Known Issues and Defects
 
 The following are known issues (and in some cases their improvements) with this hardware.
-- Ethernet interrupt pin not implemented.  A temporary surface-mount jumper was implemented to MCU pin 19.
+- Ethernet interrupt pin not implemented.  A temporary surface-mount jumper was implemented to MCU pin 19 to enable Ethernet.
