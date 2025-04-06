@@ -78,7 +78,15 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 | Power Supply: 9VDC                | Texas Instruments     | LM2940S-9.0/NOPB          | LCSC/JLCPCB       | C134005                           |                   | |
 
 ## Reference Designs
-None/Unreleased
+[Schematic](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/Schematic.pdf)
+
+[EasyEDA Project](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/EasyEDA.zip)
+
+[Gerber Files](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/Gerber.zip)
+
+[BOM](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/BOM.csv)
+
+[Pick and Place](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/PickAndPlace.csv)
 
 [![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/pcb-top.png)
 
