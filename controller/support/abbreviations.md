@@ -23,3 +23,10 @@ Abbreviations that can be found in the event log or error display are documented
 | MQTT conn fail | MQTT connection failed |
 | MQTT conn disconnect | MQTT connection disconnected |
 | MQTT bad creds | MQTT bad credentials |
+| !RC `MAC address` | A rogue client with `MAC address` attempted to connect during provisioning mode |
+| MQTT obj missing | An `mqtt` object is missing from the controller's configuration JSON |
+| MQTT `entity` missing | The configuration is missing the `entity` (host, user, or password) that is required |
+| OTA parse err `error` | There was an error while trying to parse the controller's configuration for OTA configuration; OTA will not be enabled |
+| OTA cfg no url | The URL field is missing from the OTA object on the controller's configuration; OTA will not be enabled |
+| OTA cfg no cert | The controller's OTA configuration uses HTTPS but the certificate field is missing from the controller's configuration; OTA will not be enabled |
+| OTA cfg inv proto | The protocol specified in the controller's OTA configuration does not start with either http or https |
