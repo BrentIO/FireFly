@@ -37,13 +37,31 @@ Espressif Systems ESP32-WROVER-E-N16R8 with 16MB Flash Storage
 ## Inputs
 
 - 1 bank of 8-RJ45 connectors without LEDs
-- 9VDC output (one per bank of 8-RJ45 connectors) to pins 4 & 5
+
+| Pin | Wire Color | Usage |
+| --- | ---------- | ----- |
+| 1 | White/Orange | Channel 1 |
+| 2 | Orange | Channel 2 |
+| 3 | White/Green | Channel 3 |
+| 4 | Blue | +9VDC |
+| 5 | White/Blue | +9VDC |
+| 6 | Green | Channel 4 |
+| 7 | White/Brown | Ground |
+| 8 | Brown | Ground |
 
 
 ## Outputs
 
 - 3 double-stack 90 degree 5.08mm pluggable terminal block
-- 9VDC output pins 3 & 4
+
+[![Pinout](./output_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/output_pinout.svg)
+
+| Pin | Wire Color | Meaning |
+| --- | ---------- | ------- |
+| V   | Red | Variable (0-5VDC) |
+| + | Green | Constant (9VDC) |
+| - | Black | Ground |
+
 
 ## Network
 
