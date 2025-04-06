@@ -32,7 +32,7 @@ Refer to the data sheet and [manufacturer's installation guide](https://www.sens
 5VDC from the FireFly Controller should be connected to A1 (+) and A2 (-).  Only two wires are needed from the Controller for this relay: `Red` (+) and `Black` (-).
 
 ## Proportional Control
-Proportional relays allow a percentage of brightness from 0-100%.  In reality, proportional controls will usually be most noticeable between 10% and 90%.
+Proportional relays allow a percentage of brightness from 0-100%.  In reality, proportional controls will usually be most noticeable between 10% and 90%.  FireFly Controller will automatically round down to 0% when brightness is set below 5% and round up to 100% when brightness is above 95%. 
 
 
 ::: danger Not all lights can be dimmed
