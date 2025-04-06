@@ -11,12 +11,15 @@ This controller model was a test bed for software development and manufacturing.
 
 **Number of Outputs:** 6
 
-**Power Input**
+**Form Factor:** Desktop
+
+## Power Input
 - Minimum: 10.5VDC
 - Recommended: 12VDC 3A
 - Maximum: 26VDC
 
-**Form Factor:** Desktop
+[![Pinout](./power_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/power_pinout.svg)
+
 
 ## MCU
 Espressif Systems ESP32-WROVER-E-N16R8 with 16MB Flash Storage
