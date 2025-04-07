@@ -230,7 +230,7 @@ export default defineConfig({
               },
               {
                 text: 'Development Environment',
-                link: '/controller/development_environment'
+                link: '/controller/development_environment/index.md'
               },
             ]
           },
