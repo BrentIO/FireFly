@@ -220,11 +220,12 @@ Example auto discovery payload:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "availability": [
@@ -254,7 +255,9 @@ Example state payload for `Update available`:
     "latest_version":"2024.12.1",
     "title":"App Release 2024.12.1",
     "release_summary":"We added awesome new features!",
-    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1"
+    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1",
+    "in_progress": false,
+    "update_percentage": 0
 }
 ```
 
@@ -265,8 +268,21 @@ Example state payload for `Up-to-date`:
     "latest_version":"2024.8.2",
     "title":"App Release 2024.8.2",
     "release_summary":"An early version that was still awesome!",
-    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.8.2"
+    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.8.2",
+    "in_progress": false,
+    "update_percentage": 0
 }
+```
+
+When the device is updating, the `in_progress` will be set to `true` and the `update_percentage` will be updated with the current progress, which will be reflected in Home Assistant UI.
+
+To perform the update:
+```text
+FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/set
+```
+with payload:
+```
+do-update
 ```
 
 
@@ -292,11 +308,12 @@ Example auto discovery payload:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/time-start/state",
@@ -337,11 +354,12 @@ Example auto discovery payload:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/ip-address/state",
@@ -381,11 +399,12 @@ Example auto discovery payload:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/mac-address/state",
@@ -424,11 +443,12 @@ Example auto discovery payload:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/count-errors/state",
@@ -468,11 +488,12 @@ Example auto discovery payload for the `Center` temperature sensor:
         "identifiers": [
             "673be2c4-87cc-41e1-bb4e-96367161b02f"
         ],
-        "name": "FireFly Controller Upstairs",
-        "manufacturer": "P5 Software, LLC",
-        "model": "FF1235-9901",
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
         "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
-        "sw_version": "2024.8.2",
+        "sw_version": "2025.4.1",
         "suggested_area": "Tech Room"
     },
     "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/temperature/Center/state",
@@ -521,10 +542,11 @@ homeassistant/light/C999/config
 Example auto discovery payload:
 ```json
 {
-    "name": "Recessed Lights",
+    "name": null,
     "unique_id": "FireFly-C999",
     "object_id": "FireFly-C999",
     "icon": "mdi:light-recessed",
+    "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
     "device": {
         "identifiers": [
             "FireFly-C999"
@@ -535,7 +557,6 @@ Example auto discovery payload:
     },
     "command_topic": "FireFly/C999/set",
     "state_topic": "FireFly/C999/state",
-    "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
@@ -595,12 +616,15 @@ homeassistant/light/C888/config
 Example auto discovery payload:
 ```json
 {
-    "name": "Reading Lights",
+    "name": null,
     "unique_id": "FireFly-C888",
     "object_id": "FireFly-C888",
     "icon": "mdi:wall-sconce",
     "on_command_type": "brightness",
     "brightness_scale": 100,
+    "brightness_command_topic": "FireFly/C888/set",
+    "brightness_state_topic": "FireFly/C888/state",
+    "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
     "device": {
         "identifiers": [
             "FireFly-C888"
@@ -609,11 +633,8 @@ Example auto discovery payload:
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "suggested_area": "Bedroom"
     },
-    "command_topic": "FireFly/C888/set",
     "state_topic": "FireFly/C888/state",
-    "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
-    "brightness_command_topic": "FireFly/C888/set",
-    "brightness_state_topic": "FireFly/C888/state",
+    "command_topic": "FireFly/C888/set",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
@@ -656,18 +677,18 @@ OFF
 
 | Field | Data Source |
 | ----- | ----------- |
-| `name` | Outputs -> `name` |
+| `name` | `null`, hard-coded |
 | `unqiue_id` | Concatenation of hard-coded "FireFly-" + Outputs -> `id` |
 | `object_id` | `unique_id` |
 | `device` -> `identifiers` | `unique_id` |
 | `device` -> `via_device` | Controller's UUID |
-| `device` -> `name` | Concatenation of Outputs -> `name`, single space, and Outputs -> `id` |
+| `device` -> `name` | Outputs -> `name`|
 | `device` -> `suggested_area` | Outputs -> `area` |
 | `icon` | Concatenation of hard-coded "mdi:" + Outputs -> `icon`, which must be a valid MDI icon |
 | `on_command_type` | Hard-coded `brightness` when the output `type` = `VARIABLE` |
 | `state_value_template` | Hard-coded `{% if value\|int > 0 %}ON{% else %}OFF{% endif %}` when the output `type` = `VARIABLE` |
 | `brightness_scale` | Hard-coded `100` when the output `type` = `VARIABLE` |
-| Topic names | Concatenation of hard-coded "FireFly/",  Outputs -> `id`, and the topic |
+| Topic names | Concatenation of hard-coded "FireFly/circuits/",  Outputs -> `id` |
 
 
 ## Home Assistant Device Types
