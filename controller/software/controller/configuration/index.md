@@ -15,12 +15,10 @@ One exception is that the controller model **cannot be changed** once set.  Be s
 
 ## Getting Started
 There is a (rough) sequence that must be followed in order to configure FireFly Controller:
-1. Add at least one breaker
+1. Add at least one [breaker](./breakers.md)
 2. Add [areas](./areas.md) that are specific to your location
-3.  Add [icons](./icons.md) that are needed
-4.  Although probably not necessary, add [colors](./colors.md) if you have any special button colors
-5. Circuits must be assigned to an output prior to 
-
+3. Add [icons](./icons.md) that are needed
+4. Although probably not necessary, add [colors](./colors.md) if you have any special button colors
 
 
 ## Troubleshooting
