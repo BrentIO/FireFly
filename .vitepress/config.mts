@@ -58,25 +58,97 @@ export default defineConfig({
                     link: '/controller/software/controller/index.md',
                     items:[                  
                       { 
-                        text: 'Power Supply Configuration',
+                        text: 'Configuration',
+                        link: '/controller/software/controller/configuration/index.md',
+                        collapsed: true,
+                        items: [
+                          { 
+                            text: 'Controllers',
+                            link: '/controller/software/controller/configuration/controllers'
+                          },
+                          { 
+                            text: 'Clients',
+                            link: '/controller/software/controller/configuration/clients'
+                          },
+                          { 
+                            text: 'Inputs',
+                            link: '/controller/software/controller/configuration/inputs'
+                          },
+                          { 
+                            text: 'Outputs',
+                            link: '/controller/software/controller/configuration/outputs'
+                          },
+                          { 
+                            text: 'Circuits',
+                            link: '/controller/software/controller/configuration/circuits'
+                          },
+                          { 
+                            text: 'Breakers',
+                            link: '/controller/software/controller/configuration/breakers'
+                          },
+                          { 
+                            text: 'Configuration: Areas',
+                            link: '/controller/software/controller/configuration/areas'
+                          },
+                          { 
+                            text: 'Configuration: Certificates',
+                            link: '/controller/software/controller/configuration/certificates'
+                          },
+                          { 
+                            text: 'Configuration: Colors',
+                            link: '/controller/software/controller/configuration/colors'
+                          },
+                          { 
+                            text: 'Configuration: Icons',
+                            link: '/controller/software/controller/configuration/icons'
+                          },
+                          { 
+                            text: 'Configuration: MQTT',
+                            link: '/controller/software/controller/configuration/mqtt'
+                          },
+                          { 
+                            text: 'Configuration: OTA Updates',
+                            link: '/controller/software/controller/configuration/ota'
+                          },
+                          { 
+                            text: 'Configuration: Tags',
+                            link: '/controller/software/controller/configuration/tags'
+                          },
+                          { 
+                            text: 'Configuration: WiFi',
+                            link: '/controller/software/controller/configuration/wifi'
+                          },
+                          { 
+                            text: 'Configuration: Import',
+                            link: '/controller/software/controller/configuration/import'
+                          },
+                          { 
+                            text: 'Configuration: Export',
+                            link: '/controller/software/controller/configuration/export'
+                          },
+                          { 
+                            text: 'Configuration: Reset',
+                            link: '/controller/software/controller/configuration/reset'
+                          },
+                          { 
+                            text: 'Reports: Bill of Materials',
+                            link: '/controller/software/controller/configuration/bom'
+                          },
+                          { 
+                            text: 'Reports: Control Circuits',
+                            link: '/controller/software/controller/configuration/control_circuits'
+                          }
+
+
+                        ]
                       },
                       { 
-                        text: 'Circuit Configuration',
-                      },
-                      { 
-                        text: 'Input Configuration',
-                      },
-                      { 
-                        text: 'Output Configuration',
-                      },
-                      { 
-                        text: 'Action Configuration',
-                      },
-                      { 
-                        text: 'MQTT Configuration',
+                        text: 'Provisioning Mode',
+                        link: '/controller/software/controller/provisioning_mode'
                       },
                       { 
                         text: 'API Reference',
+                        link: '/controller/software/controller/api_reference'
                       },
                     ]
                   },
@@ -200,15 +272,8 @@ export default defineConfig({
             ]
           },
           { 
-            text: 'Configurator',
-            link: '/configurator/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Development Environment',
-                link: '/configurator/development_environment/'
-              }
-            ]
+            text: 'Best Practices',
+            link: '/best_practices'
           }
         ],
     },
