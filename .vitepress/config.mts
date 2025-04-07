@@ -143,10 +143,6 @@ export default defineConfig({
                         ]
                       },
                       { 
-                        text: 'Provisioning Mode',
-                        link: '/controller/software/controller/provisioning_mode'
-                      },
-                      { 
                         text: 'API Reference',
                         link: '/controller/software/controller/api_reference'
                       },
@@ -206,6 +202,10 @@ export default defineConfig({
                   { 
                     text: 'Performance Testing',
                     link: '/controller/support/performance_testing'
+                  },
+                  { 
+                    text: 'Provisioning Mode',
+                    link: '/controller/support/provisioning_mode'
                   },
                   { 
                     text: 'Troubleshooting'
