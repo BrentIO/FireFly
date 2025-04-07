@@ -1,1 +1,112 @@
-<svg id="clientPreviewImage" viewBox="0 0 400 600"><defs><radialGradient id="innerGradient"><stop offset="10%" stop-color="#C0C0C0"></stop><stop offset="95%" stop-color="#a6a6a6"></stop></radialGradient><radialGradient id="emptyGradient"><stop offset="10%" stop-color="#595959"></stop><stop offset="95%" stop-color="#737373"></stop></radialGradient><linearGradient id="outerGradient" gradientTransform="rotate(90)"><stop class="stop1" offset="0%" stop-color="#C0C0C0"></stop><stop class="stop2" offset="50%" stop-color="#C0C0C0"></stop><stop class="stop3" offset="100%" stop-color="#a6a6a6"></stop></linearGradient></defs><circle cx="200" cy="150" r="50" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle><circle cx="200" cy="150" r="33" stroke="#ffbc47" stroke-width="10px" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle><circle cx="200" cy="300" r="50" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle><circle cx="200" cy="300" r="33" stroke="#2a36e5" stroke-width="10px" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle><circle cx="200" cy="450" r="50" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle><circle cx="200" cy="450" r="33" stroke="#ffbc47" stroke-width="10px" fill="url('#innerGradient')" data-bs-toggle="tooltip" data-bs-html="true" title=""></circle></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="clientPreviewImage"
+   viewBox="0 0 400 600"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7">
+    <radialGradient
+       id="innerGradient">
+      <stop
+         offset="10%"
+         stop-color="#C0C0C0"
+         id="stop1" />
+      <stop
+         offset="95%"
+         stop-color="#a6a6a6"
+         id="stop2" />
+    </radialGradient>
+    <radialGradient
+       id="emptyGradient">
+      <stop
+         offset="10%"
+         stop-color="#595959"
+         id="stop3" />
+      <stop
+         offset="95%"
+         stop-color="#737373"
+         id="stop4" />
+    </radialGradient>
+    <linearGradient
+       id="outerGradient"
+       gradientTransform="rotate(90)">
+      <stop
+         class="stop1"
+         offset="0%"
+         stop-color="#C0C0C0"
+         id="stop5" />
+      <stop
+         class="stop2"
+         offset="50%"
+         stop-color="#C0C0C0"
+         id="stop6" />
+      <stop
+         class="stop3"
+         offset="100%"
+         stop-color="#a6a6a6"
+         id="stop7" />
+    </linearGradient>
+  </defs>
+  <circle
+     cx="200"
+     cy="150"
+     r="50"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle7" />
+  <circle
+     cx="200"
+     cy="150"
+     r="33"
+     stroke="#ffbc47"
+     stroke-width="10px"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle8" />
+  <circle
+     cx="200"
+     cy="300"
+     r="50"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle9" />
+  <circle
+     cx="200"
+     cy="300"
+     r="33"
+     stroke="#2a36e5"
+     stroke-width="10px"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle10" />
+  <circle
+     cx="200"
+     cy="450"
+     r="50"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle11" />
+  <circle
+     cx="200"
+     cy="450"
+     r="33"
+     stroke="#ffbc47"
+     stroke-width="10px"
+     fill="url('#innerGradient')"
+     data-bs-toggle="tooltip"
+     data-bs-html="true"
+     title=""
+     id="circle12" />
+</svg>
