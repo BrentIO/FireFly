@@ -1,13 +1,71 @@
 # Automating with Input Events using MQTT
 
-Unlike with controller sensors and outputs, inputs (such as button presses) are not included in auto discovery.
+Unlike with Controller sensors and outputs, button presses are not included in MQTT auto discovery.
 
-However, because the input button press is broadcast over MQTT, the event can be read by other listeners, like Node Red.  This allows Node Red to perform multiple actions not known to the Controller when a button is pressed.  The controller will emit a message on an input port channel state change even if no output actions are defined.
+However, because the button press is broadcast over MQTT, the event can be read by subscribers such as Home Assistant.  This allows the subscriber to perform multiple actions not known to the Controller when a button changes state, such as setting a lighting scene, turning on a water feature, and starting music.  The Controller will emit a message even if no output actions are defined.
 
-For example, port 7 channel 2 is a normally open input button that is defiend in the controller's configuration file.  It has no output actions associated to the input channel.  When the button is pressed, the controller will raise an MQTT message to a pre-defined topic.  When the button is released, the controller will raise another MQTT message on the same topic.  Home Assistant (and optionally Node Red) can listen for the button press or release MQTT messages to perform multiple actions that are otherwise unknown to the controller, such as turning off all lights in the house, changing the HVAC temperature to a defined setting, and arming the alarm panel to night mode.
-
-The input port and channel must be configured on the controller for the controller to emit an MQTT message about its state chagne.  If no input is configured in the controller's configuration, the state change will not raise an MQTT message.
+The Client must be configured with the button or switch in order for the Controller to emit an MQTT message about its state change.
 
 ## Input Events Topics and Payloads
 
-<Badge type="warning" text="TODO" />Describe the topic and payload contents that are triggered for events.
+Below are the four event topics that can be raised by the Controller. Note that Extended Clients will raise events on Channel 5 or Channel 6 if configured.
+
+For all examples below, the Client ID is S17 and the second button is being exercised (Channel 2).  
+
+
+### Short State Change
+
+Example Topic:
+```text
+FireFly/inputs/S17C2
+```
+
+State Payload:
+```text
+SHORT
+```
+
+### Long State Change
+Example Topic:
+```text
+FireFly/inputs/S17C2
+```
+
+State Payload:
+```text
+LONG
+```
+
+:::info 
+The transition to `LONG` will be directly after `SHORT`.
+:::
+
+### Excessive State Change
+Excessive state changes indicate the output is already at its maximum or minimum and further requests are unnecessarily excessive.
+
+Example Topic:
+```text
+FireFly/inputs/S17C2
+```
+
+State Payload:
+```text
+EXCESSIVE
+```
+
+:::info 
+`EXCESSIVE` can occur after either `SHORT` or `LONG` events.
+:::
+
+### Returned to Normal State
+A  normal state indicates the button or switch has returned to its normal state.  For example, if the button is normally open, the button is open. If the button is normally closed, the button has returned to its normal state of being closed.
+
+Example Topic:
+```text
+FireFly/inputs/S17C2
+```
+
+State Payload:
+```text
+NORMAL
+```
