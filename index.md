@@ -17,7 +17,7 @@ features:
   - title: Open-Source, Locally-Controlled Software
     details: You can review and modify our source code, so nobody can decide it's time to "sunset" your lighting controls
   - title: Native API's
-    details: Integrate to other applications through HTTP and MQTT
+    details: Integrate to other applications through MQTT
   - title: Pre-Integrated with Home Assistant
     details: Running Home Assistant for your home automation?  Great, so are we
 ---
