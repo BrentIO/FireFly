@@ -282,3 +282,7 @@ Location (see table above) = `0xC90000`.  To flash the image:
 Hardware configurationsk are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations.  Each hardware model is defined in `hardware.h`.
 
 Additionally, the peripheral information must be added to `./www/auxillary_data.json` file.  Adding the product HEX and the product ID to the auxillary_data.json file will add it to the Product ID drop down in the Identification area of the configuration.
+
+## Filter Large JSON documents
+
+The Controller [filters large JSON documents](./configuration_json_filtering.md) in order to conserve memory and protect future upgradeability.
