@@ -30,3 +30,6 @@ Abbreviations that can be found in the event log or error display are documented
 | OTA cfg no url | The URL field is missing from the OTA object on the controller's configuration; OTA will not be enabled |
 | OTA cfg no cert | The controller's OTA configuration uses HTTPS but the certificate field is missing from the controller's configuration; OTA will not be enabled |
 | OTA cfg inv proto | The protocol specified in the controller's OTA configuration does not start with either http or https |
+| Err mkdir certs | The certificates directory does not exist on the config partition and it could not be created |
+| Err mkdir ctlrs | The controllers directory does not exist on the config partition and it could not be created |
+| Err mkdir clients | The clients directory does not exist on the config partition and it could not be created |
