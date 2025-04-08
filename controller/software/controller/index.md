@@ -3,7 +3,7 @@
 The Controller software is the application which runs on the Controller hardware for production use.  It monitors inputs and will perform defined actions (if any) to outputs.
 
 ## Network Connectivity
-All network connectivity is expected to be over Ethernet.  For security reasons, WiFi is not permitted for production use, except when [Provisioning Mode](/controller/software/controller/provisioning_mode.md) is active.
+All network connectivity is expected to be over Ethernet.  For security reasons, WiFi is not permitted for production use, except when [Provisioning Mode](/controller/support/provisioning_mode.md) is active.
 
 
 ## :white_check_mark: What this application does

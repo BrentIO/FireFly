@@ -42,7 +42,7 @@ Application updates will always require a reboot after being deployed.  Keep thi
 
 ## Activate Provisioning Mode
 
-Clicking the Activate Provisioning Mode button will toggle [Provisioning Mode](/controller/software/controller/provisioning_mode.md).  This is an asynchronous request and will take several seconds for the radio to turn on and the client information to be loaded into memory.  Refer to the OLED display to know when Provisioning Mode has become activated.
+Clicking the Activate Provisioning Mode button will toggle [Provisioning Mode](/controller/support/provisioning_mode.md).  This is an asynchronous request and will take several seconds for the radio to turn on and the client information to be loaded into memory.  Refer to the OLED display to know when Provisioning Mode has become activated.
 
 
 ## Pull Backup
