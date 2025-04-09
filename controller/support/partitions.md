@@ -3,15 +3,16 @@ FireFly Controller uses a custom board, typically using the ESP32 WROVER-E Modul
 
 The custom partition table will is defined as:
 
-| Name | Type | SubType | Offset | Size | Flags |
-|--|--|--|--|--|--|
-| nvs | data | nvs | 0x9000 | 0x5000 |
-| otadata | data | ota | 0xe000 | 0x2000 |
-| app0 | app | ota_0 | 0x10000 | 0x640000 |
-| app1 | app | ota_1 | 0x650000 | 0x640000 |
-| config | data | spiffs | 0xC90000 | 0x80000 |
-| www | data | spiffs | 0xD10000 | 0x2E0000 |
-| coredump | data | coredump | 0xFF0000 | 0x10000 |
+| Name | Type | SubType | Offset | Size (Hex) | Size (Human) | Flags |
+|--|--|--|--|--|--| -- |
+| nvs | data | nvs | 0x9000 | 0x5000 | 20KB |
+| otadata | data | ota | 0xe000 | 0x2000 | 8KB |
+| app0 | app | ota_0 | 0x10000 | 0x640000 | 6.25MB |
+| app1 | app | ota_1 | 0x650000 | 0x640000 | 6.25MB |
+| config | data | spiffs | 0xC90000 | 0x80000 | 512KB |
+| www | data | spiffs | 0xD10000 | 0x2E0000 | 2.875MB |
+| coredump | data | coredump | 0xFF0000 | 0x10000 | 64KB |
+
 
 ## `config` partition
 Data stored within this partition contains configuration data for the controller itself, such as:
