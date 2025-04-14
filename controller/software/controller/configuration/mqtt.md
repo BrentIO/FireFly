@@ -6,7 +6,7 @@ The MQTT broker's DNS and IP can be defined, as well as a port.  If you do not s
 
 When determining how to configure your username and passwords for devices, you have two options: use the same username and password to connect to MQTT for all devices -- OR -- use a known mechanism to have a different username and password for each device, based on its hardware.  Using wildcards will improve your security through obscurity.  Both the username and password can use different wildcards, so you could have the username be `$$mac$$` and password be `$$uuid$$`.  An intruder would need to know the combination of both in order to authenticate to MQTT.
 
-You can specify four different wildcards based on your MQTT authentication standards.  Examples are below for a device with a MAC address of `DE:AD:BE:EF:FE:ED` and a UUID of `b113d8ff-51ef-4fd8-82c0-7dac74d73ef3`:
+You can specify four different wildcards based on your MQTT authentication standards.  Examples are below for a device with an Ethernet MAC address of `DE:AD:BE:EF:FE:ED` and a UUID of `b113d8ff-51ef-4fd8-82c0-7dac74d73ef3`:
 
 | Wildcard | Example Value |
 | -------- | ------------- |
