@@ -17,7 +17,7 @@ For all examples below, the Client ID is S17 and the second button is being exer
 
 Example Topic:
 ```text
-FireFly/inputs/S17C2
+FireFly/inputs/S17/channels/2
 ```
 
 State Payload:
@@ -28,7 +28,7 @@ SHORT
 ### Long State Change
 Example Topic:
 ```text
-FireFly/inputs/S17C2
+FireFly/inputs/S17/channels/2
 ```
 
 State Payload:
@@ -45,7 +45,7 @@ Excessive state changes indicate the output is already at its maximum or minimum
 
 Example Topic:
 ```text
-FireFly/inputs/S17C2
+FireFly/inputs/S17/channels/2
 ```
 
 State Payload:
@@ -62,7 +62,7 @@ A  normal state indicates the button or switch has returned to its normal state.
 
 Example Topic:
 ```text
-FireFly/inputs/S17C2
+FireFly/inputs/S17/channels/2
 ```
 
 State Payload:
