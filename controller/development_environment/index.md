@@ -120,9 +120,12 @@ Install each library above using the following command:
 arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
 ```
 
+> [!INFO]  
+> Versions must also be changed in the GitHub actions.
+
 ## Add Custom Board to boards.txt
 
-The board must be added to the boards.txt file, found in the Espressif ESP Core version-specific folder. The stub for the custom board is included in the Hardware-Registration-and-Configuration project.
+The board must be added to the boards.txt file, found in the Espressif ESP Core version-specific folder.
 
 Steps:
 
@@ -131,7 +134,7 @@ Steps:
 2. Merge the sub custom board into the main boards file. Example for ESP Core version 2.0.11:
 ```bash
 cp ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.original.txt
-cat ./Hardware-Registration-and-Configuration/boards.txt >> ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt
+cat ./boards.local.txt >> ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt
 ```
 
 3. Open Visual Studio Code. Select the board labeled `P5 Software FireFly Controller`.
