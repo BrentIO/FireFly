@@ -123,21 +123,20 @@ arduino-cli lib install --zip-path /my/downloads/directory/library_name.zip
 > [!INFO]  
 > Versions must also be changed in the GitHub actions.
 
-## Add Custom Board to boards.txt
+## Add Symlink for boards.local.txt
 
-The board must be added to the boards.txt file, found in the Espressif ESP Core version-specific folder.
+The boards.local.txt file must be placed adjacent to the other boards.txt file provided by ESP32 core.
 
 Steps:
 
 1. Close Visual Studio Code
 
-2. Merge the sub custom board into the main boards file. Example for ESP Core version 2.0.11:
+2. Create a symlink adjacent to the main boards file. Example for ESP Core version 2.0.11:
 ```bash
-cp ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.original.txt
-cat ./boards.local.txt >> ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.txt
+ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.11/boards.local.txt
 ```
 
-3. Open Visual Studio Code. Select the board labeled `P5 Software FireFly Controller`.
+3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
 
 4. For new boards only, ensure the option `Hardware-Registration-and-Configuration` is set to `Enabled`. Subsequent flashes of that chip should be set to `Disabled`.
 
@@ -213,6 +212,7 @@ The folder structure should look like this:
 ```
 /my/path/to/project/FireFly-Controller
 -> .vscode
+-> boards.local.txt
 -> Controller
 	---> Controller.ino
 	---> ...
@@ -221,7 +221,7 @@ The folder structure should look like this:
 		-----> auxillary_data.json
 		-----> ...
 	---> Hardware-Registration-and-Configuration.ino
-	---> boards.txt
+
 	---> swagger.yaml
 	---> ...
 -> common
