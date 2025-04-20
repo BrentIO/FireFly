@@ -92,7 +92,7 @@ If there are any installed libraries, uninstall them before proceeding.
   
 
 #### Download required libraries
-Download each library below as a zip file.
+Download each library below as a zip file or download from GitHub.
 
 | Library | Version | URL |
 |---------|---------|-----|
