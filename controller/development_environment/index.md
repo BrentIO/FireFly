@@ -173,7 +173,7 @@ Example File Contents:
 	"buildPreferences": [
 		[
 			"build.extra_flags",
-			"-DASYNCWEBSERVER_REGEX -DPRODUCT_HEX=0x08062305 -DESP32 -DCORE_DEBUG_LEVEL=3 -I~/GitHub/P5Software/FireFly-Controller"
+			"-DASYNCWEBSERVER_REGEX -DPRODUCT_HEX=0x08062305 -DESP32 -DCORE_DEBUG_LEVEL=3 -DDISABLE_ALL_LIBRARY_WARNINGS -I~/GitHub/P5Software/FireFly-Controller"
 		]
 	],
 	"port": "/dev/tty.SLAB_USBtoUART",
@@ -202,6 +202,7 @@ Defines the custom board configured in the Custom Boards section, above:
 - `4` = Debug
 - `5` = Verbose
 
+**`DISABLE_ALL_LIBRARY_WARNINGS`** Will quiet progra messages from the FOTA library.
 
 You must also include the parent directory of FireFly-Controller using the `-I/my/path/to/project/FireFly-Controller` parameter. Note that abbreviated file paths using `~` (for instance, `~/project/FireFly-Controller`) will **not** work properly.
 
