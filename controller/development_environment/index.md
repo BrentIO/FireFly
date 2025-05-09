@@ -102,7 +102,7 @@ Download each library below as a zip file or download from GitHub.
 | ArduinoJson | 6.21.5 | https://github.com/bblanchon/ArduinoJson |
 | ArduinoStreamUtils | 1.9.0 | https://github.com/bblanchon/ArduinoStreamUtils |
 | BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
-| BrentIO_AsyncWebServer_ESP32_W5500 | 2024.7.1 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
+| BrentIO_AsyncWebServer_ESP32_W5500 | 2025.5.1 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
 | BrentIO_ESP Async WebServer | 2024.7.1 | https://github.com/BrentIO/ESPAsyncWebServer |
 | BrentIO_esp32FOTA | 2025.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
