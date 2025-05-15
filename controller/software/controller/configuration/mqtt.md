@@ -21,7 +21,7 @@ This information is never encrypted, including when stored in the configuration 
 :::
 
 ::: info EEPROM Required
-using `$$uuid$$` requires the external EEPROM to be present and programmed.
+Using `$$uuid$$` requires the external EEPROM to be present and programmed.
 :::
 
 
