@@ -20,6 +20,9 @@ You can specify four different wildcards based on your MQTT authentication stand
 This information is never encrypted, including when stored in the configuration database, any configuration exports, at rest on the Controller, and at rest on the Client.
 :::
 
+::: info EEPROM Required
+using `$$uuid$$` requires the external EEPROM to be present and programmed.
+:::
 
 
 [![MQTT](./mqtt.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/mqtt.png)
