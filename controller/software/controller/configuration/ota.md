@@ -11,6 +11,7 @@ You can configure the URL to include wildcards, which will be substituted at exe
 | Wildcard | Example Value |
 | -------- | ------------- |
 | `$$pid$$` | `FFC3232-2305` |
+| `$$app$$` | `FireFly Controller` |
 
 ::: info EEPROM Required
 Using `$$pid$$` requires the external EEPROM to be present and programmed.
