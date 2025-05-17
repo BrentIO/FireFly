@@ -6,7 +6,7 @@ If `OTA Disabled` is checked, no OTA configuration is sent for that device type.
 
 If `https` is selected, you must first upload a [certificate](/controller/software/controller/configuration/certificates) in the UI before you will be able to save.  Only one certificate can be defined.  Certificates are automatically deployed when the configuration is pushed to a Controller.
 
-You can configure the URL to include wildcards, which will be substituted at execution time.
+You can configure the URL to include wildcards, which will be substituted at execution time.  The underlying library will URL encode as necessary.
 
 | Wildcard | Example Value |
 | -------- | ------------- |
