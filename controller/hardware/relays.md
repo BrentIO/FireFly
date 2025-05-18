@@ -18,14 +18,14 @@ The specific relays mentioned below have been pre-added to the Controller config
 Binary controls come in two forms: traditional solid state relays and contactor relays.  Check with your local laws if one must be used over another.  However, a good rule of thumb is that if you are connecting a typical light circuit as the load, a standard relay is typically sufficient.  If connecting a motor (such as a fan or pump), a contactor relay should be used.
 
 ## Relay
-[Crydom DR22 Series DIN Rail Mount SSRs](https://www.sensata.com/products/relays/dr22-series-din-rail-mount-ac-output-ssr-dr2260d20u) are reliable and can typically handle more load than found in a normal household lighting setup.  Refer to the datasheet to ensure you are meeting your specific electrical needs, but `DR2220D20U` is a good choice in North America and is C-UL-US approved.  These devices typically ship with a pre-installed heatsink.
+[Crydom DR22 Series DIN Rail Mount SSRs](https://www.sensata.com/products/relays/dr22-series-din-rail-mount-ac-output-ssr-dr2260d20u) are reliable and can typically handle more load than found in a normal household lighting setup.  Refer to the datasheet to ensure you are meeting your specific electrical needs, but [`DR2220D20U`](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/datasheets/DR2220D20U.pdf) is a good choice in North America and is C-UL-US approved.  These devices typically ship with a pre-installed heatsink.
 
 Wiring on this device can be confusing; be sure to connect the correct voltage to the correct terminal.  Refer to the data sheet and [manufacturer's installation guide](https://www.sensata.com/sites/default/files/a/sensata-dr22-series-din-rail-mount-ssr-installation.pdf) for details.
 
 5VDC from the FireFly Controller should be connected to A1 (+) and A2 (-).  Only two wires are needed from the Controller for this relay: `Red` (+) and `Black` (-).
 
 ## Contactor
-[Crydom DR22 Series DIN Rail Mount SSRs](https://www.sensata.com/products/relays/dr22-series-din-rail-mount-ac-output-ssr-dr2260d20v) are reliable and can be used to power bathroom exhaust fans, small pumps, and other needs where a motor is (or could be) connected.  Refer to the datasheet to ensure you are meeting your specific electrical needs, but `DR2260D20V` is a good choice in North America and is C-UL-US approved.  These devices typically ship with a pre-installed heatsink.
+[Crydom DR22 Series DIN Rail Mount SSRs](https://www.sensata.com/products/relays/dr22-series-din-rail-mount-ac-output-ssr-dr2260d20v) are reliable and can be used to power bathroom exhaust fans, small pumps, and other needs where a motor is (or could be) connected.  Refer to the datasheet to ensure you are meeting your specific electrical needs, but [`DR2260D20V`](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/datasheets/DR2220D20U.pdf) is a good choice in North America and is C-UL-US approved.  These devices typically ship with a pre-installed heatsink.
 
 Refer to the data sheet and [manufacturer's installation guide](https://www.sensata.com/sites/default/files/a/sensata-dr22-series-din-rail-mount-ssr-installation.pdf) for details.
 
@@ -38,7 +38,7 @@ Proportional relays allow a percentage of brightness from 0-100%.  In reality, p
 ::: danger Not all lights can be dimmed
 Check with the manufacturer of the fixture to ensure it can be dimmed.  Many LED fixtures **cannot** be dimmed, or if they can be, require a particular type of dimmer.  If your fixture cannot be dimmed, or if you do not use the correct type of dimmer, **damage or fire may occur**.  
 
-Crydom PMP2425 proportional relays use a triac dimmer.  If you are not certain the dimmer type supported by the fixture **do not attempt to dim it**.
+Crydom [`PMP2425W`](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/datasheets/PMP2425W.pdf) proportional relays use a triac dimmer.  If you are not certain the dimmer type supported by the fixture **do not attempt to dim it**.
 :::
 
 [Crydom PMP2425W](https://www.sensata.com/products/relays/pmp-series-proportional-control-ssr-pmp2425w) is a good choice for dimming.  It uses 3 connectors to provide dimming on a 0-5VDC basis which is mapped from 0% to 100%.  This model typically _does not_ ship with a heatsink, which is required.  The [HS301DR](https://www.sensata.com/sites/default/files/a/sensata-hs301dr-heatsink-ssr-assemblies-datasheet.pdf) has been known to work well, but determine your own thermal needs based on installation location and cooling available.
