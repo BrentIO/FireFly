@@ -18,7 +18,7 @@ Final product design, featuring a rack mount footprint with 32 inputs and 32 out
 - Recommended: 12VDC 3A
 - Maximum: 26VDC
 
-[![Pinout](./power_pinout.svg)](./power_pinout.svg)
+[![Pinout](./power_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/power_pinout.svg)
 
 
 ## MCU
@@ -59,7 +59,7 @@ Espressif Systems ESP32-WROVER-E-N16R8 with 16MB Flash Storage
 - 16 double-stack 90 degree 5.08mm pluggable terminal block
 - Odd-numbered ports are on the top; even-numbered ports are on the bottom
 
-[![Pinout](./output_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/output_pinout.svg)
+[![Pinout](./output_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/output_pinout.svg)
 
 | Pin | Wire Color | Meaning |
 | --- | ---------- | ------- |
@@ -81,19 +81,19 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 | To be populated when released to production |
 
 ## Reference Designs
-[Schematic](./Schematic.pdf)
+[Schematic](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/Schematic.pdf)
 
-[EasyEDA Project](./EasyEDA.zip)
+[EasyEDA Project](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/EasyEDA.zip)
 
-[Gerber Files](./Gerber.zip)
+[Gerber Files](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/Gerber.zip)
 
-[BOM](./BOM.csv)
+[BOM](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/BOM.csv)
 
-[Pick and Place](./PickAndPlace.csv)
+[Pick and Place](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/PickAndPlace.csv)
 
-[![PCB Top](./pcb-top.png)](./pcb-top.png)
+[![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/pcb-top.png)
 
-[![PCB Bottom](./pcb-bottom.png)](./pcb-bottom.png)
+[![PCB Bottom](./pcb-bottom.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC3232_2505/pcb-bottom.png)
 
 
 ## 3D Printed Parts
