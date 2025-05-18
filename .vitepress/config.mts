@@ -33,13 +33,21 @@ export default defineConfig({
                     collapsed: true,
                     items:[
                       {
+                        text: 'FFC0806-2505',
+                        link: '/controller/hardware/FFC0806_2505/'
+                      },
+                      {
                         text: 'FFC0806-2305',
                         link: '/controller/hardware/FFC0806_2305/'
                       },
                       {
+                        text: 'FFC3232-2505',
+                        link: '/controller/hardware/FFC3232_2505/'
+                      },
+                      {
                         text: 'FFC3232-2211',
                         link: '/controller/hardware/FFC3232_2211/'
-                      },
+                      }
                     ]
                   },
                   {
