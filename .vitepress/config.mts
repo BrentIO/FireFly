@@ -283,6 +283,17 @@ export default defineConfig({
               },
             ]
           },
+          {
+            text: 'Cloud',
+            collapsed: true,
+            items: [
+              
+              {
+                text: 'Development Environment',
+                link: '/cloud/development_environment'
+              },
+            ]
+          },
           { 
             text: 'Best Practices',
             link: '/best_practices'
