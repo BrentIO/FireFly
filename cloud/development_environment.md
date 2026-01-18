@@ -53,18 +53,24 @@ This policy allows execution to the individual services needed to deploy and dee
 ## Github Secrets
 
 The following secrets must be configured in Github secrets:
-- `AWS_ACCESS_KEY_ID` with the access key for IAM user `firefly-github-actions`.
-- `AWS_ACCOUNT_ID` with your AWS account ID.
-- `AWS_REGION` with the region you plan to deploy to.
-- `AWS_SECRET_ACCESS_KEY` with the access key secret for IAM user `firefly-github-actions`.
-- `HOSTED_ZONE_ID` with the Hosted Zone ID for your Route 53 instance.
-- `S3_FIRMWARE_BUCKET_NAME` with the S3 bucket name you plan to use to store firmware.
-- `SAM_DEPLOYMENT_BUCKET_NAME` with the name of the bucket where deployment templates will be stored.
+
+| Name | Example Value | Description |
+| ---- | ------------- | ----------- |
+| `AWS_ACCESS_KEY_ID` | firefly-github-actions | The access key for IAM user. |
+| `AWS_ACCOUNT_ID` | 1234567890 | Your AWS account ID. |
+| `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
+| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions` |
+| `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
+| `S3_FIRMWARE_BUCKET_NAME` | my-firmware-bucket | The S3 bucket name you plan to use to store firmware. |
+| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored when deployed. |
 
 
 ## Github Variables
 The following variables must be configured in Github variables:
 
-- `API_DOMAIN_NAME` with the domain name for the API gateway, for example _api.somewhere.com_.
-- `CERTIFICATE_DOMAIN_NAME` as a wildcard to your domain, for example _*.somewhere.com_.
-- `CLOUD_FORMATION_EXECUTION_ROLE_NAME` with the value _firefly-cloudformation-execution-role_.
+| Name | Example Value | Description |
+| ---- | ------------- | ----------- |
+| `API_DOMAIN_NAME` | api.somewhere.com | The domain name for the API gateway. |
+| `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
+| `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
+| `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
