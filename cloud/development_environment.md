@@ -8,6 +8,10 @@ There are three stacks which are automatically created, udpdated, or deleted wit
 
 This assumes your Route 53 is already configured for your account with a custom domain name.
 
+::: info SAM_DEPLOYMENT_BUCKET_NAME
+The SAM_DEPLOYMENT_BUCKET_NAME will not be created automatically.  You must create this manually.
+:::
+
 ## IAM Users
 1. Create the user that will execute the deployment and deletion of the stacks.  For example, `firefly-github-actions`.
 2. Create security credentials for `firefly-github-actions` with an access key and secret.
