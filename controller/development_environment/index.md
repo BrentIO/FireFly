@@ -360,15 +360,6 @@ RUN echo "Building for architecture: $TARGETARCH" && \
    mv arduino-cli /usr/local/bin/arduino-cli && \
    rm -rf arduino-cli.tar.gz
 
-
-# ---------------------------------------------------------
-# Install Arduino CLI  (previous working version)
-# ---------------------------------------------------------
-#RUN curl -fsSL https://downloads.arduino.cc/arduino-cli/arduino-cli_0.35.3_Linux_64bit.tar.gz -o arduino-cli.tar.gz \
-#    && tar -xzf arduino-cli.tar.gz \
-#    && mv arduino-cli /usr/local/bin/arduino-cli \
-#    && rm -rf arduino-cli.tar.gz
-
 # ---------------------------------------------------------
 # Configure Arduino CLI + ESP32 core for BOTH ACT HOME paths
 # ---------------------------------------------------------
