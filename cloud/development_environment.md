@@ -151,8 +151,8 @@ SHELL ["/bin/bash", "-c"]
 ```
 
 Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-sam:latest .`
-Usage for Intel Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-sam:latest .`
 
+Usage for Intel Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-sam:latest .`
 
 
 ::: info
