@@ -138,7 +138,7 @@ ARG TARGETARCH
 
 RUN echo "Installing AWS SAM CLI for architecture: $TARGETARCH" && \
     if [ "$TARGETARCH" = "arm64" ]; then \
-        SAM_ZIP="aws-sam-cli-linux-aarch64.zip"; \
+        SAM_ZIP="aws-sam-cli-linux-arm64.zip"; \
     else \
         SAM_ZIP="aws-sam-cli-linux-x86_64.zip"; \
     fi && \
