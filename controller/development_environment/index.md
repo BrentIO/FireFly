@@ -284,3 +284,133 @@ Additionally, the peripheral information must be added to `./www/auxillary_data.
 ## Filter Large JSON documents
 
 The Controller [filters large JSON documents](./configuration_json_filtering.md) in order to conserve memory and protect future upgradeability.
+
+## Dockerfile for ACT
+
+To create a custom image for ACT for use in VSCode, use the following:
+```dockerfile
+FROM ubuntu:24.04
+LABEL act="act-arduino-ubuntu-24-04"
+
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/github/home
+
+RUN mkdir -p /github/home
+
+# ---------------------------------------------------------
+# Base system packages
+# ---------------------------------------------------------
+RUN apt-get update && apt-get install -y \
+    bash \
+    curl \
+    unzip \
+    zip \
+    git \
+    jq \
+    python3 \
+    python3-pip \
+    python3.12-venv \
+    python3.12-dev \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# Image-specific
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3-serial \
+    gzip \
+    tar \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18 (GitHub runner default)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------
+# Install GitHub CLI (gh)
+# ---------------------------------------------------------
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+       | tee /etc/apt/sources.list.d/github-cli.list >/dev/null \
+    && apt-get update \
+    && apt-get install -y gh \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------
+# Install Arduino CLI
+# ---------------------------------------------------------
+ARG TARGETARCH
+ENV ARDUINO_CLI_VERSION=0.35.3
+
+RUN echo "Building for architecture: $TARGETARCH" && \
+   if [ "$TARGETARCH" = "arm64" ]; then \
+       ARCHIVE="arduino-cli_${ARDUINO_CLI_VERSION}_Linux_ARM64.tar.gz"; \
+   else \
+       ARCHIVE="arduino-cli_${ARDUINO_CLI_VERSION}_Linux_64bit.tar.gz"; \
+   fi && \
+   curl -fsSL "https://downloads.arduino.cc/arduino-cli/${ARCHIVE}" -o arduino-cli.tar.gz && \
+   tar -xzf arduino-cli.tar.gz && \
+   mv arduino-cli /usr/local/bin/arduino-cli && \
+   rm -rf arduino-cli.tar.gz
+
+
+# ---------------------------------------------------------
+# Install Arduino CLI  (previous working version)
+# ---------------------------------------------------------
+#RUN curl -fsSL https://downloads.arduino.cc/arduino-cli/arduino-cli_0.35.3_Linux_64bit.tar.gz -o arduino-cli.tar.gz \
+#    && tar -xzf arduino-cli.tar.gz \
+#    && mv arduino-cli /usr/local/bin/arduino-cli \
+#    && rm -rf arduino-cli.tar.gz
+
+# ---------------------------------------------------------
+# Configure Arduino CLI + ESP32 core for BOTH ACT HOME paths
+# ---------------------------------------------------------
+RUN for H in /github/home /home/runner; do \
+      mkdir -p $H/.arduino15 && \
+      HOME=$H arduino-cli config init && \
+      HOME=$H arduino-cli config set directories.data $H/.arduino15 && \
+      HOME=$H arduino-cli config set board_manager.additional_urls \
+        https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json && \
+      HOME=$H arduino-cli core update-index && \
+      HOME=$H arduino-cli core install esp32:esp32@2.0.11; \
+    done
+
+# ---------------------------------------------------------
+# Install required Arduino libraries INTO BOTH HOME PATHS
+# ---------------------------------------------------------
+RUN for H in /github/home /home/runner; do \
+      HOME=$H arduino-cli config set library.enable_unsafe_install true && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit_BusIO.git#1.14.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit-GFX-Library.git#1.11.5 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit_SSD1306.git#2.5.7 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoJson.git#v6.21.5 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoStreamUtils.git#v1.9.0 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncTCP.git#2024.2.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2025.5.2 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/ESPAsyncWebServer.git#2024.7.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2025.4.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCA95x5.git#2023.10.2 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCT2075.git#2023.10.3 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/pubsubclient.git#2025.4.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/Ethernet.git#2.0.2 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/RobTillaart/I2C_EEPROM.git#1.7.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/ivanseidel/LinkedList.git#v1.3.3 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/NTPClient.git#3.2.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/RobTillaart/PCA9685_RT.git#0.4.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/nickgammon/Regexp.git#0.1.1; \
+    done
+```
+Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest .`
+
+Usage for Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest .`
+
+::: important
+Be sure to map runner setting `ubuntu-24.04` = `act-arduino-ubuntu-24-04`
+:::

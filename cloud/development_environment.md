@@ -78,3 +78,83 @@ The following variables must be configured in Github variables:
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
+
+## Dockerfile for ACT
+
+To create a custom image for ACT for use in VSCode, use the following:
+```dockerfile
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Base system packages
+RUN apt-get update && apt-get install -y \
+    bash \
+    curl \
+    unzip \
+    zip \
+    git \
+    jq \
+    python3 \
+    python3-pip \
+    python3.12-venv \
+    python3.12-dev \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# GitHub runner parity utilities
+RUN apt-get update && apt-get install -y \
+    sudo \
+    git-lfs \
+    build-essential \
+    tar \
+    gzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18 (GitHub runner default)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install AWS CLI v2 (ZIP installer)
+ARG TARGETARCH
+RUN echo "Installing AWS CLI for architecture: $TARGETARCH" && \
+    if [ "$TARGETARCH" = "arm64" ]; then \
+        AWSCLI_ZIP="awscli-exe-linux-aarch64.zip"; \
+    else \
+        AWSCLI_ZIP="awscli-exe-linux-x86_64.zip"; \
+    fi && \
+    curl -fsSL "https://awscli.amazonaws.com/${AWSCLI_ZIP}" -o awscliv2.zip && \
+    unzip awscliv2.zip && \
+    ./aws/install --update && \
+    rm -rf awscliv2.zip aws
+
+
+# Install AWS SAM CLI
+ARG TARGETARCH
+
+RUN echo "Installing AWS SAM CLI for architecture: $TARGETARCH" && \
+    if [ "$TARGETARCH" = "arm64" ]; then \
+        SAM_ZIP="aws-sam-cli-linux-aarch64.zip"; \
+    else \
+        SAM_ZIP="aws-sam-cli-linux-x86_64.zip"; \
+    fi && \
+    curl -fsSL -o sam.zip "https://github.com/aws/aws-sam-cli/releases/latest/download/${SAM_ZIP}" && \
+    unzip sam.zip -d sam-installation && \
+    ./sam-installation/install && \
+    rm -rf sam.zip sam-installation
+
+SHELL ["/bin/bash", "-c"]
+```
+
+Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-sam:latest .`
+Usage for Intel Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-sam:latest .`
+
+
+
+::: important
+Be sure to map runner setting `ubuntu-latest` = `act-sam`
+:::
