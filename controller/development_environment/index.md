@@ -402,6 +402,6 @@ Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-ardu
 
 Usage for Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-arduino-ubuntu-24-04:latest .`
 
-::: important
+::: info
 Be sure to map runner setting `ubuntu-24.04` = `act-arduino-ubuntu-24-04`
 :::
