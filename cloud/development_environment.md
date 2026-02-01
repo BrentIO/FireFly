@@ -157,4 +157,6 @@ Usage for Intel Apple Silicon: `docker build --no-cache --platform=linux/arm64 -
 
 ::: info
 Be sure to map runner setting `ubuntu-latest` = `act-sam`
+
+On Apple Silicon, Options setting `pull` = `false` is required.
 :::
