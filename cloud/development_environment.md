@@ -160,3 +160,7 @@ Be sure to map runner setting `ubuntu-latest` = `act-sam`
 
 On Apple Silicon, Options setting `pull` = `false` is required.
 :::
+
+::: info
+On Apple Silicon, Options setting `container-architecture` = `linux/arm64` is required.
+:::
