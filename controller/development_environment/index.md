@@ -407,3 +407,7 @@ Be sure to map runner setting `ubuntu-24.04` = `act-arduino-ubuntu-24-04`
 
 On Apple Silicon, Options setting `pull` = `false` is required.
 :::
+
+::: info
+Be sure to set the Option `artifact-server-path` to a local directory to retrieve the binaries.
+:::
