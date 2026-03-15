@@ -1,4 +1,4 @@
-@startuml DELETE /firmware/{zip_name}
+@startuml
 
 title DELETE /firmware/{zip_name}
 

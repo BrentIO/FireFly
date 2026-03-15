@@ -1,4 +1,4 @@
-@startuml S3 Firmware Upload (GitHub Action → func-s3-firmware-uploaded)
+@startuml
 
 title S3 Firmware Upload\n(GitHub Action → func-s3-firmware-uploaded)
 
