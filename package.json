@@ -5,9 +5,9 @@
     "docs:preview": "vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "^1.0.1"
+    "vitepress": "^1.6.4"
   },
   "dependencies": {
-    "swagger-ui-dist": "^5.17.2"
+    "@scalar/api-reference": "^1.48.7"
   }
 }

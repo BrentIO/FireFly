@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { SwaggerUIBundle } from "swagger-ui-dist";
-import "swagger-ui-dist/swagger-ui.css";
+import { onMounted, shallowRef } from 'vue'
 
-onMounted(() => {
-  SwaggerUIBundle({
-    dom_id: "#swaggerContainer",
-    url: "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/swagger.yaml"
-  });
-});
+const ApiReference = shallowRef()
+
+onMounted(async () => {
+  ApiReference.value = (await import('@scalar/api-reference')).ApiReference
+})
 </script>
 
 <template>
-  <div class="swagger" id="swaggerContainer" />
+  <component
+    v-if="ApiReference"
+    :is="ApiReference"
+    :configuration="{
+      url: 'https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/swagger.yaml'
+    }"
+  />
 </template>
