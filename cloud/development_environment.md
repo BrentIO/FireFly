@@ -168,7 +168,7 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 
 ### Integration Tests
 
-The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the CloudFormation stack outputs and runs the test suite against the live environment.
+The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the `firefly-api-gateway` stack output and the UI URL from the `firefly-cloudfront-ui` stack output, then runs the full test suite against the live environment.  UI tests are automatically skipped if the `firefly-cloudfront-ui` stack does not exist.
 
 ## Running Tests Locally
 
@@ -186,6 +186,8 @@ pip install -r tests/requirements.txt
 |---|---|---|
 | `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
 | `FIREFLY_FIRMWARE_BUCKET` | For upload tests | Private S3 firmware bucket name |
+| `FIREFLY_UI_URL` | For UI tests | Base URL of the firmware management UI (e.g. `https://ui.example.com`) |
+| `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
 
 AWS credentials must be available via the standard boto3 credential chain.
 
