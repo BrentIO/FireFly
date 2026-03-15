@@ -14,7 +14,8 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 
 - `AWS_ACCOUNT_ID` — your AWS account ID.
 - `AWS_REGION` — the region you plan to deploy to.
-- `S3_FIRMWARE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware.
+- `S3_FIRMWARE_PRIVATE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware ZIPs.
+- `S3_FIRMWARE_PUBLIC_BUCKET_NAME` — the S3 bucket name you plan to use for public OTA firmware delivery.
 - `SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
 - `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
 
@@ -82,7 +83,8 @@ The following secrets must be configured in each GitHub environment:
 | `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
 | `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions`. |
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
-| `S3_FIRMWARE_BUCKET_NAME` | my-firmware-bucket | The S3 bucket name you plan to use to store firmware. |
+| `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | my-firmware-private | The S3 bucket name for storing firmware ZIPs (private). |
+| `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
 | `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
 ### GitHub Variables
@@ -95,6 +97,8 @@ The following variables must be configured in each GitHub environment:
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
+| `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
+| `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
 
 ## GitHub Actions Workflows
 
@@ -119,7 +123,10 @@ Individual deploy workflows are available for updating a specific stack without 
 | `deploy-func-api-firmware-delete` | Deploys the firmware delete Lambda. Requires API Gateway and shared layer. |
 | `deploy-func-s3-firmware-uploaded` | Deploys the S3 upload trigger Lambda. Requires shared layer. |
 | `deploy-func-s3-firmware-deleted` | Deploys the S3 delete trigger Lambda. Requires shared layer. |
-| `deploy-s3-firmware` | Creates the S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
+| `deploy-s3-firmware` | Creates the private S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
+| `deploy-s3-firmware-public` | Creates the public S3 bucket for OTA firmware delivery. |
+| `deploy-cloudfront` | Deploys the CloudFront distribution. Requires ACM certificate and public S3 bucket. |
+| `deploy-func-api-ota-get` | Deploys the OTA firmware manifest Lambda. Requires API Gateway, shared layer, and CloudFront. |
 
 ### Deleting
 
@@ -132,7 +139,10 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 | Workflow | Description |
 | -------- | ----------- |
 | `delete-all` | Tears down all stacks in the correct order. |
-| `delete-s3-firmware` | Deletes the S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
+| `delete-s3-firmware` | Deletes the private S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
+| `delete-func-api-ota-get` | Deletes the OTA firmware manifest Lambda. Must run before the API Gateway. |
+| `delete-cloudfront` | Deletes the CloudFront distribution. Must run before the public S3 bucket. |
+| `delete-s3-firmware-public` | Deletes the public S3 firmware bucket. Must run after CloudFront is deleted. |
 | `delete-func-api-health-get` | Deletes the health check Lambda. |
 | `delete-func-api-firmware-get` | Deletes the firmware list/download Lambda. |
 | `delete-func-api-firmware-status-patch` | Deletes the firmware status update Lambda. |
@@ -163,7 +173,7 @@ pip install -r tests/requirements.txt
 | Variable | Required | Description |
 |---|---|---|
 | `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
-| `FIREFLY_FIRMWARE_BUCKET` | For upload tests | S3 firmware bucket name |
+| `FIREFLY_FIRMWARE_BUCKET` | For upload tests | Private S3 firmware bucket name |
 
 AWS credentials must be available via the standard boto3 credential chain.
 

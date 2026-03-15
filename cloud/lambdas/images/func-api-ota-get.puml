@@ -1,0 +1,32 @@
+@startuml
+
+title GET /ota/{product_id}/{application}
+
+actor Controller
+participant "API Gateway" as APIGW
+participant "func-api-ota-get" as Lambda
+database DynamoDB
+collections "CloudFront" as CF
+
+== Released firmware available ==
+
+Controller -> APIGW : GET /ota/{product_id}/{application}
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
+DynamoDB --> Lambda : items (released builds)
+Lambda -> Lambda : select latest by uploaded_at\nbuild CloudFront URLs
+Lambda --> APIGW : 200 OK\n{"type": "...", "version": "...", "url": "...", "littlefs": "..."}
+APIGW --> Controller : 200 OK\n{OTA manifest}
+Controller -> CF : GET /{product_id}/{application}/{version}/{binary}
+CF --> Controller : firmware binary
+
+== No released firmware found ==
+
+Controller -> APIGW : GET /ota/{product_id}/{application}
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
+DynamoDB --> Lambda : (no items)
+Lambda --> APIGW : 404 Not Found
+APIGW --> Controller : 404 Not Found
+
+@enduml

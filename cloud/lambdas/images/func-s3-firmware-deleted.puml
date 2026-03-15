@@ -20,8 +20,8 @@ else
     Lambda -> Lambda : raise exception
   else found
     DDB --> Lambda : Item (pk, version, release_status)
-    alt release_status == RELEASED
-      Lambda -> DDB : update_item\nSET release_status=REVOKED, ttl=now+10d
+    alt release_status in {RELEASED, REVOKED}
+      Lambda -> Lambda : skip — lifecycle managed\nby func-api-firmware-status-patch
     else
       Lambda -> DDB : update_item\nSET release_status=DELETED, ttl=now+10d
     end
