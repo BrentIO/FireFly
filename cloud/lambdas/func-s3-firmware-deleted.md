@@ -12,7 +12,7 @@ The function processes events from both the `processed/` and `errors/` prefixes.
 The record is located by querying a DynamoDB GSI (`zip_name-index`) using the UUID filename extracted from the S3 key.
 
 ## Invocation
-Invoked by an **S3 event notification** when a `.zip` file is deleted from the `processed/` or `errors/` prefix of the firmware bucket. This is typically triggered by [func-api-firmware-delete](/cloud/lambdas/func-api-firmware-delete), but may also be triggered by any direct S3 deletion (e.g. manual cleanup).
+Invoked by an **S3 event notification** when a `.zip` file is deleted from the `processed/` or `errors/` prefix of the firmware bucket. This is typically triggered by [func-api-firmware-delete](/cloud/lambdas/func-api-firmware-delete), but may also be triggered by any direct S3 deletion (e.g. manual cleanup or S3 lifecycle expiry).
 
 ## Sequence Diagram
 
@@ -20,3 +20,11 @@ Invoked by an **S3 event notification** when a `.zip` file is deleted from the `
 
 ## API Endpoints
 This function is not invoked via API Gateway and has no associated API endpoints.
+
+## TTL Behavior
+
+After updating the `release_status`, this function sets a DynamoDB `ttl` attribute on the record to 10 days from the time of deletion.  DynamoDB will automatically delete the record once the TTL expires, keeping the table free of stale entries.
+
+::: info Note
+DynamoDB TTL deletion is eventually consistent and may take up to 48 hours after the TTL timestamp before the item is actually removed.
+:::

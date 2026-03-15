@@ -24,3 +24,42 @@ Invoked by **API Gateway** on an HTTP `PATCH /firmware/{zip_name}/status` reques
 | `PATCH` | `/firmware/{zip_name}/status` | Transition firmware to a new release status |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Complete Status State Machine
+
+All possible `release_status` values and how they are set:
+
+```
+                    ┌─────────────────┐
+         upload OK  │  READY_TO_TEST  │
+        ────────────►                 │
+                    └────────┬────────┘
+                             │ PATCH /status
+                             ▼
+                    ┌─────────────────┐
+                    │    TESTING      │
+                    └────────┬────────┘
+                             │ PATCH /status
+                             ▼
+                    ┌─────────────────┐
+                    │    RELEASED     │
+                    └────────┬────────┘
+                             │ PATCH /status  ─── or ───  DELETE /firmware/{zip_name}
+                             ▼                                       │
+                    ┌─────────────────┐                              ▼
+                    │    REVOKED      │               ┌──────────────────────────┐
+                    └─────────────────┘               │         DELETED          │
+                                                      └──────────────────────────┘
+```
+
+| Status | Set By | Description |
+|---|---|---|
+| `PROCESSING` | `func-s3-firmware-uploaded` | Transient state during upload processing; not normally visible via API |
+| `READY_TO_TEST` | `func-s3-firmware-uploaded` | Upload validated successfully; awaiting testing |
+| `TESTING` | This function | Firmware is under active test |
+| `RELEASED` | This function | Firmware is publicly released |
+| `REVOKED` | `func-s3-firmware-deleted` | Previously released firmware that has been pulled; set automatically when a `RELEASED` record's S3 file is deleted |
+| `DELETED` | `func-s3-firmware-deleted` | Firmware deleted from S3; set automatically for any non-`RELEASED` record |
+| `ERROR` | `func-s3-firmware-uploaded` | Upload validation failed; the `error` field contains the reason |
+
+`REVOKED` and `DELETED` statuses cannot be set via this endpoint and cannot be reversed.

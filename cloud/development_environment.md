@@ -147,3 +147,34 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 ### Integration Tests
 
 The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the CloudFormation stack outputs and runs the test suite against the live environment.
+
+## Running Tests Locally
+
+Integration tests can also be run locally against any deployed environment.
+
+### Setup
+
+```bash
+pip install -r tests/requirements.txt
+```
+
+### Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
+| `FIREFLY_FIRMWARE_BUCKET` | For upload tests | S3 firmware bucket name |
+
+AWS credentials must be available via the standard boto3 credential chain.
+
+### Running Tests
+
+```bash
+# All tests
+pytest tests/integration/ -v
+
+# Skip tests that require S3 upload
+pytest tests/integration/ -v -k "not (firmware_item or fresh_firmware_item)"
+```
+
+Tests that upload firmware wait up to 60 seconds for the S3 event to propagate and the record to appear in the API before proceeding.
