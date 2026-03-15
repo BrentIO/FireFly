@@ -297,6 +297,10 @@ export default defineConfig({
                     link: '/cloud/lambdas/func-api-firmware-delete'
                   },
                   {
+                    text: 'func-api-firmware-download-get',
+                    link: '/cloud/lambdas/func-api-firmware-download-get'
+                  },
+                  {
                     text: 'func-api-firmware-get',
                     link: '/cloud/lambdas/func-api-firmware-get'
                   },

@@ -26,6 +26,7 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-s3-firmware-uploaded` | S3 upload event handler |
 | `firefly-func-s3-firmware-deleted` | S3 delete event handler |
 | `firefly-func-api-ota-get` | OTA firmware manifest endpoint |
+| `firefly-func-api-firmware-download-get` | Pre-signed URL endpoint for downloading firmware ZIPs from the private bucket |
 
 ## Shared Lambda Layer
 
