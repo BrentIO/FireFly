@@ -47,7 +47,25 @@ jobs:
       - name: Install PlantUML
         run: sudo apt-get install -y plantuml
       - name: Generate PlantUML diagrams
-        run: find . -name "*.puml" -exec plantuml -tsvg {} \;
+        run: |
+          find . -name "*.puml" -print0 | while IFS= read -r -d '' f; do
+            dir=$(dirname "$f")
+            plantuml -tsvg -o "$dir" "$f"
+            echo "Generated: ${f%.puml}.svg"
+          done
+      - name: Verify SVG output
+        run: |
+          echo "Generated SVG files:"
+          find . -name "*.svg" -path "*/lambdas/*"
+          missing=0
+          for puml in $(find . -name "*.puml"); do
+            svg="${puml%.puml}.svg"
+            if [ ! -f "$svg" ]; then
+              echo "MISSING: $svg"
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then exit 1; fi
       - name: Build with VitePress
         run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
