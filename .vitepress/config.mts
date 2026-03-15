@@ -327,6 +327,10 @@ export default defineConfig({
                 ]
               },
               {
+                text: 'Firmware Management UI',
+                link: '/cloud/ui'
+              },
+              {
                 text: 'API Reference',
                 link: '/cloud/api_reference'
               },
