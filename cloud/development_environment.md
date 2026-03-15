@@ -102,7 +102,7 @@ The following variables must be configured in each GitHub environment:
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
-| `UI_DOMAIN_NAME` | ui.somewhere.com | The custom domain name for the firmware management UI. |
+| `UI_DOMAIN_NAME` | `ui.somewhere.com` | The custom domain name for the firmware management UI, without the `https://` scheme. |
 
 ## GitHub Actions Workflows
 
