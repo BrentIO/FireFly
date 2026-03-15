@@ -287,10 +287,43 @@ export default defineConfig({
             text: 'Cloud',
             collapsed: true,
             items: [
-              
               {
                 text: 'Development Environment',
                 link: '/cloud/development_environment'
+              },
+              {
+                text: 'API Reference',
+                link: '/cloud/api_reference'
+              },
+              {
+                text: 'Lambda Functions',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'func-api-health-get',
+                    link: '/cloud/lambdas/func-api-health-get'
+                  },
+                  {
+                    text: 'func-api-firmware-get',
+                    link: '/cloud/lambdas/func-api-firmware-get'
+                  },
+                  {
+                    text: 'func-api-firmware-delete',
+                    link: '/cloud/lambdas/func-api-firmware-delete'
+                  },
+                  {
+                    text: 'func-api-firmware-status-patch',
+                    link: '/cloud/lambdas/func-api-firmware-status-patch'
+                  },
+                  {
+                    text: 'func-s3-firmware-uploaded',
+                    link: '/cloud/lambdas/func-s3-firmware-uploaded'
+                  },
+                  {
+                    text: 'func-s3-firmware-deleted',
+                    link: '/cloud/lambdas/func-s3-firmware-deleted'
+                  },
+                ]
               },
             ]
           },

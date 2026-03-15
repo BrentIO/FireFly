@@ -44,6 +44,10 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: npm ci # or pnpm install / yarn install / bun install
+      - name: Install PlantUML
+        run: sudo apt-get install -y plantuml
+      - name: Generate PlantUML diagrams
+        run: find . -name "*.puml" -exec plantuml -tsvg {} \;
       - name: Build with VitePress
         run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
