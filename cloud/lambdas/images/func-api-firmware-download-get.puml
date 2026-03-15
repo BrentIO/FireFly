@@ -1,0 +1,53 @@
+@startuml
+
+title GET /firmware/{zip_name}/download
+
+actor Client
+participant "API Gateway" as APIGW
+participant "func-api-firmware-download-get" as Lambda
+database DynamoDB
+collections "S3\n(private)" as S3
+
+== Successful (active firmware) ==
+
+Client -> APIGW : GET /firmware/550e8400-...zip/download
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+DynamoDB --> Lambda : item\n{release_status: "READY_TO_TEST", ...}
+Lambda -> Lambda : release_status not DELETED or PROCESSING\nprefix = "processed/"
+Lambda -> S3 : generate_presigned_url\nKey: processed/550e8400-...zip\nExpires: 900s
+S3 --> Lambda : pre-signed URL
+Lambda --> APIGW : 200 OK\n{"url": "https://...", "expires_in": 900}
+APIGW --> Client : 200 OK
+
+Client -> S3 : GET (pre-signed URL)
+S3 --> Client : firmware ZIP
+
+== Deleted ==
+
+Client -> APIGW : GET /firmware/550e8400-...zip/download
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query GSI zip_name-index
+DynamoDB --> Lambda : item\n{release_status: "DELETED"}
+Lambda --> APIGW : 410 Gone\n{"message": "Firmware has been deleted"}
+APIGW --> Client : 410 Gone
+
+== Still processing ==
+
+Client -> APIGW : GET /firmware/550e8400-...zip/download
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query GSI zip_name-index
+DynamoDB --> Lambda : item\n{release_status: "PROCESSING"}
+Lambda --> APIGW : 409 Conflict\n{"message": "Firmware is still being processed"}
+APIGW --> Client : 409 Conflict
+
+== Not found ==
+
+Client -> APIGW : GET /firmware/00000000-...zip/download
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query GSI zip_name-index
+DynamoDB --> Lambda : (no items)
+Lambda --> APIGW : 404 Not Found
+APIGW --> Client : 404 Not Found
+
+@enduml
