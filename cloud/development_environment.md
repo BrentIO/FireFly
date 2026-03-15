@@ -1,19 +1,36 @@
 # Cloud Development Environment
-The workflows will automatically create the environment required for firmware control.  This includes S3 buckets, gateways, and the lambda functions.  This document will explain how to bootstrap the AWS account to use the deployment templates.
 
-Multiple CloudFormation stacks are automatically created, updated, or deleted with these templates, grouped into three categories:
-- S3 Firmware Bucket Stack
-- API Stack
-- Lambda Stack
+This guide walks through bootstrapping an AWS account to use the FireFly Cloud deployment workflows.  You will prepare the IAM policy files, create the required AWS resources, and then configure GitHub with the credentials and settings the workflows need.  Once complete, the workflows will automatically create, update, and delete the CloudFormation stacks that make up the FireFly Cloud — including S3 buckets, API Gateway, DynamoDB, and Lambda functions.
 
-This assumes your Route 53 is already configured for your account with a custom domain name.
+This guide assumes your Route 53 is already configured for your account with a custom domain name.
 
-## SAM Deployment Bucket
+::: info AWS Region Support
+Only **us-east-1** region is supported.
+:::
+
+## Step 1: Prepare Policy Files
+
+Before creating anything in AWS, update the placeholder values in the policy files in the `policies/` directory:
+
+- `AWS_ACCOUNT_ID` — your AWS account ID.
+- `AWS_REGION` — the region you plan to deploy to.
+- `S3_FIRMWARE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware.
+- `SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
+- `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
+
+The following policy files require updates:
+- `policies/firefly-github-actions-cloudformation-access-policy.json`
+- `policies/firefly-cloudformation-execution-policy.json`
+
+## Step 2: AWS Setup
+
+### SAM Deployment Bucket
 
 1. Create an S3 bucket to store CloudFormation deployment templates.  This bucket must be in the same region you plan to deploy to.
-2. Note the bucket name — you will need it when configuring GitHub secrets.
+2. Name it to match the `SAM_DEPLOYMENT_BUCKET_NAME` value you used in Step 1.
 
-## IAM Users
+### IAM Users
+
 1. Create the user that will execute the deployment and deletion of the stacks.  For example, `firefly-github-actions`.
 2. Create security credentials for `firefly-github-actions` with an access key and secret.
 
@@ -21,65 +38,56 @@ This assumes your Route 53 is already configured for your account with a custom 
 Do not create or attach permissions for the user at this time.
 :::
 
-## IAM Roles
+### IAM Roles
 
-1. Create a new role named  `firefly-cloudformation-execution-role`.
+1. Create a new role named `firefly-cloudformation-execution-role`.
 2. Create a trust relationship using statements in `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
 
 ::: info Note
 Do not create or attach permissions for the role at this time.
 :::
 
-## IAM Policies
+### IAM Policies
 
-Be sure to replace the following placeholders stored in the policy files:
-- `AWS_ACCOUNT_ID` with your AWS account ID.
-- `AWS_REGION` with the region you plan to deploy to.
-- `S3_FIRMWARE_BUCKET_NAME` with the S3 bucket name you plan to use to store firmware.
-- `SAM_DEPLOYMENT_BUCKET_NAME` with the name of the bucket where deployment templates will be stored.
-- `HOSTED_ZONE_ID` with the Hosted Zone ID for your Route 53 instance.
-
-::: info AWS Region Support
-Only **us-east-1** region is supported.
-:::
-
-### CloudFormation Access Policy
+#### CloudFormation Access Policy
 This policy allows the IAM user to execute CloudFormation scripts and assume the CloudFormation Execution role.
-1. Create a new policy using statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
+1. Create a new policy using the updated statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
 2. Name the policy `firefly-github-actions-cloudformation-access-policy`.
 3. Attach IAM user entity `firefly-github-actions` to the policy.
 
-### CloudFormation Execution Policy
-This policy allows execution to the individual services needed to deploy and delete the stacks.
-1. Create a new policy using statements in `policies/firefly-cloudformation-execution-policy.json`.
+#### CloudFormation Execution Policy
+This policy allows CloudFormation to deploy and delete the individual AWS services in each stack.
+1. Create a new policy using the updated statements in `policies/firefly-cloudformation-execution-policy.json`.
 2. Name the policy `firefly-cloudformation-execution-policy`.
 3. Attach IAM role entity `firefly-cloudformation-execution-role` to the policy.
 
-## Github Environments
+## Step 3: GitHub Setup
 
-The workflows deploy to either a `dev` or `production` environment.  You must create both environments in the repository settings under **Settings > Environments** and configure the secrets and variables for each environment.
+### GitHub Environments
+
+The workflows deploy to either a `dev` or `production` environment.  Create both environments in the repository settings under **Settings > Environments**.
 
 ::: info Note
 Secrets and variables must be set at the **environment** level, not at the repository level.
 :::
 
-## Github Secrets
+### GitHub Secrets
 
-The following secrets must be configured in each Github environment:
+The following secrets must be configured in each GitHub environment:
 
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
 | `AWS_ACCESS_KEY_ID` | firefly-github-actions | The access key for IAM user. |
 | `AWS_ACCOUNT_ID` | 1234567890 | Your AWS account ID. |
 | `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
-| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions` |
+| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions`. |
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
 | `S3_FIRMWARE_BUCKET_NAME` | my-firmware-bucket | The S3 bucket name you plan to use to store firmware. |
-| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored when deployed. |
+| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
+### GitHub Variables
 
-## Github Variables
-The following variables must be configured in each Github environment:
+The following variables must be configured in each GitHub environment:
 
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
@@ -118,7 +126,7 @@ Individual deploy workflows are available for updating a specific stack without 
 Use **Delete All** (`delete-all`) to tear down the entire environment.  Individual delete workflows are available if you need to remove a specific stack.
 
 ::: warning Dependency Order
-Stacks must be deleted in reverse dependency order.  **Delete All** handles this automatically.  If running individual delete workflows manually, delete Lambda functions before the API Gateway, the API Gateway before the ACM certificate, and the S3 bucket before the S3 trigger Lambdas, and all Lambda functions before the shared layer.
+Stacks must be deleted in reverse dependency order.  **Delete All** handles this automatically.  If running individual delete workflows manually, delete Lambda functions before the API Gateway, the API Gateway before the ACM certificate, the S3 bucket before the S3 trigger Lambdas, and all Lambda functions before the shared layer.
 :::
 
 | Workflow | Description |
