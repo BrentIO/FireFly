@@ -1,18 +1,36 @@
 # Cloud Development Environment
-The workflows will automatically create the environment required for firmware control.  This includes S3 buckets, gateways, and the lambda functions.  This document will explain how to bootstrap the AWS account to use the deployment templates.
 
-There are three stacks which are automatically created, updated, or deleted with these templates:
-- S3 Firmware Bucket Stack
-- API Stack
-- Lambda Stack
+This guide walks through bootstrapping an AWS account to use the FireFly Cloud deployment workflows.  You will prepare the IAM policy files, create the required AWS resources, and then configure GitHub with the credentials and settings the workflows need.  Once complete, the workflows will automatically create, update, and delete the CloudFormation stacks that make up the FireFly Cloud — including S3 buckets, API Gateway, DynamoDB, and Lambda functions.
 
-This assumes your Route 53 is already configured for your account with a custom domain name.
+This guide assumes your Route 53 is already configured for your account with a custom domain name.
 
-::: info SAM_DEPLOYMENT_BUCKET_NAME
-The SAM_DEPLOYMENT_BUCKET_NAME will not be created automatically.  You must create this manually.
+::: info AWS Region Support
+Only **us-east-1** region is supported.
 :::
 
-## IAM Users
+## Step 1: Prepare Policy Files
+
+Before creating anything in AWS, update the placeholder values in the policy files in the `policies/` directory:
+
+- `AWS_ACCOUNT_ID` — your AWS account ID.
+- `AWS_REGION` — the region you plan to deploy to.
+- `S3_FIRMWARE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware.
+- `SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
+- `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
+
+The following policy files require updates:
+- `policies/firefly-github-actions-cloudformation-access-policy.json`
+- `policies/firefly-cloudformation-execution-policy.json`
+
+## Step 2: AWS Setup
+
+### SAM Deployment Bucket
+
+1. Create an S3 bucket to store CloudFormation deployment templates.  This bucket must be in the same region you plan to deploy to.
+2. Name it to match the `SAM_DEPLOYMENT_BUCKET_NAME` value you used in Step 1.
+
+### IAM Users
+
 1. Create the user that will execute the deployment and deletion of the stacks.  For example, `firefly-github-actions`.
 2. Create security credentials for `firefly-github-actions` with an access key and secret.
 
@@ -20,57 +38,56 @@ The SAM_DEPLOYMENT_BUCKET_NAME will not be created automatically.  You must crea
 Do not create or attach permissions for the user at this time.
 :::
 
-## IAM Roles
+### IAM Roles
 
-1. Create a new role named  `firefly-cloudformation-execution-role`.
+1. Create a new role named `firefly-cloudformation-execution-role`.
 2. Create a trust relationship using statements in `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
 
 ::: info Note
 Do not create or attach permissions for the role at this time.
 :::
 
-## IAM Policies
+### IAM Policies
 
-Be sure to replace the following placeholders stored in the policy files:
-- `AWS_ACCOUNT_ID` with your AWS account ID.
-- `AWS_REGION` with the region you plan to deploy to.
-- `S3_FIRMWARE_BUCKET_NAME` with the S3 bucket name you plan to use to store firmware.
-- `SAM_DEPLOYMENT_BUCKET_NAME` with the name of the bucket where deployment templates will be stored.
-- `HOSTED_ZONE_ID` with the Hosted Zone ID for your Route 53 instance.
-
-::: info AWS Region Support
-Only **us-east-1** region is supported.
-:::
-
-### CloudFormation Access Policy
+#### CloudFormation Access Policy
 This policy allows the IAM user to execute CloudFormation scripts and assume the CloudFormation Execution role.
-1. Create a new policy using statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
+1. Create a new policy using the updated statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
 2. Name the policy `firefly-github-actions-cloudformation-access-policy`.
 3. Attach IAM user entity `firefly-github-actions` to the policy.
 
-### CloudFormation Execution Policy
-This policy allows execution to the individual services needed to deploy and delete the stacks.
-1. Create a new policy using statements in `policies/firefly-cloudformation-execution-policy.json`.
+#### CloudFormation Execution Policy
+This policy allows CloudFormation to deploy and delete the individual AWS services in each stack.
+1. Create a new policy using the updated statements in `policies/firefly-cloudformation-execution-policy.json`.
 2. Name the policy `firefly-cloudformation-execution-policy`.
 3. Attach IAM role entity `firefly-cloudformation-execution-role` to the policy.
 
-## Github Secrets
+## Step 3: GitHub Setup
 
-The following secrets must be configured in Github secrets:
+### GitHub Environments
+
+The workflows deploy to either a `dev` or `production` environment.  Create both environments in the repository settings under **Settings > Environments**.
+
+::: info Note
+Secrets and variables must be set at the **environment** level, not at the repository level.
+:::
+
+### GitHub Secrets
+
+The following secrets must be configured in each GitHub environment:
 
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
 | `AWS_ACCESS_KEY_ID` | firefly-github-actions | The access key for IAM user. |
 | `AWS_ACCOUNT_ID` | 1234567890 | Your AWS account ID. |
 | `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
-| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions` |
+| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions`. |
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
 | `S3_FIRMWARE_BUCKET_NAME` | my-firmware-bucket | The S3 bucket name you plan to use to store firmware. |
-| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored when deployed. |
+| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
+### GitHub Variables
 
-## Github Variables
-The following variables must be configured in Github variables:
+The following variables must be configured in each GitHub environment:
 
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
@@ -79,88 +96,54 @@ The following variables must be configured in Github variables:
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
 
-## Dockerfile for ACT
+## GitHub Actions Workflows
 
-To create a custom image for ACT for use in VSCode, use the following:
-```dockerfile
-FROM ubuntu:24.04
+All deployments and deletions are performed through GitHub Actions workflows, each targeting either the `dev` or `production` environment.  Most individual workflows also include an optional **Run integration tests after deploy** checkbox.
 
-ENV DEBIAN_FRONTEND=noninteractive
+### Deploying
 
-# Base system packages
-RUN apt-get update && apt-get install -y \
-    bash \
-    curl \
-    unzip \
-    zip \
-    git \
-    jq \
-    python3 \
-    python3-pip \
-    python3.12-venv \
-    python3.12-dev \
-    ca-certificates \
-    gnupg \
-    lsb-release \
-    && rm -rf /var/lib/apt/lists/*
+For initial setup, use **Deploy All** (`deploy-all`), which deploys all stacks in the correct dependency order and runs integration tests at the end.
 
-# GitHub runner parity utilities
-RUN apt-get update && apt-get install -y \
-    sudo \
-    git-lfs \
-    build-essential \
-    tar \
-    gzip \
-    && rm -rf /var/lib/apt/lists/*
+Individual deploy workflows are available for updating a specific stack without redeploying everything:
 
-# Install Node.js 18 (GitHub runner default)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get update \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+| Workflow | Description |
+| -------- | ----------- |
+| `deploy-all` | Deploys all stacks in dependency order and runs integration tests. Use this for first-time setup. |
+| `deploy-dynamodb-firmware` | Creates the DynamoDB firmware table. |
+| `deploy-acm-api-gateway` | Requests the ACM certificate and validates it via Route 53. Must run before the API Gateway. |
+| `deploy-api-gateway` | Deploys the HTTP API Gateway. Requires ACM certificate to exist. |
+| `deploy-shared-layer` | Publishes the shared Lambda layer used by most functions. |
+| `deploy-func-api-health-get` | Deploys the health check Lambda. Requires API Gateway. |
+| `deploy-func-api-firmware-get` | Deploys the firmware list/download Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-api-firmware-status-patch` | Deploys the firmware status update Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-api-firmware-delete` | Deploys the firmware delete Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-s3-firmware-uploaded` | Deploys the S3 upload trigger Lambda. Requires shared layer. |
+| `deploy-func-s3-firmware-deleted` | Deploys the S3 delete trigger Lambda. Requires shared layer. |
+| `deploy-s3-firmware` | Creates the S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
 
-# Install AWS CLI v2 (ZIP installer)
-ARG TARGETARCH
-RUN echo "Installing AWS CLI for architecture: $TARGETARCH" && \
-    if [ "$TARGETARCH" = "arm64" ]; then \
-        AWSCLI_ZIP="awscli-exe-linux-aarch64.zip"; \
-    else \
-        AWSCLI_ZIP="awscli-exe-linux-x86_64.zip"; \
-    fi && \
-    curl -fsSL "https://awscli.amazonaws.com/${AWSCLI_ZIP}" -o awscliv2.zip && \
-    unzip awscliv2.zip && \
-    ./aws/install --update && \
-    rm -rf awscliv2.zip aws
+### Deleting
 
+Use **Delete All** (`delete-all`) to tear down the entire environment.  Individual delete workflows are available if you need to remove a specific stack.
 
-# Install AWS SAM CLI
-ARG TARGETARCH
-
-RUN echo "Installing AWS SAM CLI for architecture: $TARGETARCH" && \
-    if [ "$TARGETARCH" = "arm64" ]; then \
-        SAM_ZIP="aws-sam-cli-linux-arm64.zip"; \
-    else \
-        SAM_ZIP="aws-sam-cli-linux-x86_64.zip"; \
-    fi && \
-    curl -fsSL -o sam.zip "https://github.com/aws/aws-sam-cli/releases/latest/download/${SAM_ZIP}" && \
-    unzip sam.zip -d sam-installation && \
-    ./sam-installation/install && \
-    rm -rf sam.zip sam-installation
-
-SHELL ["/bin/bash", "-c"]
-```
-
-Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-sam:latest .`
-
-Usage for Intel Apple Silicon: `docker build --no-cache --platform=linux/arm64 -t act-sam:latest .`
-
-
-::: info
-Be sure to map runner setting `ubuntu-latest` = `act-sam`
-
-On Apple Silicon, Options setting `pull` = `false` is required.
+::: warning Dependency Order
+Stacks must be deleted in reverse dependency order.  **Delete All** handles this automatically.  If running individual delete workflows manually, delete Lambda functions before the API Gateway, the API Gateway before the ACM certificate, the S3 bucket before the S3 trigger Lambdas, and all Lambda functions before the shared layer.
 :::
 
-::: info
-On Apple Silicon, Options setting `container-architecture` = `linux/arm64` is required.
-:::
+| Workflow | Description |
+| -------- | ----------- |
+| `delete-all` | Tears down all stacks in the correct order. |
+| `delete-s3-firmware` | Deletes the S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
+| `delete-func-api-health-get` | Deletes the health check Lambda. |
+| `delete-func-api-firmware-get` | Deletes the firmware list/download Lambda. |
+| `delete-func-api-firmware-status-patch` | Deletes the firmware status update Lambda. |
+| `delete-func-api-firmware-delete` | Deletes the firmware delete Lambda. |
+| `delete-api-gateway` | Deletes the API Gateway. Must run after all API Lambda functions are deleted. |
+| `delete-acm-api-gateway` | Deletes the ACM certificate. Must run after the API Gateway is deleted. |
+| `delete-func-s3-firmware-uploaded` | Deletes the S3 upload trigger Lambda. Must run after the S3 bucket is deleted. |
+| `delete-func-s3-firmware-deleted` | Deletes the S3 delete trigger Lambda. Must run after the S3 bucket is deleted. |
+| `delete-shared-layer` | Deletes the shared Lambda layer. Must run after all Lambda functions are deleted. |
+| `delete-dynamodb-firmware` | Deletes the DynamoDB firmware table. |
+
+### Integration Tests
+
+The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the CloudFormation stack outputs and runs the test suite against the live environment.
