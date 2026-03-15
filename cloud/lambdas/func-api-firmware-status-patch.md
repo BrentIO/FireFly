@@ -29,28 +29,7 @@ See the [API Reference](/cloud/api_reference) for full schema documentation.
 
 All possible `release_status` values and how they are set:
 
-```
-                    ┌─────────────────┐
-         upload OK  │  READY_TO_TEST  │
-        ────────────►                 │
-                    └────────┬────────┘
-                             │ PATCH /status
-                             ▼
-                    ┌─────────────────┐
-                    │    TESTING      │
-                    └────────┬────────┘
-                             │ PATCH /status
-                             ▼
-                    ┌─────────────────┐
-                    │    RELEASED     │
-                    └────────┬────────┘
-                             │ PATCH /status  ─── or ───  DELETE /firmware/{zip_name}
-                             ▼                                       │
-                    ┌─────────────────┐                              ▼
-                    │    REVOKED      │               ┌──────────────────────────┐
-                    └─────────────────┘               │         DELETED          │
-                                                      └──────────────────────────┘
-```
+![Status State Machine](./images/func-api-firmware-status-patch-states.svg)
 
 | Status | Set By | Description |
 |---|---|---|
