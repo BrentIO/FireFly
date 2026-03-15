@@ -1,4 +1,4 @@
-@startuml GET /firmware
+@startuml
 
 title GET /firmware (list)
 

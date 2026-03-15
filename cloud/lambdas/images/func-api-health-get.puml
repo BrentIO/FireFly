@@ -1,4 +1,4 @@
-@startuml GET /health
+@startuml
 
 title GET /health
 

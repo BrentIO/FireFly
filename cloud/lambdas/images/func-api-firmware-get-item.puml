@@ -1,4 +1,4 @@
-@startuml GET /firmware/{zip_name}
+@startuml
 
 title GET /firmware/{zip_name}
 

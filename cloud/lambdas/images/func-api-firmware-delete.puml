@@ -1,4 +1,4 @@
-@startuml DELETE /firmware/{zip_name}
+@startuml
 
 title DELETE /firmware/{zip_name}
 
@@ -7,7 +7,7 @@ participant "API Gateway" as APIGW
 participant "func-api-firmware-delete" as DeleteLambda
 participant "func-s3-firmware-deleted" as DeletedLambda
 database DynamoDB
-storage S3
+database S3
 
 == Successful deletion (non-released firmware) ==
 

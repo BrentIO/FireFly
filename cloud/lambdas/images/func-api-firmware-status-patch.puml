@@ -1,4 +1,4 @@
-@startuml PATCH /firmware/{zip_name}/status
+@startuml
 
 title PATCH /firmware/{zip_name}/status
 

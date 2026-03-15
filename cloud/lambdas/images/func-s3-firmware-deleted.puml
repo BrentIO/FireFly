@@ -2,7 +2,7 @@
 skinparam sequenceArrowThickness 2
 skinparam roundcorner 5
 
-collections "S3\nfirefly-firmware" as S3
+database "S3\nfirefly-firmware" as S3
 participant "func-s3-firmware-deleted" as Lambda
 database "DynamoDB\nfirefly-firmware" as DDB
 
