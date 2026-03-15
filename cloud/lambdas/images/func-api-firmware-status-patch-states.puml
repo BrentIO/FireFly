@@ -1,0 +1,17 @@
+@startuml
+
+[*] --> READY_TO_TEST : upload OK\n(func-s3-firmware-uploaded)
+[*] --> ERROR : upload failure\n(func-s3-firmware-uploaded)
+
+READY_TO_TEST --> TESTING : PATCH /status
+TESTING --> RELEASED : PATCH /status
+RELEASED --> REVOKED : PATCH /status\nor DELETE /firmware/{zip_name}
+
+READY_TO_TEST --> DELETED : DELETE /firmware/{zip_name}
+TESTING --> DELETED : DELETE /firmware/{zip_name}
+ERROR --> DELETED : DELETE /firmware/{zip_name}
+
+REVOKED --> [*] : TTL (10 days)
+DELETED --> [*] : TTL (10 days)
+
+@enduml
