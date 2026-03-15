@@ -1,0 +1,30 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 5
+
+collections "S3\nfirefly-firmware" as S3
+participant "func-s3-firmware-deleted" as Lambda
+database "DynamoDB\nfirefly-firmware" as DDB
+
+S3 --> Lambda : S3 ObjectRemoved event\n(processed/{uuid}.zip\nor errors/{uuid}.zip)
+
+Lambda -> Lambda : extract {uuid}.zip from key
+Lambda -> Lambda : check prefix is processed/ or errors/
+
+alt non-zip or wrong prefix
+  Lambda -> Lambda : ignore event
+else
+  Lambda -> DDB : Query zip_name-index ({uuid}.zip)
+  alt not found
+    DDB --> Lambda : Empty result
+    Lambda -> Lambda : raise exception
+  else found
+    DDB --> Lambda : Item (pk, version, release_status)
+    alt release_status == RELEASED
+      Lambda -> DDB : update_item\nSET release_status=REVOKED, ttl=now+10d
+    else
+      Lambda -> DDB : update_item\nSET release_status=DELETED, ttl=now+10d
+    end
+  end
+end
+@enduml
