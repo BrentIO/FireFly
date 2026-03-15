@@ -186,7 +186,7 @@ pip install -r tests/requirements.txt
 |---|---|---|
 | `FIREFLY_API_URL` | No | API base URL (defaults to the production URL if not set) |
 | `FIREFLY_FIRMWARE_BUCKET` | For upload tests | Private S3 firmware bucket name |
-| `FIREFLY_UI_URL` | For UI tests | Base URL of the firmware management UI (e.g. `https://ui.example.com`) |
+| `FIREFLY_UI_URL` | For UI and CORS tests | Base URL of the firmware management UI (e.g. `https://ui.example.com`) |
 | `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
 
 AWS credentials must be available via the standard boto3 credential chain.
