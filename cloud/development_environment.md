@@ -87,6 +87,54 @@ The following variables must be configured in each Github environment:
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
 
-## Deploying
+## GitHub Actions Workflows
 
-Once all IAM resources and GitHub environments are configured, use the **Deploy All** workflow to deploy the complete stack in the correct order.  Individual deploy and delete workflows are also available for updating or removing specific stacks.
+All deployments and deletions are performed through GitHub Actions workflows, each targeting either the `dev` or `production` environment.  Most individual workflows also include an optional **Run integration tests after deploy** checkbox.
+
+### Deploying
+
+For initial setup, use **Deploy All** (`deploy-all`), which deploys all stacks in the correct dependency order and runs integration tests at the end.
+
+Individual deploy workflows are available for updating a specific stack without redeploying everything:
+
+| Workflow | Description |
+| -------- | ----------- |
+| `deploy-all` | Deploys all stacks in dependency order and runs integration tests. Use this for first-time setup. |
+| `deploy-dynamodb-firmware` | Creates the DynamoDB firmware table. |
+| `deploy-acm-api-gateway` | Requests the ACM certificate and validates it via Route 53. Must run before the API Gateway. |
+| `deploy-api-gateway` | Deploys the HTTP API Gateway. Requires ACM certificate to exist. |
+| `deploy-shared-layer` | Publishes the shared Lambda layer used by most functions. |
+| `deploy-func-api-health-get` | Deploys the health check Lambda. Requires API Gateway. |
+| `deploy-func-api-firmware-get` | Deploys the firmware list/download Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-api-firmware-status-patch` | Deploys the firmware status update Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-api-firmware-delete` | Deploys the firmware delete Lambda. Requires API Gateway and shared layer. |
+| `deploy-func-s3-firmware-uploaded` | Deploys the S3 upload trigger Lambda. Requires shared layer. |
+| `deploy-func-s3-firmware-deleted` | Deploys the S3 delete trigger Lambda. Requires shared layer. |
+| `deploy-s3-firmware` | Creates the S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
+
+### Deleting
+
+Use **Delete All** (`delete-all`) to tear down the entire environment.  Individual delete workflows are available if you need to remove a specific stack.
+
+::: warning Dependency Order
+Stacks must be deleted in reverse dependency order.  **Delete All** handles this automatically.  If running individual delete workflows manually, delete Lambda functions before the API Gateway, the API Gateway before the ACM certificate, and the S3 bucket before the S3 trigger Lambdas, and all Lambda functions before the shared layer.
+:::
+
+| Workflow | Description |
+| -------- | ----------- |
+| `delete-all` | Tears down all stacks in the correct order. |
+| `delete-s3-firmware` | Deletes the S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
+| `delete-func-api-health-get` | Deletes the health check Lambda. |
+| `delete-func-api-firmware-get` | Deletes the firmware list/download Lambda. |
+| `delete-func-api-firmware-status-patch` | Deletes the firmware status update Lambda. |
+| `delete-func-api-firmware-delete` | Deletes the firmware delete Lambda. |
+| `delete-api-gateway` | Deletes the API Gateway. Must run after all API Lambda functions are deleted. |
+| `delete-acm-api-gateway` | Deletes the ACM certificate. Must run after the API Gateway is deleted. |
+| `delete-func-s3-firmware-uploaded` | Deletes the S3 upload trigger Lambda. Must run after the S3 bucket is deleted. |
+| `delete-func-s3-firmware-deleted` | Deletes the S3 delete trigger Lambda. Must run after the S3 bucket is deleted. |
+| `delete-shared-layer` | Deletes the shared Lambda layer. Must run after all Lambda functions are deleted. |
+| `delete-dynamodb-firmware` | Deletes the DynamoDB firmware table. |
+
+### Integration Tests
+
+The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the CloudFormation stack outputs and runs the test suite against the live environment.
