@@ -309,6 +309,10 @@ export default defineConfig({
                     link: '/cloud/lambdas/func-api-health-get'
                   },
                   {
+                    text: 'func-api-ota-get',
+                    link: '/cloud/lambdas/func-api-ota-get'
+                  },
+                  {
                     text: 'func-s3-firmware-deleted',
                     link: '/cloud/lambdas/func-s3-firmware-deleted'
                   },

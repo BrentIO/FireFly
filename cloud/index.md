@@ -1,10 +1,10 @@
 # FireFly Cloud
 
-FireFly Cloud is the serverless AWS backend that manages the Arduino firmware lifecycle.  It handles firmware uploads, validation, status progression, and deletion via an HTTP API backed by Lambda, DynamoDB, API Gateway, and S3.
+FireFly Cloud is the serverless AWS backend that manages the Arduino firmware lifecycle.  It handles firmware uploads, validation, status progression, deletion, and over-the-air (OTA) delivery via an HTTP API backed by Lambda, DynamoDB, API Gateway, S3, and CloudFront.
 
 ## Architecture
 
-Firmware enters the system by being uploaded directly to S3, which triggers the upload Lambda to validate and register it.  The API Gateway exposes endpoints for querying firmware records, advancing their release status, and initiating deletion.  Deletion is asynchronous — removing the S3 file triggers the delete Lambda, which updates DynamoDB.
+Firmware enters the system by being uploaded directly to S3, which triggers the upload Lambda to validate and register it.  The API Gateway exposes endpoints for querying firmware records, advancing their release status, and initiating deletion.  When firmware is released, binaries are published to a public S3 bucket fronted by CloudFront for device OTA delivery.  When firmware is revoked, the binaries are moved to a restricted prefix and the CloudFront URLs become inaccessible.
 
 ## CloudFormation Stacks
 
@@ -15,7 +15,9 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-acm-api-gateway` | ACM certificate for the API custom domain |
 | `firefly-api-gateway` | HTTP API Gateway v2 with custom domain and access logs |
 | `firefly-dynamodb-firmware` | DynamoDB firmware table |
-| `firefly-s3-firmware` | S3 firmware bucket with lifecycle rules and event notifications |
+| `firefly-s3-firmware` | Private S3 firmware bucket with lifecycle rules and event notifications |
+| `firefly-s3-firmware-public` | Public S3 bucket for OTA firmware binary delivery; `revoked/` prefix is access-denied and expires after 90 days |
+| `firefly-cloudfront` | CloudFront distribution fronting the public firmware bucket for OTA delivery |
 | `firefly-shared-layer` | Shared Python Lambda layer |
 | `firefly-func-api-health-get` | Health check endpoint |
 | `firefly-func-api-firmware-get` | Firmware list and item retrieval endpoints |
@@ -23,6 +25,7 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-api-firmware-delete` | Firmware deletion endpoint |
 | `firefly-func-s3-firmware-uploaded` | S3 upload event handler |
 | `firefly-func-s3-firmware-deleted` | S3 delete event handler |
+| `firefly-func-api-ota-get` | OTA firmware manifest endpoint |
 
 ## Shared Lambda Layer
 

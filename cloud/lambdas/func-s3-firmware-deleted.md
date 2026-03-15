@@ -3,11 +3,11 @@
 ## Description
 Responds to a firmware ZIP being deleted from S3. The function updates the corresponding DynamoDB record's `release_status` and sets a TTL so the record is automatically purged after 10 days.
 
-The new status is determined by the record's current state at the time of deletion:
-- `RELEASED` → `REVOKED` (the firmware was publicly available before being pulled)
-- Anything else → `DELETED`
-
 The function processes events from both the `processed/` and `errors/` prefixes. Deletions from any other prefix are ignored.
+
+Records in `RELEASED` or `REVOKED` state are skipped — their lifecycle is managed by [func-api-firmware-status-patch](/cloud/lambdas/func-api-firmware-status-patch), which sets the status and TTL when those transitions occur via the API. Deletions from the private bucket for these records are triggered by S3 lifecycle expiry and should not alter the DynamoDB record.
+
+For all other states, the record is updated to `DELETED`.
 
 The record is located by querying a DynamoDB GSI (`zip_name-index`) using the UUID filename extracted from the S3 key.
 

@@ -5,7 +5,7 @@
 
 READY_TO_TEST --> TESTING : PATCH /status
 TESTING --> RELEASED : PATCH /status
-RELEASED --> REVOKED : PATCH /status\nor DELETE /firmware/{zip_name}
+RELEASED --> REVOKED : PATCH /status
 
 READY_TO_TEST --> DELETED : DELETE /firmware/{zip_name}
 TESTING --> DELETED : DELETE /firmware/{zip_name}
