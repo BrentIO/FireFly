@@ -8,9 +8,10 @@ Multiple CloudFormation stacks are automatically created, updated, or deleted wi
 
 This assumes your Route 53 is already configured for your account with a custom domain name.
 
-::: info SAM_DEPLOYMENT_BUCKET_NAME
-The SAM_DEPLOYMENT_BUCKET_NAME will not be created automatically.  You must create this S3 bucket manually in the same region you plan to deploy to before running any workflows.
-:::
+## SAM Deployment Bucket
+
+1. Create an S3 bucket to store CloudFormation deployment templates.  This bucket must be in the same region you plan to deploy to.
+2. Note the bucket name — you will need it when configuring GitHub secrets.
 
 ## IAM Users
 1. Create the user that will execute the deployment and deletion of the stacks.  For example, `firefly-github-actions`.
