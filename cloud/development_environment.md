@@ -16,6 +16,7 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 - `AWS_REGION` — the region you plan to deploy to.
 - `S3_FIRMWARE_PRIVATE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware ZIPs.
 - `S3_FIRMWARE_PUBLIC_BUCKET_NAME` — the S3 bucket name you plan to use for public OTA firmware delivery.
+- `S3_UI_BUCKET_NAME` — the S3 bucket name you plan to use for the UI static files.
 - `SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
 - `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
 
@@ -85,6 +86,7 @@ The following secrets must be configured in each GitHub environment:
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | my-firmware-private | The S3 bucket name for storing firmware ZIPs (private). |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
+| `S3_UI_BUCKET_NAME` | my-firefly-ui | The S3 bucket name for the UI static files (private, served via CloudFront). |
 | `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
 ### GitHub Variables
@@ -94,11 +96,13 @@ The following variables must be configured in each GitHub environment:
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
 | `API_DOMAIN_NAME` | api.somewhere.com | The domain name for the API gateway. |
+| `API_URL` | https://api.somewhere.com | The full base URL for the API, injected into the UI at build time. |
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
+| `UI_DOMAIN_NAME` | ui.somewhere.com | The custom domain name for the firmware management UI. |
 
 ## GitHub Actions Workflows
 
@@ -127,6 +131,10 @@ Individual deploy workflows are available for updating a specific stack without 
 | `deploy-s3-firmware-public` | Creates the public S3 bucket for OTA firmware delivery. |
 | `deploy-cloudfront` | Deploys the CloudFront distribution. Requires ACM certificate and public S3 bucket. |
 | `deploy-func-api-ota-get` | Deploys the OTA firmware manifest Lambda. Requires API Gateway, shared layer, and CloudFront. |
+| `deploy-func-api-firmware-download-get` | Deploys the pre-signed download URL Lambda. Requires API Gateway, shared layer, and private S3 firmware bucket. |
+| `deploy-s3-ui` | Creates the private S3 bucket for UI static files. |
+| `deploy-cloudfront-ui` | Deploys the CloudFront distribution serving the UI. Requires ACM certificate and UI S3 bucket. |
+| `deploy-ui-app` | Builds the Vue app and syncs it to S3, then invalidates the CloudFront cache. Requires CloudFront UI distribution. |
 
 ### Deleting
 
@@ -153,6 +161,10 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 | `delete-func-s3-firmware-deleted` | Deletes the S3 delete trigger Lambda. Must run after the S3 bucket is deleted. |
 | `delete-shared-layer` | Deletes the shared Lambda layer. Must run after all Lambda functions are deleted. |
 | `delete-dynamodb-firmware` | Deletes the DynamoDB firmware table. |
+| `delete-func-api-firmware-download-get` | Deletes the pre-signed download URL Lambda. Must run before the API Gateway. |
+| `delete-ui-app` | Empties the UI S3 bucket. Must run before the CloudFront UI distribution is deleted. |
+| `delete-cloudfront-ui` | Deletes the CloudFront UI distribution. Must run after the UI S3 bucket is emptied. |
+| `delete-s3-ui` | Deletes the private UI S3 bucket. Must run after the CloudFront UI distribution is deleted. |
 
 ### Integration Tests
 
