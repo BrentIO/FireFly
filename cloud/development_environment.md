@@ -96,7 +96,7 @@ The following variables must be configured in each GitHub environment:
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
 | `API_DOMAIN_NAME` | api.somewhere.com | The domain name for the API gateway. |
-| `API_URL` | https://api.somewhere.com | The full base URL for the API, injected into the UI at build time. |
+| `API_URL` | `https://api.somewhere.com` | The full base URL for the API, including the `https://` scheme, injected into the UI at build time. |
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
