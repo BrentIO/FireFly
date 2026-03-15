@@ -3,7 +3,7 @@
 title S3 Firmware Upload\n(GitHub Action → func-s3-firmware-uploaded)
 
 actor "GitHub Action" as GHA
-storage S3
+database S3
 participant "func-s3-firmware-uploaded" as Lambda
 database DynamoDB
 
