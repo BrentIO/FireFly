@@ -2,7 +2,7 @@
 
 ## Description
 
-Returns an [esp32FOTA](https://github.com/chrisjoyce911/esp32FOTA)-compatible OTA manifest for the latest `RELEASED` firmware matching the given `product_id` and `application`. The manifest contains CloudFront URLs the device uses to download the firmware binaries directly.
+Returns an OTA manifest compatible with the [BrentIO/esp32FOTA](https://github.com/BrentIO/esp32FOTA) fork for the latest `RELEASED` firmware matching the given `product_id` and `application`. The manifest contains CloudFront URLs the device uses to download the firmware binaries directly.
 
 If multiple `RELEASED` builds exist for the same product and application, the most recently processed build is returned.
 
@@ -26,7 +26,7 @@ See the [API Reference](/cloud/api_reference) for full schema documentation.
 
 ## Response Format
 
-The response is an [esp32FOTA](https://github.com/chrisjoyce911/esp32FOTA)-compatible manifest:
+The response is a manifest compatible with the [BrentIO/esp32FOTA](https://github.com/BrentIO/esp32FOTA) fork:
 
 | Field | Required | Description |
 |---|---|---|
