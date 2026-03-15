@@ -1,7 +1,7 @@
 # Cloud Development Environment
 The workflows will automatically create the environment required for firmware control.  This includes S3 buckets, gateways, and the lambda functions.  This document will explain how to bootstrap the AWS account to use the deployment templates.
 
-There are three stacks which are automatically created, udpdated, or deleted with these templates:
+There are three stacks which are automatically created, updated, or deleted with these templates:
 - S3 Firmware Bucket Stack
 - API Stack
 - Lambda Stack
@@ -23,7 +23,7 @@ Do not create or attach permissions for the user at this time.
 ## IAM Roles
 
 1. Create a new role named  `firefly-cloudformation-execution-role`.
-2. Create a trust relationship using statements in `./Cloud/firefly-cloudformation-execution-role_trust-relationships.json`.
+2. Create a trust relationship using statements in `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
 
 ::: info Note
 Do not create or attach permissions for the role at this time.
@@ -44,13 +44,13 @@ Only **us-east-1** region is supported.
 
 ### CloudFormation Access Policy
 This policy allows the IAM user to execute CloudFormation scripts and assume the CloudFormation Execution role.
-1. Create a new poicy using statements in `./Cloud/firefly-github-actions-cloudformation-access-policy.json`.
+1. Create a new policy using statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
 2. Name the policy `firefly-github-actions-cloudformation-access-policy`.
 3. Attach IAM user entity `firefly-github-actions` to the policy.
 
 ### CloudFormation Execution Policy
-This policy allows execution to the individual services needed to deploy and deelete 
-1. Create a new policy using statements in `./Cloud/firefly-cloudformation-execution-policy.json`.
+This policy allows execution to the individual services needed to deploy and delete the stacks.
+1. Create a new policy using statements in `policies/firefly-cloudformation-execution-policy.json`.
 2. Name the policy `firefly-cloudformation-execution-policy`.
 3. Attach IAM role entity `firefly-cloudformation-execution-role` to the policy.
 
