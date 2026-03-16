@@ -13,6 +13,8 @@ The custom partition table will is defined as:
 | www | data | spiffs | 0xD10000 | 0x2E0000 | 2.875MB |
 | coredump | data | coredump | 0xFF0000 | 0x10000 | 64KB |
 
+> **Note:** The `spiffs` SubType label is an ESP32 toolchain partition type identifier. The `config` and `www` partitions both use the LittleFS filesystem, not SPIFFS.
+
 
 ## `config` partition
 Data stored within this partition contains configuration data for the controller itself, such as:
