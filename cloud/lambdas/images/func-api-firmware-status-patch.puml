@@ -42,7 +42,7 @@ DynamoDB --> Lambda : success
 Lambda --> APIGW : 200 OK\n{updated firmware record}
 APIGW --> Client : 200 OK\n{updated firmware record}
 
-== Other valid transition (e.g. READY_TO_TEST → TESTING) ==
+== Other valid transition (e.g. READY_TO_TEST → TESTING or TESTING → READY_TO_TEST) ==
 
 Client -> APIGW : PATCH /firmware/550e8400-...zip/status\n{"release_status": "TESTING"}
 APIGW -> Lambda : invoke
@@ -78,6 +78,7 @@ APIGW --> Client : 404 Not Found
 note over Client, S3Public
   Valid transitions (human-initiated via this endpoint):
   READY_TO_TEST → TESTING
+  TESTING       → READY_TO_TEST  (rollback)
   TESTING       → RELEASED  (copies binaries from private → public S3)
   RELEASED      → REVOKED   (moves binaries to revoked/ in public S3, sets DynamoDB TTL)
 

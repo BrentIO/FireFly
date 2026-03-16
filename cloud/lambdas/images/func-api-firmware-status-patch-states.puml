@@ -4,6 +4,7 @@
 [*] --> ERROR : upload failure\n(func-s3-firmware-uploaded)
 
 READY_TO_TEST --> TESTING : PATCH /status
+TESTING --> READY_TO_TEST : PATCH /status
 TESTING --> RELEASED : PATCH /status
 RELEASED --> REVOKED : PATCH /status
 
