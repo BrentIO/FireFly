@@ -6,6 +6,7 @@ Transitions a firmware build to a new `release_status`. Only the following trans
 | From | To |
 |---|---|
 | `READY_TO_TEST` | `TESTING` |
+| `TESTING` | `READY_TO_TEST` |
 | `TESTING` | `RELEASED` |
 | `RELEASED` | `REVOKED` |
 
@@ -49,4 +50,4 @@ All possible `release_status` values and how they are set:
 | `DELETED` | `func-s3-firmware-deleted` | Firmware deleted from S3; set automatically for any non-`RELEASED`/`REVOKED` record |
 | `ERROR` | `func-s3-firmware-uploaded` | Upload validation failed; the `error` field contains the reason |
 
-`REVOKED` and `DELETED` statuses cannot be set via this endpoint and cannot be reversed.
+`REVOKED` and `DELETED` statuses cannot be set via this endpoint and cannot be reversed. The `TESTING` status can be rolled back to `READY_TO_TEST`.
