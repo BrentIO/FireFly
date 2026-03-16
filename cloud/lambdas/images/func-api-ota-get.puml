@@ -8,21 +8,48 @@ participant "func-api-ota-get" as Lambda
 database DynamoDB
 collections "CloudFront" as CF
 
-== Released firmware available ==
+== Missing current_version ==
 
-Controller -> APIGW : GET /ota/{product_id}/{application}
+Controller -> APIGW : GET /ota/{product_id}/{application}\n(no current_version param)
+APIGW -> Lambda : invoke
+Lambda --> APIGW : 400 Bad Request
+APIGW --> Controller : 400 Bad Request
+
+== Update available ==
+
+Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
 APIGW -> Lambda : invoke
 Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
-DynamoDB --> Lambda : items (released builds)
-Lambda -> Lambda : select latest by uploaded_at\nbuild CloudFront URLs
+DynamoDB --> Lambda : items (released builds, sorted by version)
+Lambda -> Lambda : find oldest RELEASED with version > current_version\nbuild CloudFront URLs
 Lambda --> APIGW : 200 OK\n{"type": "...", "version": "...", "url": "...", "littlefs": "..."}
-APIGW --> Controller : 200 OK\n{OTA manifest}
+APIGW --> Controller : 200 OK\n{OTA manifest — next version}
 Controller -> CF : GET /{product_id}/{application}/{version}/{binary}
 CF --> Controller : firmware binary
 
+== Device already on latest released version ==
+
+Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
+DynamoDB --> Lambda : items (no RELEASED version > current_version)
+Lambda -> Lambda : current_version found in RELEASED\nbuild CloudFront URLs for current version
+Lambda --> APIGW : 200 OK\n{"type": "...", "version": "{same}", "url": "...", "littlefs": "..."}
+APIGW --> Controller : 200 OK\n{OTA manifest — same version, semver_compare == 0, no update}
+
+== Device running revoked firmware with no newer release ==
+
+Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
+APIGW -> Lambda : invoke
+Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
+DynamoDB --> Lambda : items (no RELEASED version > current_version)
+Lambda -> Lambda : current_version NOT found in RELEASED\n(it is REVOKED or unknown)
+Lambda --> APIGW : 409 Conflict
+APIGW --> Controller : 409 Conflict
+
 == No released firmware found ==
 
-Controller -> APIGW : GET /ota/{product_id}/{application}
+Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
 APIGW -> Lambda : invoke
 Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
 DynamoDB --> Lambda : (no items)
