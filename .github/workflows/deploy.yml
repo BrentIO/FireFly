@@ -27,6 +27,8 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -38,8 +40,6 @@ jobs:
           node-version: 24
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       - name: Install dependencies
         run: npm install
       - name: Install PlantUML
@@ -78,6 +78,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     name: Deploy
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
