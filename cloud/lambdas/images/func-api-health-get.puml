@@ -1,5 +1,5 @@
 @startuml
-!include common.puml
+!include common-sequence.puml
 
 title GET /health
 
