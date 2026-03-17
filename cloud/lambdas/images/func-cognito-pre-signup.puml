@@ -1,0 +1,31 @@
+@startuml
+!include common-sequence.iuml
+
+title Cognito Pre-Signup Trigger
+
+box "AWS" #ffdbbb
+    participant "Cognito" as Cognito
+    participant "func-cognito-pre-signup" as Lambda
+    database "DynamoDB\nfirefly-users" as DynUsers
+end box
+
+Cognito -> Lambda++ : PreSignUp event\n{triggerSource, email}
+
+alt triggerSource == "PreSignUp_AdminCreateUser"
+    Lambda --> Cognito-- : allow\n(autoConfirmUser = true)
+else federated sign-in (Google)
+    Lambda -> DynUsers++ : GetItem\nKey: {email}
+
+    alt email not found
+        DynUsers --> Lambda-- : (no item)
+        Lambda --> Cognito-- : raise Exception\n"not authorized"
+    else environment mismatch
+        DynUsers --> Lambda-- : item\n{environments: [...]}
+        Lambda --> Cognito-- : raise Exception\n"no access to environment"
+    else allowed
+        DynUsers --> Lambda-- : item\n{environments: [...]}
+        Lambda --> Cognito-- : event (allow signup)
+    end
+end
+
+@enduml

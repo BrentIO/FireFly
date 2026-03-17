@@ -1,0 +1,51 @@
+@startuml
+!include common-sequence.iuml
+
+title Authentication — Sign In with Google (PKCE Flow)
+
+actor User
+
+box "Browser"
+    participant "SPA\n(Vue)" as SPA
+end box
+
+box "AWS" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "Cognito\nHosted UI" as Cognito
+    participant "func-cognito-\npre-signup" as PreSignup
+    database "DynamoDB\nfirefly-users" as DynUsers
+end box
+
+participant "Google\nOAuth 2.0" as Google
+
+User -> SPA++ : clicks "Sign in with Google"
+SPA -> SPA : generate PKCE\ncode_verifier + code_challenge
+SPA --> User-- : redirect to Cognito Hosted UI
+User -> Cognito++ : GET /oauth2/authorize\n?identity_provider=Google\n&code_challenge={challenge}
+
+Cognito --> User-- : redirect to Google OAuth
+User -> Google++ : Google sign-in
+Google --> User-- : redirect to Cognito\n?code={google_code}
+User -> Cognito++ : GET /oauth2/callback?code={google_code}
+
+Cognito -> PreSignup++ : PreSignUp trigger\n{email, triggerSource}
+PreSignup -> DynUsers++ : GetItem\nKey: {email}
+DynUsers --> PreSignup-- : item (or not found)
+
+alt email not in allowed list
+    PreSignup --> Cognito-- : raise Exception
+    Cognito --> User-- : sign-in blocked
+else email not allowed in environment
+    PreSignup --> Cognito-- : raise Exception
+    Cognito --> User-- : sign-in blocked
+else allowed
+    PreSignup --> Cognito-- : event (allow)
+    Cognito --> User-- : redirect to SPA\n/callback?code={auth_code}
+    User -> SPA++ : GET /callback?code={auth_code}
+    SPA -> Cognito++ : POST /oauth2/token\n{code, code_verifier}
+    Cognito --> SPA-- : {access_token, id_token, refresh_token}
+    SPA -> SPA : store tokens in memory\n+ refresh_token in sessionStorage
+    SPA --> User-- : redirect to /firmware
+end
+
+@enduml
