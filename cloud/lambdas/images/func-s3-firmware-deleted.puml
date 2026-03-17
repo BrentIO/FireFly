@@ -1,30 +1,36 @@
 @startuml
-skinparam sequenceArrowThickness 2
-skinparam roundcorner 5
+!include common.puml
 
-database "S3\nfirefly-firmware" as S3
-participant "func-s3-firmware-deleted" as Lambda
-database "DynamoDB\nfirefly-firmware" as DDB
+title func-s3-firmware-deleted\n(S3 ObjectRemoved event)
 
-S3 --> Lambda : S3 ObjectRemoved event\n(processed/{uuid}.zip\nor errors/{uuid}.zip)
+box "Infrastructure" #ffdbbb
+    database "S3\nfirefly-firmware" as S3
+    participant "func-s3-firmware-deleted" as Lambda
+    database "DynamoDB\nfirefly-firmware" as DDB
+end box
+
+S3 -\ Lambda++ : S3 ObjectRemoved event (async)\n(processed/{uuid}.zip or errors/{uuid}.zip)
 
 Lambda -> Lambda : extract {uuid}.zip from key
-Lambda -> Lambda : check prefix is processed/ or errors/
 
 alt non-zip or wrong prefix
-  Lambda -> Lambda : ignore event
-else
-  Lambda -> DDB : Query zip_name-index ({uuid}.zip)
-  alt not found
-    DDB --> Lambda : Empty result
-    Lambda -> Lambda : raise exception
-  else found
-    DDB --> Lambda : Item (pk, version, release_status)
-    alt release_status in {RELEASED, REVOKED}
-      Lambda -> Lambda : skip — lifecycle managed\nby func-api-firmware-status-patch
-    else
-      Lambda -> DDB : update_item\nSET release_status=DELETED, ttl=now+10d
+    Lambda -> Lambda : ignore event
+else valid zip in processed/ or errors/
+    Lambda -> DDB++ : Query zip_name-index ({uuid}.zip)
+    alt not found
+        DDB --> Lambda-- : (no items)
+        Lambda -> Lambda : raise exception
+    else found
+        DDB --> Lambda-- : item (pk, version, release_status)
+        alt release_status in {RELEASED, REVOKED}
+            Lambda -> Lambda : skip — lifecycle managed\nby func-api-firmware-status-patch
+        else
+            Lambda -> DDB++ : update_item\nSET release_status = DELETED, ttl = now + 10 days
+            DDB --> Lambda-- : success
+        end
     end
-  end
 end
+
+deactivate Lambda
+
 @enduml

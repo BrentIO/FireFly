@@ -1,59 +1,46 @@
 @startuml
+!include common.puml
 
 title GET /ota/{product_id}/{application}
 
 actor Controller
-participant "API Gateway" as APIGW
-participant "func-api-ota-get" as Lambda
-database DynamoDB
-collections "CloudFront" as CF
 
-== Missing current_version ==
+box "Infrastructure" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-ota-get" as Lambda
+    database DynamoDB
+    collections "CloudFront" as CF
+end box
 
-Controller -> APIGW : GET /ota/{product_id}/{application}\n(no current_version param)
-APIGW -> Lambda : invoke
-Lambda --> APIGW : 400 Bad Request
-APIGW --> Controller : 400 Bad Request
+Controller -> APIGW++ : GET /ota/{product_id}/{application}\n?current_version={version}
+APIGW -> Lambda++ : invoke
 
-== Update available ==
-
-Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
-DynamoDB --> Lambda : items (released builds, sorted by version)
-Lambda -> Lambda : find oldest RELEASED with version > current_version\nbuild CloudFront URLs
-Lambda --> APIGW : 200 OK\n{"type": "...", "version": "...", "url": "...", "littlefs": "..."}
-APIGW --> Controller : 200 OK\n{OTA manifest — next version}
-Controller -> CF : GET /{product_id}/{application}/{version}/{binary}
-CF --> Controller : firmware binary
-
-== Device already on latest released version ==
-
-Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
-DynamoDB --> Lambda : items (no RELEASED version > current_version)
-Lambda -> Lambda : current_version found in RELEASED\nbuild CloudFront URLs for current version
-Lambda --> APIGW : 200 OK\n{"type": "...", "version": "{same}", "url": "...", "littlefs": "..."}
-APIGW --> Controller : 200 OK\n{OTA manifest — same version, semver_compare == 0, no update}
-
-== Device running revoked firmware with no newer release ==
-
-Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
-DynamoDB --> Lambda : items (no RELEASED version > current_version)
-Lambda -> Lambda : current_version NOT found in RELEASED\n(it is REVOKED or unknown)
-Lambda --> APIGW : 409 Conflict
-APIGW --> Controller : 409 Conflict
-
-== No released firmware found ==
-
-Controller -> APIGW : GET /ota/{product_id}/{application}\n?current_version={version}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
-DynamoDB --> Lambda : (no items)
-Lambda --> APIGW : 404 Not Found
-APIGW --> Controller : 404 Not Found
+alt missing current_version param
+    Lambda --> APIGW-- : 400 Bad Request
+    APIGW --> Controller-- : 400 Bad Request
+else current_version provided
+    Lambda -> DynamoDB++ : Query pk = {product_id}#{application}\nfilter release_status = RELEASED
+    alt no released firmware found
+        DynamoDB --> Lambda-- : (no items)
+        Lambda --> APIGW-- : 404 Not Found
+        APIGW --> Controller-- : 404 Not Found
+    else current version is revoked or unknown with no newer release
+        DynamoDB --> Lambda-- : items (current_version not in RELEASED,\nno newer RELEASED version exists)
+        Lambda --> APIGW-- : 409 Conflict
+        APIGW --> Controller-- : 409 Conflict
+    else update available
+        DynamoDB --> Lambda-- : items (released builds)
+        Lambda -> Lambda : find oldest RELEASED with version > current_version\nbuild CloudFront URLs
+        Lambda --> APIGW-- : 200 OK\n{"type": "...", "version": "{next}", "url": "...", "littlefs": "..."}
+        APIGW --> Controller-- : 200 OK\n{OTA manifest — next version}
+        Controller -> CF++ : GET /{product_id}/{application}/{version}/{binary}
+        CF --> Controller-- : firmware binary
+    else already on latest released version
+        DynamoDB --> Lambda-- : items (current_version found in RELEASED,\nno newer version exists)
+        Lambda -> Lambda : build CloudFront URLs for current version
+        Lambda --> APIGW-- : 200 OK\n{"type": "...", "version": "{same}", "url": "...", "littlefs": "..."}
+        APIGW --> Controller-- : 200 OK\n{OTA manifest — same version, semver_compare == 0, no update}
+    end
+end
 
 @enduml
