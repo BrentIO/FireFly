@@ -12,4 +12,4 @@ skinparam {
     Shadowing false
 }
 
-center footer %filename%          %date("yyyy-MM-dd HH:mm")
+center footer %filename()          %date("yyyy-MM-dd HH:mm")
