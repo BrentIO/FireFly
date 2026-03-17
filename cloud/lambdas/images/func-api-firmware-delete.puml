@@ -1,70 +1,49 @@
 @startuml
+!include common.puml
 
 title DELETE /firmware/{zip_name}
 
 actor Client
-participant "API Gateway" as APIGW
-participant "func-api-firmware-delete" as DeleteLambda
-participant "func-s3-firmware-deleted" as DeletedLambda
-database DynamoDB
-database S3
 
-== Successful deletion (non-released firmware) ==
+box "Infrastructure" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-firmware-delete" as DeleteLambda
+    participant "func-s3-firmware-deleted" as DeletedLambda
+    database DynamoDB
+    database S3
+end box
 
-Client -> APIGW : DELETE /firmware/550e8400-...zip
-APIGW -> DeleteLambda : invoke
-DeleteLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> DeleteLambda : item\n{pk, version,\n release_status: "READY_TO_TEST", ...}
-DeleteLambda -> DeleteLambda : release_status not in {DELETED, REVOKED} ✓\nprefix = "processed/"
-DeleteLambda -> S3 : DeleteObject\nKey: processed/550e8400-...zip
-S3 --> DeleteLambda : success
-DeleteLambda --> APIGW : 202 Accepted\n{"message": "Deletion initiated"}
-APIGW --> Client : 202 Accepted
+Client -> APIGW++ : DELETE /firmware/550e8400-...zip
+APIGW -> DeleteLambda++ : invoke
+DeleteLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
 
-note over S3, DeletedLambda
-  Async: S3 fires ObjectRemoved event
-end note
+alt not found
+    DynamoDB --> DeleteLambda-- : (no items)
+    DeleteLambda --> APIGW-- : 404 Not Found
+    APIGW --> Client-- : 404 Not Found
+else already removed (DELETED or REVOKED)
+    DynamoDB --> DeleteLambda-- : item\n{release_status: "DELETED" or "REVOKED", ...}
+    DeleteLambda --> APIGW-- : 409 Conflict\n{"message": "Firmware is already in state '...'"}
+    APIGW --> Client-- : 409 Conflict
+else active firmware found
+    DynamoDB --> DeleteLambda-- : item\n{release_status: "READY_TO_TEST"|"TESTING"|"ERROR", ...}
+    DeleteLambda -> S3++ : DeleteObject\nKey: processed/ or errors/550e8400-...zip
+    S3 --> DeleteLambda-- : success
+    DeleteLambda --> APIGW-- : 202 Accepted\n{"message": "Deletion initiated"}
+    APIGW --> Client-- : 202 Accepted
 
-S3 -> DeletedLambda : S3 ObjectRemoved event\n(processed/550e8400-...zip)
-DeletedLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> DeletedLambda : item\n{release_status: "READY_TO_TEST"}
-DeletedLambda -> DeletedLambda : release_status != RELEASED\nnew_status = "DELETED"
-DeletedLambda -> DynamoDB : UpdateItem\nKey: {pk, version}\nSET release_status = "DELETED", ttl = now + 10 days
+    S3 -\ DeletedLambda++ : S3 ObjectRemoved event (async)\n(processed/ or errors/550e8400-...zip)
+    DeletedLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+    DynamoDB --> DeletedLambda-- : item\n{release_status: ...}
 
-== Successful deletion (released firmware → REVOKED) ==
-
-Client -> APIGW : DELETE /firmware/550e8400-...zip
-APIGW -> DeleteLambda : invoke
-DeleteLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> DeleteLambda : item\n{release_status: "RELEASED", ...}
-DeleteLambda -> S3 : DeleteObject\nKey: processed/550e8400-...zip
-S3 --> DeleteLambda : success
-DeleteLambda --> APIGW : 202 Accepted
-APIGW --> Client : 202 Accepted
-
-S3 -> DeletedLambda : S3 ObjectRemoved event\n(processed/550e8400-...zip)
-DeletedLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> DeletedLambda : item\n{release_status: "RELEASED"}
-DeletedLambda -> DeletedLambda : release_status == RELEASED\nnew_status = "REVOKED"
-DeletedLambda -> DynamoDB : UpdateItem\nKey: {pk, version}\nSET release_status = "REVOKED", ttl = now + 10 days
-
-== Already removed ==
-
-Client -> APIGW : DELETE /firmware/550e8400-...zip
-APIGW -> DeleteLambda : invoke
-DeleteLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> DeleteLambda : item\n{release_status: "DELETED", ...}
-DeleteLambda -> DeleteLambda : release_status in {DELETED, REVOKED} ✗
-DeleteLambda --> APIGW : 409 Conflict\n{"message": "Firmware is already in state 'DELETED'..."}
-APIGW --> Client : 409 Conflict
-
-== Not found ==
-
-Client -> APIGW : DELETE /firmware/00000000-...zip
-APIGW -> DeleteLambda : invoke
-DeleteLambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "00000000-...zip"
-DynamoDB --> DeleteLambda : (no items)
-DeleteLambda --> APIGW : 404 Not Found
-APIGW --> Client : 404 Not Found
+    alt release_status == RELEASED
+        DeletedLambda -> DynamoDB++ : UpdateItem\nSET release_status = "REVOKED", ttl = now + 10 days
+        DynamoDB --> DeletedLambda-- : success
+    else other status
+        DeletedLambda -> DynamoDB++ : UpdateItem\nSET release_status = "DELETED", ttl = now + 10 days
+        DynamoDB --> DeletedLambda-- : success
+    end
+    deactivate DeletedLambda
+end
 
 @enduml

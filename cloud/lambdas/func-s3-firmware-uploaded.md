@@ -21,7 +21,7 @@ Invoked by an **S3 event notification** when a `.zip` file is created in the `in
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-s3-firmware-uploaded.svg)
+[![Sequence Diagram](./images/func-s3-firmware-uploaded.svg)](./images/func-s3-firmware-uploaded.svg)
 
 ## API Endpoints
 This function is not invoked via API Gateway and has no associated API endpoints.

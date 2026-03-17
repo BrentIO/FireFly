@@ -15,11 +15,11 @@ Invoked by **API Gateway** on an HTTP `GET` request to `/firmware` or `/firmware
 
 ### List firmware
 
-![List firmware sequence diagram](./images/func-api-firmware-get-list.svg)
+[![List firmware sequence diagram](./images/func-api-firmware-get-list.svg)](./images/func-api-firmware-get-list.svg)
 
 ### Get single firmware record
 
-![Get firmware item sequence diagram](./images/func-api-firmware-get-item.svg)
+[![Get firmware item sequence diagram](./images/func-api-firmware-get-item.svg)](./images/func-api-firmware-get-item.svg)
 
 ## API Endpoints
 | Method | Path | Description |

@@ -16,7 +16,7 @@ Invoked by an **S3 event notification** when a `.zip` file is deleted from the `
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-s3-firmware-deleted.svg)
+[![Sequence Diagram](./images/func-s3-firmware-deleted.svg)](./images/func-s3-firmware-deleted.svg)
 
 ## API Endpoints
 This function is not invoked via API Gateway and has no associated API endpoints.

@@ -16,7 +16,7 @@ Invoked by **API Gateway** on an HTTP `GET /ota/{product_id}/{application}` requ
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-api-ota-get.svg)
+[![Sequence Diagram](./images/func-api-ota-get.svg)](./images/func-api-ota-get.svg)
 
 ## API Endpoints
 

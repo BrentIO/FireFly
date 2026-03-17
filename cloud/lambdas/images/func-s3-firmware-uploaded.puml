@@ -1,43 +1,48 @@
 @startuml
+!include common.puml
 
-title S3 Firmware Upload\n(GitHub Action → func-s3-firmware-uploaded)
+title func-s3-firmware-uploaded\n(S3 ObjectCreated event — GitHub Action → S3)
 
 actor "GitHub Action" as GHA
-database S3
-participant "func-s3-firmware-uploaded" as Lambda
-database DynamoDB
 
-== Successful upload ==
+box "Infrastructure" #ffdbbb
+    database S3
+    participant "func-s3-firmware-uploaded" as Lambda
+    database DynamoDB
+end box
 
-GHA -> S3 : PutObject\nKey: incoming/firefly-controller-v2-1.4.2.zip
-S3 -> Lambda : S3 ObjectCreated event\n(incoming/firefly-controller-v2-1.4.2.zip)
-Lambda -> S3 : CopyObject incoming/ → processing/\nDeleteObject incoming/
-Lambda -> S3 : HeadObject (get file size)
-Lambda -> S3 : Download ZIP to /tmp
-Lambda -> Lambda : Compute SHA256 of ZIP
-Lambda -> Lambda : Extract ZIP\nRead manifest.json
-Lambda -> Lambda : Validate manifest schema\n(required fields, files array)
-Lambda -> Lambda : Verify each file exists\nand matches SHA256 in manifest
-Lambda -> DynamoDB : PutItem\n{release_status: "READY_TO_TEST", ...}
-Lambda -> S3 : CopyObject processing/ → processed/\nDeleteObject processing/
+GHA -> S3++ : PutObject\nKey: incoming/{filename}.zip
+S3 --> GHA-- : success
+S3 -\ Lambda++ : S3 ObjectCreated event (async)\n(incoming/{filename}.zip)
 
-== Failed upload (manifest or checksum error) ==
+Lambda -> S3++ : CopyObject incoming/ → processing/\nDeleteObject incoming/
+S3 --> Lambda-- : success
+Lambda -> S3++ : HeadObject (get file size)
+S3 --> Lambda-- : file metadata
+Lambda -> S3++ : Download ZIP to /tmp
+S3 --> Lambda-- : ZIP data
+Lambda -> Lambda : Compute SHA256 of ZIP\nExtract ZIP, read manifest.json\nValidate manifest schema (required fields, files array)\nVerify each file exists and matches SHA256 in manifest
 
-GHA -> S3 : PutObject\nKey: incoming/bad-firmware.zip
-S3 -> Lambda : S3 ObjectCreated event
-Lambda -> S3 : CopyObject incoming/ → processing/
-Lambda -> S3 : Download ZIP to /tmp
-Lambda -> Lambda : Extract ZIP
-Lambda -> Lambda : Validate manifest — fails\n(e.g. "SHA256 mismatch for firmware.bin")
-Lambda -> DynamoDB : PutItem\n{product_id: "__UNKNOWN_PRODUCT__" or manifest value,\n version: "ERROR#<version>#<uuid>",\n release_status: "ERROR",\n error: "SHA256 mismatch for firmware.bin"}
-Lambda -> S3 : CopyObject processing/ → errors/\nDeleteObject processing/
+alt validation succeeds
+    Lambda -> DynamoDB++ : PutItem\n{release_status: "READY_TO_TEST", ...}
+    DynamoDB --> Lambda-- : success
+    Lambda -> S3++ : CopyObject processing/ → processed/\nDeleteObject processing/
+    S3 --> Lambda-- : success
+else validation fails (manifest error or checksum mismatch)
+    Lambda -> DynamoDB++ : PutItem\n{release_status: "ERROR",\n error: "<reason>", ...}
+    DynamoDB --> Lambda-- : success
+    Lambda -> S3++ : CopyObject processing/ → errors/\nDeleteObject processing/
+    S3 --> Lambda-- : success
+end
+
+deactivate Lambda
 
 note over S3
-  S3 lifecycle rules clean up prefixes automatically:
-  incoming/   — 1 day
-  processing/ — 1 day
-  errors/     — 7 days
-  processed/  — 30 days
+    S3 lifecycle rules expire prefixes automatically:
+    incoming/   — 1 day
+    processing/ — 1 day
+    errors/     — 7 days
+    processed/  — 30 days
 end note
 
 @enduml

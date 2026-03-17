@@ -8,7 +8,7 @@ Invoked by **API Gateway** on an HTTP `GET /health` request.
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-api-health-get.svg)
+[![Sequence Diagram](./images/func-api-health-get.svg)](./images/func-api-health-get.svg)
 
 ## API Endpoints
 | Method | Path | Description |

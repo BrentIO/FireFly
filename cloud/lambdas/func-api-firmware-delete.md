@@ -14,7 +14,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /firmware/{zip_name}` request.
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-api-firmware-delete.svg)
+[![Sequence Diagram](./images/func-api-firmware-delete.svg)](./images/func-api-firmware-delete.svg)
 
 ## API Endpoints
 | Method | Path | Description |

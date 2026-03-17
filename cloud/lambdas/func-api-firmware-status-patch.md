@@ -25,7 +25,7 @@ Invoked by **API Gateway** on an HTTP `PATCH /firmware/{zip_name}/status` reques
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-api-firmware-status-patch.svg)
+[![Sequence Diagram](./images/func-api-firmware-status-patch.svg)](./images/func-api-firmware-status-patch.svg)
 
 ## API Endpoints
 | Method | Path | Description |
@@ -38,7 +38,7 @@ See the [API Reference](/cloud/api_reference) for full schema documentation.
 
 All possible `release_status` values and how they are set:
 
-![Status State Machine](./images/func-api-firmware-status-patch-states.svg)
+[![Status State Machine](./images/func-api-firmware-status-patch-states.svg)](./images/func-api-firmware-status-patch-states.svg)
 
 | Status | Set By | Description |
 |---|---|---|

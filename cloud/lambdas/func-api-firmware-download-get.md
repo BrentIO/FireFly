@@ -17,7 +17,7 @@ Invoked by **API Gateway** on an HTTP `GET /firmware/{zip_name}/download` reques
 
 ## Sequence Diagram
 
-![Sequence Diagram](./images/func-api-firmware-download-get.svg)
+[![Sequence Diagram](./images/func-api-firmware-download-get.svg)](./images/func-api-firmware-download-get.svg)
 
 ## API Endpoints
 

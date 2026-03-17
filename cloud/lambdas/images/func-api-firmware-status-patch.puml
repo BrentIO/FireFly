@@ -1,91 +1,70 @@
 @startuml
+!include common.puml
 
 title PATCH /firmware/{zip_name}/status
 
 actor Client
-participant "API Gateway" as APIGW
-participant "func-api-firmware-status-patch" as Lambda
-database DynamoDB
-collections "S3\n(private)" as S3Private
-collections "S3\n(public)" as S3Public
 
-== TESTING → RELEASED (publishes firmware binaries) ==
+box "Infrastructure" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-firmware-status-patch" as Lambda
+    database DynamoDB
+    collections "S3\n(private)" as S3Private
+    collections "S3\n(public)" as S3Public
+end box
 
-Client -> APIGW : PATCH /firmware/550e8400-...zip/status\n{"release_status": "RELEASED"}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-DynamoDB --> Lambda : item\n{pk, version, release_status: "TESTING", ...}
-Lambda -> Lambda : validate transition\nTESTING → RELEASED ✓
-Lambda -> S3Private : GetObject\nprocessed/550e8400-...zip
-S3Private --> Lambda : ZIP contents
-Lambda -> Lambda : extract files\n(exclude config.bin, manifest.json)
-Lambda -> S3Public : PutObject\n{product_id}/{application}/{version}/{filename}\n(one per binary file)
-S3Public --> Lambda : success
-Lambda -> DynamoDB : UpdateItem\nKey: {pk, version}\nSET release_status = "RELEASED"
-DynamoDB --> Lambda : success
-Lambda --> APIGW : 200 OK\n{updated firmware record}
-APIGW --> Client : 200 OK\n{updated firmware record}
+Client -> APIGW++ : PATCH /firmware/550e8400-...zip/status\n{"release_status": "..."}
+APIGW -> Lambda++ : invoke
+Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
 
-== RELEASED → REVOKED (moves binaries to revoked/ prefix) ==
-
-Client -> APIGW : PATCH /firmware/550e8400-...zip/status\n{"release_status": "REVOKED"}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query GSI zip_name-index
-DynamoDB --> Lambda : item\n{release_status: "RELEASED", ...}
-Lambda -> Lambda : validate transition\nRELEASED → REVOKED ✓
-Lambda -> S3Public : ListObjectsV2\n{product_id}/{application}/{version}/
-S3Public --> Lambda : object list
-Lambda -> S3Public : CopyObject + DeleteObject\nfor each binary file\n→ revoked/{product_id}/{application}/{version}/
-S3Public --> Lambda : success
-Lambda -> DynamoDB : UpdateItem\nSET release_status = "REVOKED", ttl = now + 10 days
-DynamoDB --> Lambda : success
-Lambda --> APIGW : 200 OK\n{updated firmware record}
-APIGW --> Client : 200 OK\n{updated firmware record}
-
-== Other valid transition (e.g. READY_TO_TEST → TESTING or TESTING → READY_TO_TEST) ==
-
-Client -> APIGW : PATCH /firmware/550e8400-...zip/status\n{"release_status": "TESTING"}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query GSI zip_name-index
-DynamoDB --> Lambda : item\n{release_status: "READY_TO_TEST", ...}
-Lambda -> Lambda : validate transition\nREADY_TO_TEST → TESTING ✓
-Lambda -> DynamoDB : UpdateItem\nSET release_status = "TESTING"
-DynamoDB --> Lambda : success
-Lambda --> APIGW : 200 OK\n{updated firmware record}
-APIGW --> Client : 200 OK\n{updated firmware record}
-
-== Invalid transition ==
-
-Client -> APIGW : PATCH /firmware/550e8400-...zip/status\n{"release_status": "RELEASED"}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query GSI zip_name-index
-DynamoDB --> Lambda : item\n{release_status: "READY_TO_TEST", ...}
-Lambda -> Lambda : validate transition\nREADY_TO_TEST → RELEASED ✗
-Lambda --> APIGW : 422 Unprocessable Entity\n{"message": "Cannot transition from 'READY_TO_TEST' to 'RELEASED'",\n "allowed_transitions": ["TESTING"]}
-APIGW --> Client : 422 Unprocessable Entity
-
-== Not found ==
-
-Client -> APIGW : PATCH /firmware/00000000-...zip/status\n{"release_status": "TESTING"}
-APIGW -> Lambda : invoke
-Lambda -> DynamoDB : Query GSI zip_name-index
-DynamoDB --> Lambda : (no items)
-Lambda --> APIGW : 404 Not Found
-APIGW --> Client : 404 Not Found
-
-== State transition reference ==
+alt not found
+    DynamoDB --> Lambda-- : (no items)
+    Lambda --> APIGW-- : 404 Not Found
+    APIGW --> Client-- : 404 Not Found
+else invalid transition
+    DynamoDB --> Lambda-- : item\n{release_status: "READY_TO_TEST", ...}
+    Lambda --> APIGW-- : 422 Unprocessable Entity\n{"message": "Cannot transition from 'READY_TO_TEST' to 'RELEASED'",\n "allowed_transitions": ["TESTING"]}
+    APIGW --> Client-- : 422 Unprocessable Entity
+else TESTING → RELEASED (publishes firmware binaries)
+    DynamoDB --> Lambda-- : item\n{pk, version, release_status: "TESTING", ...}
+    Lambda -> S3Private++ : GetObject\nprocessed/550e8400-...zip
+    S3Private --> Lambda-- : ZIP contents
+    Lambda -> Lambda : extract files\n(exclude config.bin, manifest.json)
+    Lambda -> S3Public++ : PutObject\n{product_id}/{application}/{version}/{filename}\n(one per binary file)
+    S3Public --> Lambda-- : success
+    Lambda -> DynamoDB++ : UpdateItem\nKey: {pk, version}\nSET release_status = "RELEASED"
+    DynamoDB --> Lambda-- : success
+    Lambda --> APIGW-- : 200 OK\n{updated firmware record}
+    APIGW --> Client-- : 200 OK\n{updated firmware record}
+else RELEASED → REVOKED (moves binaries to revoked/ prefix)
+    DynamoDB --> Lambda-- : item\n{release_status: "RELEASED", ...}
+    Lambda -> S3Public++ : ListObjectsV2\n{product_id}/{application}/{version}/
+    S3Public --> Lambda-- : object list
+    Lambda -> S3Public++ : CopyObject + DeleteObject\nfor each binary file\n→ revoked/{product_id}/{application}/{version}/
+    S3Public --> Lambda-- : success
+    Lambda -> DynamoDB++ : UpdateItem\nSET release_status = "REVOKED", ttl = now + 10 days
+    DynamoDB --> Lambda-- : success
+    Lambda --> APIGW-- : 200 OK\n{updated firmware record}
+    APIGW --> Client-- : 200 OK\n{updated firmware record}
+else other valid transition (e.g. READY_TO_TEST ↔ TESTING)
+    DynamoDB --> Lambda-- : item\n{release_status: "READY_TO_TEST", ...}
+    Lambda -> DynamoDB++ : UpdateItem\nSET release_status = "{target}"
+    DynamoDB --> Lambda-- : success
+    Lambda --> APIGW-- : 200 OK\n{updated firmware record}
+    APIGW --> Client-- : 200 OK\n{updated firmware record}
+end
 
 note over Client, S3Public
-  Valid transitions (human-initiated via this endpoint):
-  READY_TO_TEST → TESTING
-  TESTING       → READY_TO_TEST  (rollback)
-  TESTING       → RELEASED  (copies binaries from private → public S3)
-  RELEASED      → REVOKED   (moves binaries to revoked/ in public S3, sets DynamoDB TTL)
+    Valid transitions (human-initiated via this endpoint):
+    READY_TO_TEST → TESTING
+    TESTING       → READY_TO_TEST  (rollback)
+    TESTING       → RELEASED  (copies binaries from private → public S3)
+    RELEASED      → REVOKED   (moves binaries to revoked/ in public S3, sets DynamoDB TTL)
 
-  Automatic transitions (event-driven, not via this endpoint):
-  upload success → READY_TO_TEST  (func-s3-firmware-uploaded)
-  upload failure → ERROR          (func-s3-firmware-uploaded)
-  S3 file removed (non-RELEASED/REVOKED) → DELETED  (func-s3-firmware-deleted)
+    Automatic transitions (event-driven, not via this endpoint):
+    upload success → READY_TO_TEST  (func-s3-firmware-uploaded)
+    upload failure → ERROR          (func-s3-firmware-uploaded)
+    S3 file removed (non-RELEASED/REVOKED) → DELETED  (func-s3-firmware-deleted)
 end note
 
 @enduml
