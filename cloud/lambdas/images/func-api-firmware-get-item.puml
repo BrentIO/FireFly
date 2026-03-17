@@ -11,9 +11,9 @@ box "AWS" #ffdbbb
     database DynamoDB
 end box
 
-Client -> APIGW++ : GET /firmware/550e8400-...zip
+Client -> APIGW++ : GET /firmware/{zip_name}
 APIGW -> Lambda++ : invoke
-Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "{zip_name}"
 
 alt found
     DynamoDB --> Lambda-- : item (full record including files[])
@@ -21,7 +21,7 @@ alt found
     APIGW --> Client-- : 200 OK\n{full firmware record}
 else not found
     DynamoDB --> Lambda-- : (no items)
-    Lambda --> APIGW-- : 404 Not Found\n{"message": "Firmware not found: 00000000-...zip"}
+    Lambda --> APIGW-- : 404 Not Found\n{"message": "Firmware not found: {zip_name}"}
     APIGW --> Client-- : 404 Not Found
 end
 

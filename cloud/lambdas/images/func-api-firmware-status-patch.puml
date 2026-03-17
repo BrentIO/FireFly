@@ -13,9 +13,9 @@ box "AWS" #ffdbbb
     collections "S3\n(public)" as S3Public
 end box
 
-Client -> APIGW++ : PATCH /firmware/550e8400-...zip/status\n{"release_status": "..."}
+Client -> APIGW++ : PATCH /firmware/{zip_name}/status\n{"release_status": "{target}"}
 APIGW -> Lambda++ : invoke
-Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "{zip_name}"
 
 alt not found
     DynamoDB --> Lambda-- : (no items)
@@ -27,7 +27,7 @@ else invalid transition
     APIGW --> Client-- : 422 Unprocessable Entity
 else TESTING → RELEASED (publishes firmware binaries)
     DynamoDB --> Lambda-- : item\n{pk, version, release_status: "TESTING", ...}
-    Lambda -> S3Private++ : GetObject\nprocessed/550e8400-...zip
+    Lambda -> S3Private++ : GetObject\nprocessed/{zip_name}
     S3Private --> Lambda-- : ZIP contents
     Lambda -> Lambda : extract files\n(exclude config.bin, manifest.json)
     Lambda -> S3Public++ : PutObject\n{product_id}/{application}/{version}/{filename}\n(one per binary file)

@@ -13,28 +13,29 @@ box "AWS" #ffdbbb
     database S3
 end box
 
-Client -> APIGW++ : DELETE /firmware/550e8400-...zip
+Client -> APIGW++ : DELETE /firmware/{zip_name}
 APIGW -> DeleteLambda++ : invoke
-DeleteLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+DeleteLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "{zip_name}"
 
 alt not found
     DynamoDB --> DeleteLambda-- : (no items)
     DeleteLambda --> APIGW-- : 404 Not Found
     APIGW --> Client-- : 404 Not Found
 else already removed (DELETED or REVOKED)
-    DynamoDB --> DeleteLambda-- : item\n{release_status: "DELETED" or "REVOKED", ...}
+    DynamoDB --> DeleteLambda-- : item\n{pk, version, release_status, ...}
     DeleteLambda --> APIGW-- : 409 Conflict\n{"message": "Firmware is already in state '...'"}
     APIGW --> Client-- : 409 Conflict
 else active firmware found
-    DynamoDB --> DeleteLambda-- : item\n{release_status: "READY_TO_TEST"|"TESTING"|"ERROR", ...}
-    DeleteLambda -> S3++ : DeleteObject\nKey: processed/ or errors/550e8400-...zip
+    DynamoDB --> DeleteLambda-- : item\n{pk, version, release_status, ...}
+    DeleteLambda -> DeleteLambda : determine S3 prefix\n(processed/ or errors/)
+    DeleteLambda -> S3++ : DeleteObject\nKey: {prefix}/{zip_name}
     S3 --> DeleteLambda-- : success
     DeleteLambda --> APIGW-- : 202 Accepted\n{"message": "Deletion initiated"}
     APIGW --> Client-- : 202 Accepted
 
-    S3 -\ DeletedLambda++ : S3 ObjectRemoved event (async)\n(processed/ or errors/550e8400-...zip)
-    DeletedLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
-    DynamoDB --> DeletedLambda-- : item\n{release_status: ...}
+    S3 -\ DeletedLambda++ : S3 ObjectRemoved event (async)\n({prefix}/{zip_name})
+    DeletedLambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "{zip_name}"
+    DynamoDB --> DeletedLambda-- : item\n{pk, version, release_status}
 
     alt release_status == RELEASED
         DeletedLambda -> DynamoDB++ : UpdateItem\nSET release_status = "REVOKED", ttl = now + 10 days
