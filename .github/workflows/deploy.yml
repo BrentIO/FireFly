@@ -47,7 +47,9 @@ jobs:
       - name: Generate PlantUML diagrams
         run: |
           find . -name "*.puml" -print0 | while IFS= read -r -d '' f; do
-            plantuml -tsvg "$f"
+            dir=$(dirname "$f")
+            base=$(basename "$f")
+            (cd "$dir" && plantuml -tsvg "$base")
             echo "Generated: ${f%.puml}.svg"
           done
       - name: Verify SVG output
@@ -63,6 +65,10 @@ jobs:
             fi
           done
           if [ "$missing" -eq 1 ]; then exit 1; fi
+      - name: Copy SVGs to public for direct URL access
+        run: |
+          mkdir -p public/cloud/lambdas/images
+          cp cloud/lambdas/images/*.svg public/cloud/lambdas/images/
       - name: Build with VitePress
         run: npm run docs:build
       - name: Upload artifact
