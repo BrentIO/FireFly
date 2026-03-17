@@ -5,16 +5,16 @@ title GET /firmware/{zip_name}/download
 
 actor Client
 
-box "Infrastructure" #ffdbbb
+box "AWS" #ffdbbb
     participant "API Gateway" as APIGW
     participant "func-api-firmware-download-get" as Lambda
     database DynamoDB
     collections "S3\n(private)" as S3
 end box
 
-Client -> APIGW++ : GET /firmware/550e8400-...zip/download
+Client -> APIGW++ : GET /firmware/{zip_name}/download
 APIGW -> Lambda++ : invoke
-Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "550e8400-...zip"
+Lambda -> DynamoDB++ : Query GSI zip_name-index\nKeyCondition: zip_name = "{zip_name}"
 
 alt not found
     DynamoDB --> Lambda-- : (no items)
@@ -30,7 +30,7 @@ else PROCESSING
     APIGW --> Client-- : 409 Conflict
 else active firmware
     DynamoDB --> Lambda-- : item\n{release_status: "READY_TO_TEST"|..., ...}
-    Lambda -> S3++ : generate_presigned_url\nKey: processed/550e8400-...zip\nExpires: 900s
+    Lambda -> S3++ : generate_presigned_url\nKey: processed/{zip_name}\nExpires: 900s
     S3 --> Lambda-- : pre-signed URL
     Lambda --> APIGW-- : 200 OK\n{"url": "https://...", "expires_in": 900}
     APIGW --> Client-- : 200 OK

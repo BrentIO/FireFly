@@ -5,7 +5,7 @@ title GET /firmware (list)
 
 actor Client
 
-box "Infrastructure" #ffdbbb
+box "AWS" #ffdbbb
     participant "API Gateway" as APIGW
     participant "func-api-firmware-get" as Lambda
     database DynamoDB
@@ -18,10 +18,10 @@ alt no query filters
     Lambda -> DynamoDB++ : Scan (all items)
     DynamoDB --> Lambda-- : items[]
 else filtered by product_id
-    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "FFC3232-2603"
+    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "{product_id}"
     DynamoDB --> Lambda-- : items[]
 else filtered by product_id and version
-    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "FFC3232-2603"\nFilterExpression: version = "2026.03.01"
+    Lambda -> DynamoDB++ : Query GSI product_id-index\nKeyCondition: product_id = "{product_id}"\nFilterExpression: version = "{version}"
     DynamoDB --> Lambda-- : items[] (may contain multiple builds)
 end
 
