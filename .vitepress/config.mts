@@ -289,6 +289,14 @@ export default defineConfig({
             link: '/cloud/index',
             items: [
               {
+                text: 'Authentication',
+                link: '/cloud/authentication'
+              },
+              {
+                text: 'Administration',
+                link: '/cloud/administration'
+              },
+              {
                 text: 'Lambda Functions',
                 collapsed: true,
                 items: [
@@ -315,6 +323,26 @@ export default defineConfig({
                   {
                     text: 'func-api-ota-get',
                     link: '/cloud/lambdas/func-api-ota-get'
+                  },
+                  {
+                    text: 'func-api-users-delete',
+                    link: '/cloud/lambdas/func-api-users-delete'
+                  },
+                  {
+                    text: 'func-api-users-get',
+                    link: '/cloud/lambdas/func-api-users-get'
+                  },
+                  {
+                    text: 'func-api-users-patch',
+                    link: '/cloud/lambdas/func-api-users-patch'
+                  },
+                  {
+                    text: 'func-api-users-post',
+                    link: '/cloud/lambdas/func-api-users-post'
+                  },
+                  {
+                    text: 'func-cognito-pre-signup',
+                    link: '/cloud/lambdas/func-cognito-pre-signup'
                   },
                   {
                     text: 'func-s3-firmware-deleted',

@@ -13,8 +13,15 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | Stack | Description |
 |---|---|
 | `firefly-acm-api-gateway` | ACM certificate for the API custom domain |
-| `firefly-api-gateway` | HTTP API Gateway v2 with custom domain and access logs |
+| `firefly-api-gateway` | HTTP API Gateway v2 with custom domain, access logs, and Cognito JWT authorizer |
 | `firefly-dynamodb-firmware` | DynamoDB firmware table |
+| `firefly-dynamodb-users` | DynamoDB allowed-list table for invitation-only access control |
+| `firefly-cognito` | Cognito User Pool with Google IdP, pre-signup trigger, and super_users group |
+| `firefly-func-cognito-pre-signup` | Pre-signup Lambda trigger that enforces invitation-only access |
+| `firefly-func-api-users-get` | Users list endpoint |
+| `firefly-func-api-users-post` | User invite endpoint |
+| `firefly-func-api-users-delete` | User deletion endpoint |
+| `firefly-func-api-users-patch` | Super user status endpoint |
 | `firefly-s3-firmware` | Private S3 firmware bucket with lifecycle rules and event notifications |
 | `firefly-s3-firmware-public` | Public S3 bucket for OTA firmware binary delivery; `revoked/` prefix is access-denied and expires after 90 days |
 | `firefly-cloudfront` | CloudFront distribution fronting the public firmware bucket for OTA delivery |
