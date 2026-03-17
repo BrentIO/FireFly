@@ -5,7 +5,7 @@ title func-s3-firmware-uploaded\n(S3 ObjectCreated event — GitHub Action → S
 
 actor "GitHub Action" as GHA
 
-box "Infrastructure" #ffdbbb
+box "AWS" #ffdbbb
     database S3
     participant "func-s3-firmware-uploaded" as Lambda
     database DynamoDB

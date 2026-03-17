@@ -5,7 +5,7 @@ title GET /firmware (list)
 
 actor Client
 
-box "Infrastructure" #ffdbbb
+box "AWS" #ffdbbb
     participant "API Gateway" as APIGW
     participant "func-api-firmware-get" as Lambda
     database DynamoDB

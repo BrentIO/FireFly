@@ -5,7 +5,7 @@ title PATCH /firmware/{zip_name}/status
 
 actor Client
 
-box "Infrastructure" #ffdbbb
+box "AWS" #ffdbbb
     participant "API Gateway" as APIGW
     participant "func-api-firmware-status-patch" as Lambda
     database DynamoDB
