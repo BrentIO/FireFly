@@ -1,4 +1,4 @@
-!include common.puml
+!include common.iuml
 !pragma teoz true
 autonumber
 hide footbox
