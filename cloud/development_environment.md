@@ -103,14 +103,12 @@ The following variables must be configured in each GitHub environment:
 | `API_URL` | `https://api.somewhere.com` | The full base URL for the API, including the `https://` scheme, injected into the UI at build time. |
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
-| `COGNITO_USER_POOL_DOMAIN_PREFIX` | firefly-myapp | Unique prefix for the Cognito hosted UI domain (e.g., `{prefix}.auth.us-east-1.amazoncognito.com`). |
+| `AUTH_DOMAIN_NAME` | auth.somewhere.com | The custom domain for the Cognito hosted UI (e.g., `auth.example.com`). A Route 53 alias record is created automatically during deployment. |
 | `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
 | `DYNAMODB_USERS_TABLE_NAME` | firefly-users | The name of the users allowed-list table. |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
-| `UI_CALLBACK_URL` | `https://ui.somewhere.com/callback` | Full callback URL for the SPA; Cognito redirects here after Google sign-in. |
 | `UI_DOMAIN_NAME` | `ui.somewhere.com` | The custom domain name for the firmware management UI, without the `https://` scheme. |
-| `UI_LOGOUT_URL` | `https://ui.somewhere.com/login` | Full URL Cognito redirects to after sign-out. |
 
 ## Google Cloud Setup
 
@@ -126,9 +124,9 @@ FireFly uses Google as the only identity provider for the management console.  T
    - Application type: **Web application**.
    - Under **Authorized redirect URIs**, add the Cognito hosted UI callback URL:
      ```
-     https://{COGNITO_USER_POOL_DOMAIN_PREFIX}.auth.{AWS_REGION}.amazoncognito.com/oauth2/idpresponse
+     https://{AUTH_DOMAIN_NAME}/oauth2/idpresponse
      ```
-     Replace `{COGNITO_USER_POOL_DOMAIN_PREFIX}` with the value you set for the GitHub variable of the same name, and `{AWS_REGION}` with your region (e.g., `us-east-1`).
+     Replace `{AUTH_DOMAIN_NAME}` with the value of the `AUTH_DOMAIN_NAME` GitHub variable (e.g., `auth.example.com`).
 4. Copy the **Client ID** and **Client Secret** — these become the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` GitHub secrets.
 
 ::: info Redirect URI
