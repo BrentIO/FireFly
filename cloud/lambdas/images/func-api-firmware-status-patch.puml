@@ -1,5 +1,5 @@
 @startuml
-!include common.puml
+!include common-sequence.puml
 
 title PATCH /firmware/{zip_name}/status
 
