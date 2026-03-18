@@ -71,11 +71,10 @@ jobs:
           if [ "$missing" -eq 1 ]; then exit 1; fi
       - name: Copy SVGs to public for direct URL access
         run: |
-          find . -name "*.svg" -path "*/images/*" | while IFS= read -r f; do
-            dest="public/$(dirname "${f#./}")"
-            mkdir -p "$dest"
-            cp "$f" "$dest/"
-          done
+          mkdir -p public/cloud/lambdas/images
+          cp cloud/lambdas/images/*.svg public/cloud/lambdas/images/
+          mkdir -p public/cloud/github_actions/images
+          cp cloud/github_actions/images/*.svg public/cloud/github_actions/images/
       - name: Build with VitePress
         run: npm run docs:build
       - name: Upload artifact
