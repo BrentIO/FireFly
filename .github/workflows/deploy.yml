@@ -59,7 +59,7 @@ jobs:
       - name: Verify SVG output
         run: |
           echo "Generated SVG files:"
-          find . -name "*.svg" -path "*/lambdas/*"
+          find . -name "*.svg" -path "*/images/*"
           missing=0
           for puml in $(find . -name "*.puml"); do
             svg="${puml%.puml}.svg"
@@ -71,8 +71,11 @@ jobs:
           if [ "$missing" -eq 1 ]; then exit 1; fi
       - name: Copy SVGs to public for direct URL access
         run: |
-          mkdir -p public/cloud/lambdas/images
-          cp cloud/lambdas/images/*.svg public/cloud/lambdas/images/
+          find . -name "*.svg" -path "*/images/*" | while IFS= read -r f; do
+            dest="public/$(dirname "${f#./}")"
+            mkdir -p "$dest"
+            cp "$f" "$dest/"
+          done
       - name: Build with VitePress
         run: npm run docs:build
       - name: Upload artifact
