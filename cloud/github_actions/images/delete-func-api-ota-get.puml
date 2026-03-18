@@ -1,0 +1,20 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-func-api-ota-get\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "SSM Parameter Store" as SSM
+    participant "API Gateway" as APIGW
+end box
+
+GHA -> CF++ : SAM delete\nstack: firefly-func-api-ota-get
+CF -> APIGW : Remove route\nGET /ota/{product_id}/{application}
+CF --> GHA-- : DELETE_COMPLETE
+
+note over SSM : FIRMWARE_TYPE_MAP SSM parameter\nis NOT deleted automatically.\nManual cleanup required for\nfull environment teardown.
+
+@enduml

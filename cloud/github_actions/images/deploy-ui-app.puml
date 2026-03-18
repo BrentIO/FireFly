@@ -1,0 +1,47 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-ui-app\n(GitHub Action → S3 + CloudFront)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "S3" as S3
+    participant "CloudFront" as CDN
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-cognito → CognitoClientId
+CF --> GHA-- : CognitoClientId
+
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront-ui → CloudFrontDistributionId
+CF --> GHA-- : CloudFrontDistributionId
+
+GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName
+CF --> GHA-- : BucketName
+
+note over GHA : npm ci (ui/ directory)
+
+note over GHA : npm run build\nVITE_API_URL, VITE_COMMIT_SHA,\nVITE_COGNITO_DOMAIN, VITE_COGNITO_CLIENT_ID,\nVITE_COGNITO_REDIRECT_URI
+
+GHA -> S3++ : aws s3 sync ui/dist/ s3://{BucketName}\n--delete
+S3 --> GHA-- : Sync complete
+
+GHA -> CDN++ : create-invalidation\n--distribution-id {id}\n--paths "/*"
+CDN --> GHA-- : Invalidation created
+
+alt Cognito stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Build uses missing client ID;\nauthentication will not work at runtime
+end
+
+alt npm build fails
+    note over GHA : Workflow fails before any AWS changes
+end
+
+alt CloudFront invalidation fails
+    CDN --> GHA : Error
+    note over GHA : Old assets may be served\nfrom cache; not a deploy blocker
+end
+
+@enduml

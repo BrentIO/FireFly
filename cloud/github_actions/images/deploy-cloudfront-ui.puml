@@ -1,0 +1,37 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-cloudfront-ui\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "CloudFormation\n(acm-api-gateway)" as CFLookup
+    participant "CloudFront" as CFront
+    participant "Route 53" as R53
+end box
+
+GHA -> CFLookup++ : aws cloudformation describe-stacks\nstack: firefly-acm-api-gateway\noutput: CertificateArn
+CFLookup --> GHA-- : CertificateArn
+
+GHA -> CF : SAM build\ntemplate: templates/cloudfront-ui.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-cloudfront-ui\nparams: UiBucketName, CertificateArn,\nUiDomain, HostedZoneId
+CF -> CFront++ : Create distribution\norigins: s3-ui\nalternate domain: UiDomain\ncertificate: CertificateArn
+note over CFront : Distribution propagation\ntakes 15-20 minutes
+CFront --> CF-- : Distribution created\nDomainName (*.cloudfront.net)
+CF -> R53 : Create Route 53 ALIAS record\nUiDomain → CloudFront domain
+R53 --> CF : Record created
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt CNAME already associated with another distribution
+    CFront --> CF : InvalidRequest
+    CF --> GHA : ROLLBACK_COMPLETE
+    note over GHA : Workflow fails.\nRemove the alternate domain name from\nthe conflicting CloudFront distribution.
+end
+
+alt Workflow cancelled during propagation
+    note over CFront : Stack may be left in UPDATE_IN_PROGRESS.\nWait for propagation to complete\nbefore re-running.
+end
+
+@enduml

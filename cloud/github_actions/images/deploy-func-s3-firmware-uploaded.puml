@@ -1,0 +1,22 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-func-s3-firmware-uploaded\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF : SAM build\nlambdas/func-s3-firmware-uploaded/template.yaml
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-s3-firmware-uploaded\nparams: FirmwareBucketName, DynamoDbFirmwareTableName,\n        EnvironmentName
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt shared-layer stack not found / layer ARN unresolvable
+    CF --> GHA : BUILD_FAILED / ValidationError
+    note over GHA : Workflow fails\n(deploy-shared-layer must run first)
+end
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-func-s3-firmware-uploaded\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : SAM delete\nstack: firefly-func-s3-firmware-uploaded
+CF --> GHA-- : DELETE_COMPLETE
+
+alt s3-firmware stack not deleted first
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Resource-based policy still attached\nRun delete-s3-firmware first
+end
+
+@enduml

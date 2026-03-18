@@ -1,0 +1,24 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-s3-firmware-public\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    collections "S3" as S3
+end box
+
+GHA -> CF : SAM build\ntemplate: templates/s3-firmware-public.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-s3-firmware-public\nparams: BucketName (from secrets)
+CF -> S3++ : Create bucket\nBucket policy: deny s3:GetObject on revoked/* prefix\nLifecycle: expire revoked/* after 90 days
+S3 --> CF-- : Bucket created
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt Stack already in ROLLBACK_COMPLETE
+    CF --> GHA : Stack exists in ROLLBACK_COMPLETE
+    note over GHA : Workflow fails.\nManually delete the stack before re-running.
+end
+
+@enduml

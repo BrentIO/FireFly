@@ -1,0 +1,49 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-func-api-ota-get\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "SSM Parameter Store" as SSM
+    participant "API Gateway" as APIGW
+end box
+
+GHA -> SSM++ : put-parameter\nFIRMWARE_TYPE_MAP (from GitHub env var)
+SSM --> GHA-- : stored
+
+GHA -> CF++ : describe-stacks\nfirefly-api-gateway\n→ ApiId
+CF --> GHA-- : ApiId
+
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront\n→ CloudFrontDomain
+CF --> GHA-- : CloudFrontDomain
+
+GHA -> CF : SAM build
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-ota-get\nparams: ApiId, DynamoDbFirmwareTableName,\n        CloudFrontDomain, FirmwareTypeMapSsmPath,\n        EnvironmentName
+CF -> APIGW : Register route\nGET /ota/{product_id}/{application}
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt FIRMWARE_TYPE_MAP var missing / SSM put-parameter fails
+    SSM --> GHA : AccessDenied / missing value
+    note over GHA : Workflow fails\nVerify FIRMWARE_TYPE_MAP is set\nand IAM permissions are correct
+end
+
+alt cloudfront stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-cloudfront must run first)
+end
+
+alt api-gateway stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-api-gateway must run first)
+end
+
+alt shared-layer ARN unresolvable
+    CF --> GHA : BUILD_FAILED / ValidationError
+    note over GHA : Workflow fails\n(deploy-shared-layer must run first)
+end
+
+@enduml

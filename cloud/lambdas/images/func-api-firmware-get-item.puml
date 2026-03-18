@@ -1,5 +1,5 @@
 @startuml
-!include common-sequence.iuml
+!include ../../../images/common-sequence.iuml
 
 title GET /firmware/{zip_name}
 

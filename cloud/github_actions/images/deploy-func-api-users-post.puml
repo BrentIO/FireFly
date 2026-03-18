@@ -1,0 +1,25 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title deploy-func-api-users-post\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-api-gateway → ApiId, AuthorizerId
+CF --> GHA-- : ApiId, AuthorizerId
+
+GHA -> CF : SAM build
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-users-post\nparams: ApiId, AuthorizerId,\n        DynamoDbUsersTableName
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt api-gateway stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-api-gateway must run first)
+end
+
+@enduml

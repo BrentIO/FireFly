@@ -1,0 +1,17 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-func-api-firmware-get\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "API Gateway" as APIGW
+end box
+
+GHA -> CF++ : SAM delete\nstack: firefly-func-api-firmware-get
+CF -> APIGW : Remove routes\nGET /firmware\nGET /firmware/{zip_name}
+CF --> GHA-- : DELETE_COMPLETE
+
+@enduml

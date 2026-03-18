@@ -1,0 +1,35 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-s3-firmware-public\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    collections "S3" as S3
+end box
+
+note over GHA : Prerequisite: delete-cloudfront must\ncomplete before this job runs.
+
+GHA -> S3 : Check if bucket exists
+alt Bucket does not exist (NoSuchBucket)
+    S3 --> GHA : NoSuchBucket
+    note over GHA : Script exits 0 (idempotent)
+end
+
+alt TARGET_ENV == production AND bucket is non-empty
+    S3 --> GHA : Object count > 0
+    note over GHA : Script exits 1.\nRefuses to empty production bucket.\nManual action required.
+end
+
+GHA -> S3 : Abort incomplete multipart uploads
+GHA -> S3 : Delete all objects (recursive)
+S3 --> GHA : Bucket empty
+
+GHA -> CF++ : sam delete\nstack: firefly-s3-firmware-public\n--no-prompts --region
+CF -> S3 : Delete bucket
+S3 --> CF : Bucket deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+@enduml

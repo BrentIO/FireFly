@@ -1,0 +1,24 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-s3-firmware\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    database "S3" as S3
+end box
+
+GHA -> S3++ : aws s3 rm s3://{BucketName} --recursive
+S3 --> GHA-- : Objects deleted
+
+GHA -> CF++ : SAM delete\nstack: firefly-s3-firmware
+CF --> GHA-- : DELETE_COMPLETE
+
+alt bucket empty but delete still fails
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Investigate CloudFormation events\nfor resource-level error
+end
+
+@enduml

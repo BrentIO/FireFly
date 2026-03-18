@@ -1,0 +1,20 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-func-api-users-get\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : sam delete\nstack: firefly-func-api-users-get\n--no-prompts --region
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+@enduml
