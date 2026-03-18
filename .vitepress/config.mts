@@ -289,74 +289,201 @@ export default defineConfig({
             link: '/cloud/index',
             items: [
               {
-                text: 'Authentication',
-                link: '/cloud/authentication'
-              },
-              {
-                text: 'Administration',
-                link: '/cloud/administration'
-              },
-              {
-                text: 'Lambda Functions',
+                text: 'FireFly Management Console',
+                link: '/cloud/ui',
                 collapsed: true,
                 items: [
                   {
-                    text: 'func-api-firmware-delete',
-                    link: '/cloud/lambdas/func-api-firmware-delete'
+                    text: 'User Management',
+                    link: '/cloud/administration'
                   },
                   {
-                    text: 'func-api-firmware-download-get',
-                    link: '/cloud/lambdas/func-api-firmware-download-get'
-                  },
-                  {
-                    text: 'func-api-firmware-get',
-                    link: '/cloud/lambdas/func-api-firmware-get'
-                  },
-                  {
-                    text: 'func-api-firmware-status-patch',
-                    link: '/cloud/lambdas/func-api-firmware-status-patch'
-                  },
-                  {
-                    text: 'func-api-health-get',
-                    link: '/cloud/lambdas/func-api-health-get'
-                  },
-                  {
-                    text: 'func-api-ota-get',
-                    link: '/cloud/lambdas/func-api-ota-get'
-                  },
-                  {
-                    text: 'func-api-users-delete',
-                    link: '/cloud/lambdas/func-api-users-delete'
-                  },
-                  {
-                    text: 'func-api-users-get',
-                    link: '/cloud/lambdas/func-api-users-get'
-                  },
-                  {
-                    text: 'func-api-users-patch',
-                    link: '/cloud/lambdas/func-api-users-patch'
-                  },
-                  {
-                    text: 'func-api-users-post',
-                    link: '/cloud/lambdas/func-api-users-post'
-                  },
-                  {
-                    text: 'func-cognito-pre-signup',
-                    link: '/cloud/lambdas/func-cognito-pre-signup'
-                  },
-                  {
-                    text: 'func-s3-firmware-deleted',
-                    link: '/cloud/lambdas/func-s3-firmware-deleted'
-                  },
-                  {
-                    text: 'func-s3-firmware-uploaded',
-                    link: '/cloud/lambdas/func-s3-firmware-uploaded'
+                    text: 'Authentication',
+                    link: '/cloud/authentication'
                   },
                 ]
               },
               {
-                text: 'Firmware Management UI',
-                link: '/cloud/ui'
+                text: 'Infrastructure',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Lambda Functions',
+                    collapsed: true,
+                    items: [
+                      {
+                        text: 'func-api-firmware-delete',
+                        link: '/cloud/lambdas/func-api-firmware-delete'
+                      },
+                      {
+                        text: 'func-api-firmware-download-get',
+                        link: '/cloud/lambdas/func-api-firmware-download-get'
+                      },
+                      {
+                        text: 'func-api-firmware-get',
+                        link: '/cloud/lambdas/func-api-firmware-get'
+                      },
+                      {
+                        text: 'func-api-firmware-status-patch',
+                        link: '/cloud/lambdas/func-api-firmware-status-patch'
+                      },
+                      {
+                        text: 'func-api-health-get',
+                        link: '/cloud/lambdas/func-api-health-get'
+                      },
+                      {
+                        text: 'func-api-ota-get',
+                        link: '/cloud/lambdas/func-api-ota-get'
+                      },
+                      {
+                        text: 'func-api-users-delete',
+                        link: '/cloud/lambdas/func-api-users-delete'
+                      },
+                      {
+                        text: 'func-api-users-get',
+                        link: '/cloud/lambdas/func-api-users-get'
+                      },
+                      {
+                        text: 'func-api-users-patch',
+                        link: '/cloud/lambdas/func-api-users-patch'
+                      },
+                      {
+                        text: 'func-api-users-post',
+                        link: '/cloud/lambdas/func-api-users-post'
+                      },
+                      {
+                        text: 'func-cognito-pre-signup',
+                        link: '/cloud/lambdas/func-cognito-pre-signup'
+                      },
+                      {
+                        text: 'func-s3-firmware-deleted',
+                        link: '/cloud/lambdas/func-s3-firmware-deleted'
+                      },
+                      {
+                        text: 'func-s3-firmware-uploaded',
+                        link: '/cloud/lambdas/func-s3-firmware-uploaded'
+                      },
+                    ]
+                  },
+                  {
+                    text: 'Deployment and Deletion',
+                    collapsed: true,
+                    items: [
+                      {
+                        text: 'Overview',
+                        link: '/cloud/github_actions/index'
+                      },
+                      {
+                        text: 'acm-api-gateway',
+                        link: '/cloud/github_actions/acm-api-gateway'
+                      },
+                      {
+                        text: 'acm-cognito',
+                        link: '/cloud/github_actions/acm-cognito'
+                      },
+                      {
+                        text: 'api-gateway',
+                        link: '/cloud/github_actions/api-gateway'
+                      },
+                      {
+                        text: 'cloudfront',
+                        link: '/cloud/github_actions/cloudfront'
+                      },
+                      {
+                        text: 'cloudfront-ui',
+                        link: '/cloud/github_actions/cloudfront-ui'
+                      },
+                      {
+                        text: 'cognito',
+                        link: '/cloud/github_actions/cognito'
+                      },
+                      {
+                        text: 'dynamodb-firmware',
+                        link: '/cloud/github_actions/dynamodb-firmware'
+                      },
+                      {
+                        text: 'dynamodb-users',
+                        link: '/cloud/github_actions/dynamodb-users'
+                      },
+                      {
+                        text: 'func-api-firmware-delete',
+                        link: '/cloud/github_actions/func-api-firmware-delete'
+                      },
+                      {
+                        text: 'func-api-firmware-download-get',
+                        link: '/cloud/github_actions/func-api-firmware-download-get'
+                      },
+                      {
+                        text: 'func-api-firmware-get',
+                        link: '/cloud/github_actions/func-api-firmware-get'
+                      },
+                      {
+                        text: 'func-api-firmware-status-patch',
+                        link: '/cloud/github_actions/func-api-firmware-status-patch'
+                      },
+                      {
+                        text: 'func-api-health-get',
+                        link: '/cloud/github_actions/func-api-health-get'
+                      },
+                      {
+                        text: 'func-api-ota-get',
+                        link: '/cloud/github_actions/func-api-ota-get'
+                      },
+                      {
+                        text: 'func-api-users-delete',
+                        link: '/cloud/github_actions/func-api-users-delete'
+                      },
+                      {
+                        text: 'func-api-users-get',
+                        link: '/cloud/github_actions/func-api-users-get'
+                      },
+                      {
+                        text: 'func-api-users-patch',
+                        link: '/cloud/github_actions/func-api-users-patch'
+                      },
+                      {
+                        text: 'func-api-users-post',
+                        link: '/cloud/github_actions/func-api-users-post'
+                      },
+                      {
+                        text: 'func-cognito-pre-signup',
+                        link: '/cloud/github_actions/func-cognito-pre-signup'
+                      },
+                      {
+                        text: 'func-s3-firmware-deleted',
+                        link: '/cloud/github_actions/func-s3-firmware-deleted'
+                      },
+                      {
+                        text: 'func-s3-firmware-uploaded',
+                        link: '/cloud/github_actions/func-s3-firmware-uploaded'
+                      },
+                      {
+                        text: 'integration-tests',
+                        link: '/cloud/github_actions/integration-tests'
+                      },
+                      {
+                        text: 's3-firmware',
+                        link: '/cloud/github_actions/s3-firmware'
+                      },
+                      {
+                        text: 's3-firmware-public',
+                        link: '/cloud/github_actions/s3-firmware-public'
+                      },
+                      {
+                        text: 's3-ui',
+                        link: '/cloud/github_actions/s3-ui'
+                      },
+                      {
+                        text: 'shared-layer',
+                        link: '/cloud/github_actions/shared-layer'
+                      },
+                      {
+                        text: 'ui-app',
+                        link: '/cloud/github_actions/ui-app'
+                      },
+                    ]
+                  },
+                ]
               },
               {
                 text: 'API Reference',
