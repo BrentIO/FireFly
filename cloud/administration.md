@@ -8,13 +8,7 @@ The **Users** section in the navigation menu (visible to super users only) provi
 
 The first super user cannot be invited through the UI because the UI itself requires authentication.  Bootstrap the first account manually:
 
-1. Open the [AWS Cognito console](https://console.aws.amazon.com/cognito).
-2. Select the `firefly-user-pool` User Pool.
-3. Go to **Users** → **Create user**.
-4. Set the user's email address.  Set a temporary password (it will never be used; the user will always sign in with Google).
-5. Confirm the user if prompted.
-6. Go to **Groups** → `super_users` → **Add user** and add the user you just created.
-7. Go to **DynamoDB** → `firefly-users` table → **Create item** and add a record with:
+1. Go to **DynamoDB** → `firefly-users` table → **Create item** and add a record with:
    ```json
    {
      "email": "user@example.com",
@@ -23,7 +17,15 @@ The first super user cannot be invited through the UI because the UI itself requ
      "created_at": "2026-01-01T00:00:00+00:00"
    }
    ```
-8. The user can now sign in with **Sign in with Google** using their Google account that matches the email address configured above.
+2. Sign in using **Sign in with Google** with the Google account that matches the email address above.  Cognito will create a federated user (username prefixed with `Google_`) on first sign-in.
+3. Open the [AWS Cognito console](https://console.aws.amazon.com/cognito) and select the `firefly-user-pool` User Pool.
+4. Go to **Users** and find the newly-created `Google_` prefixed user for the account.
+5. Go to **Groups** → `super_users` → **Add user** and add that `Google_` user.
+6. Sign out and sign back in.  The session must be refreshed for the new group membership to appear in the token.
+
+::: warning Do not create a local Cognito user
+Do not manually create a local Cognito user for the super user's email address.  A local user with the same email as a Google-federated user will cause an "Attribute cannot be updated" error on sign-in.  All users must sign in exclusively through Google.
+:::
 
 ### Inviting Users
 
