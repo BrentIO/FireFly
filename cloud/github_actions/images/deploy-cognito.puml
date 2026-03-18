@@ -1,0 +1,68 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-cognito\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "CloudFormation\n(acm-cognito)" as CFAcm
+    participant "CloudFormation\n(func-cognito-pre-signup)" as CFLambda
+    participant "Cognito" as Cognito
+    participant "Route 53" as R53
+end box
+
+GHA -> CF : Check stack status
+alt Stack in ROLLBACK_COMPLETE
+    CF --> GHA : ROLLBACK_COMPLETE
+    GHA -> CF : aws cloudformation delete-stack\nstack: firefly-cognito
+    GHA -> CF : Wait for DELETE_COMPLETE
+end
+
+GHA -> CF : Diagnose existing Cognito domain\nand orphaned User Pools (informational)
+
+GHA -> R53 : Check if parent domain A record exists
+alt Parent domain A record missing
+    GHA -> R53 : Create temporary A record\n1.2.3.4 (required for Cognito domain validation)
+    note over R53 : Temporary record removed\nafter successful deploy
+end
+
+GHA -> CFAcm++ : aws cloudformation describe-stacks\nstack: firefly-acm-cognito\noutput: CertificateArn
+CFAcm --> GHA-- : CertificateArn
+
+GHA -> CFLambda++ : aws cloudformation describe-stacks\nstack: firefly-func-cognito-pre-signup\noutput: PreSignUpLambdaArn
+CFLambda --> GHA-- : PreSignUpLambdaArn
+
+GHA -> CF : SAM build\ntemplate: templates/cognito.yaml (implied)
+GHA -> CF++ : SAM deploy\nstack: firefly-cognito\nparams: AuthDomainName, CertificateArn,\nGoogleClientId, GoogleClientSecret,\nUiCallbackUrl, UiLogoutUrl,\nPreSignUpLambdaArn
+CF -> Cognito++ : Create User Pool\nGoogle IdP federation\nCustom domain: AuthDomainName\nPre-signup trigger: PreSignUpLambdaArn
+Cognito --> CF-- : User Pool created\nUserPoolId, CloudFront domain
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE\nOutputs: UserPoolId, UserPoolClientId,\nCognitoCloudFrontDomain
+
+GHA -> R53 : Create Route 53 ALIAS record\nAuthDomainName → Cognito CloudFront domain
+R53 --> GHA : Alias record created
+
+alt Temporary A record was created
+    GHA -> R53 : Delete temporary A record (1.2.3.4)
+    R53 --> GHA : Record deleted
+end
+
+alt Stack creation/update fails
+    CF --> GHA : ROLLBACK_COMPLETE
+    GHA -> CF : Print CloudFormation stack events for diagnostics
+    note over GHA : Workflow fails with exit code != 0
+end
+
+alt Route 53 alias creation fails
+    R53 --> GHA : Error
+    note over GHA : Cognito custom domain won't resolve.\nAPI Gateway JWT validation will fail.\nFix Route 53 record manually and re-run.
+end
+
+alt Cognito domain already taken by another account
+    Cognito --> CF : Domain already exists
+    CF --> GHA : ROLLBACK_COMPLETE
+    note over GHA : Workflow fails.\nCognito domain names are globally unique\nacross all AWS accounts.
+end
+
+@enduml

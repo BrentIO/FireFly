@@ -1,0 +1,77 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-all\nDeployment Wave Order
+
+actor "GitHub Actions Runner" as GHA
+
+box "Wave 1 — No Dependencies" #ffdbbb
+    participant "dynamodb-firmware" as W1A
+    participant "dynamodb-users" as W1B
+    participant "acm-cognito" as W1C
+    participant "acm-api-gateway" as W1D
+    participant "shared-layer" as W1E
+    participant "s3-firmware-public" as W1F
+    participant "s3-ui" as W1G
+end box
+
+box "Wave 2" #ffe8cc
+    participant "func-cognito-pre-signup" as W2A
+    participant "cloudfront" as W2B
+    participant "cloudfront-ui" as W2C
+end box
+
+box "Wave 3" #fff2e0
+    participant "cognito" as W3A
+end box
+
+box "Wave 4" #fffaf0
+    participant "api-gateway" as W4A
+end box
+
+box "Wave 5 — Lambda Functions" #f5fff0
+    participant "func-api-*\nfunc-s3-*\nfunc-api-ota-get\nfunc-api-firmware-download-get" as W5A
+end box
+
+box "Wave 6" #f0f5ff
+    participant "s3-firmware" as W6A
+    participant "ui-app" as W6B
+end box
+
+box "Wave 7 — Integration Tests" #f5f0ff
+    participant "run-integration-tests" as W7A
+end box
+
+GHA -> W1A : deploy (parallel)
+GHA -> W1B : deploy (parallel)
+GHA -> W1C : deploy (parallel)
+GHA -> W1D : deploy (parallel)
+GHA -> W1E : deploy (parallel)
+GHA -> W1F : deploy (parallel)
+GHA -> W1G : deploy (parallel)
+
+W1B --> W2A : needs: dynamodb-users
+W1C --> W3A : needs: acm-cognito (via cognito)
+W1D --> W2B : needs: acm-api-gateway
+W1D --> W2C : needs: acm-api-gateway
+W1F --> W2B : needs: s3-firmware-public
+W1G --> W2C : needs: s3-ui
+
+W2A --> W3A : needs: func-cognito-pre-signup
+W2B --> W5A : needs: cloudfront (ota-get only)
+W2C --> W6B : needs: cloudfront-ui
+
+W3A --> W4A : needs: cognito
+W1D --> W4A : needs: acm-api-gateway
+
+W4A --> W5A : needs: api-gateway
+W1E --> W5A : needs: shared-layer
+
+W5A --> W6A : needs: func-s3-firmware-uploaded, func-s3-firmware-deleted
+W3A --> W6B : needs: cognito
+
+W6A --> W7A : needs: s3-firmware
+W6B --> W7A : needs: ui-app
+W5A --> W7A : needs: func-api-* (all)
+
+@enduml

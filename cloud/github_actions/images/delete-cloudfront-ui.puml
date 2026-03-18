@@ -1,0 +1,29 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-cloudfront-ui\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "CloudFront" as CFront
+    participant "Route 53" as R53
+end box
+
+note over GHA : Prerequisite: delete-ui-app must\ncomplete before this job runs.
+
+GHA -> CF++ : sam delete\nstack: firefly-cloudfront-ui\n--no-prompts --region
+CF -> R53 : Delete Route 53 ALIAS record
+R53 --> CF : Record deleted
+CF -> CFront++ : Disable and delete distribution
+note over CFront : Distribution deletion\ntakes 15-20 minutes
+CFront --> CF-- : Distribution deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+@enduml

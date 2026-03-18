@@ -1,0 +1,41 @@
+@startuml
+!include common-sequence.iuml
+
+title run-integration-tests\n(GitHub Action → pytest)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-api-gateway → ApiUrl
+CF --> GHA-- : ApiUrl
+
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront-ui → UICloudFrontDomain\n(optional)
+CF --> GHA-- : UICloudFrontDomain
+
+GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName\n(optional)
+CF --> GHA-- : BucketName
+
+GHA -> CF++ : describe-stacks\nfirefly-cognito → UserPoolId, ClientId\n(optional)
+CF --> GHA-- : UserPoolId, ClientId
+
+note over GHA : pip install -r tests/requirements.txt
+
+note over GHA : pytest tests/integration/ -v\nFIREFLY_API_URL, FIREFLY_FIRMWARE_BUCKET,\nFIREFLY_UI_URL, FIREFLY_UI_BUCKET,\nFIREFLY_COGNITO_USER_POOL_ID,\nFIREFLY_COGNITO_CLIENT_ID,\nFIREFLY_TEST_USER_EMAIL,\nFIREFLY_TEST_USER_PASSWORD
+
+alt api-gateway stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails immediately;\nFIREFLY_API_URL is not set
+end
+
+alt pytest test failure
+    note over GHA : Workflow exits non-zero.\nCheck test output and CloudWatch logs\nfor the relevant Lambda function.
+end
+
+alt optional stack not found
+    note over GHA : Dependent tests are skipped;\nworkflow continues
+end
+
+@enduml

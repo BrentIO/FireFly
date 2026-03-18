@@ -1,0 +1,33 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-shared-layer\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "Lambda" as Lambda
+    collections "S3\n(SAM artifacts)" as S3
+end box
+
+GHA -> GHA : SAM build\ntemplate: lambdas/shared/template.yaml\nPackages: logging_config.py,\napp_config.py, feature_flags.py
+GHA -> S3 : Upload layer artifact
+S3 --> GHA : Artifact uploaded
+
+GHA -> CF++ : SAM deploy\nstack: firefly-shared-layer
+CF -> Lambda++ : Publish Lambda layer version\n(Python shared modules)
+Lambda --> CF-- : LayerVersionArn
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE\nOutput: LayerVersionArn
+
+alt SAM build fails (Python dependency issue)
+    GHA --> GHA : Build error
+    note over GHA : Workflow fails before any AWS changes.\nFix Python dependencies and re-run.
+end
+
+alt Stack creation/update fails
+    CF --> GHA : ROLLBACK_COMPLETE
+    note over GHA : Workflow fails with exit code != 0
+end
+
+@enduml

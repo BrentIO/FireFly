@@ -1,0 +1,20 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-func-cognito-pre-signup\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : SAM delete\nstack: firefly-func-cognito-pre-signup
+CF --> GHA-- : DELETE_COMPLETE
+
+alt cognito stack not deleted first
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Cognito User Pool still holds\na resource-based policy referencing\nthis function.\nRun delete-cognito first.
+end
+
+@enduml

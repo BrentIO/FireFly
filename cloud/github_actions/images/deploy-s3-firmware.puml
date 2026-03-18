@@ -1,0 +1,31 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-s3-firmware\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-func-s3-firmware-uploaded\n→ FirmwareUploadLambdaArn
+CF --> GHA-- : FirmwareUploadLambdaArn
+
+GHA -> CF++ : describe-stacks\nfirefly-func-s3-firmware-deleted\n→ FirmwareDeleteLambdaArn
+CF --> GHA-- : FirmwareDeleteLambdaArn
+
+GHA -> CF++ : SAM deploy\nstack: firefly-s3-firmware\ntemplate: templates/s3-firmware.yaml\nparams: BucketName, FirmwareUploadLambdaArn,\n        FirmwareDeleteLambdaArn
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt func-s3-firmware-uploaded stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-func-s3-firmware-uploaded must run first)
+end
+
+alt func-s3-firmware-deleted stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-func-s3-firmware-deleted must run first)
+end
+
+@enduml

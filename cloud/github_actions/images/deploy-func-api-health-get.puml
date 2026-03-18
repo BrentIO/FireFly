@@ -1,0 +1,32 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-func-api-health-get\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "API Gateway" as APIGW
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-api-gateway\n→ ApiId
+CF --> GHA-- : ApiId
+
+GHA -> CF : SAM build
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-health-get\nparams: ApiId
+CF -> APIGW : Register route\nGET /health
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt api-gateway stack not found
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-api-gateway must run first)
+end
+
+alt GET /health route already registered
+    CF --> GHA : CREATE_FAILED
+    note over GHA : Route conflict\nVerify no other stack owns GET /health
+end
+
+@enduml

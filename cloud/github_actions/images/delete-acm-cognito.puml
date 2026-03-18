@@ -1,0 +1,30 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-acm-cognito\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "ACM" as ACM
+end box
+
+note over GHA : Prerequisite: delete-cognito must\ncomplete before this job runs.
+
+GHA -> CF++ : sam delete\nstack: firefly-acm-cognito\n--no-prompts --region
+CF -> ACM : Delete certificate
+ACM --> CF : Certificate deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+alt Certificate still in use by Cognito User Pool
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Workflow fails.\nEnsure delete-cognito completed successfully.
+end
+
+@enduml

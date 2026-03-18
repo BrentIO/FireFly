@@ -1,0 +1,24 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-dynamodb-users\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    database "DynamoDB" as DDB
+end box
+
+GHA -> CF : SAM build\ntemplate: templates/dynamodb-users.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-dynamodb-users\nparams: DynamoDbUsersTableName
+CF -> DDB++ : Create table\n(invitation allowlist)
+DDB --> CF-- : Table ACTIVE
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt Table already exists with data in bad stack state
+    CF --> GHA : DELETE_FAILED / ROLLBACK_COMPLETE
+    note over GHA : DynamoDB will not delete non-empty tables\nby default. Check deletion protection\nand PITR settings.
+end
+
+@enduml

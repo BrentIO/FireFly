@@ -1,0 +1,24 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-ui-app\n(GitHub Action → S3)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "S3" as S3
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName
+CF --> GHA-- : BucketName
+
+GHA -> S3++ : aws s3 rm s3://{BucketName}\n--recursive
+S3 --> GHA-- : Objects deleted
+
+alt firefly-s3-ui stack not found
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+@enduml

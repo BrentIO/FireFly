@@ -1,0 +1,42 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-cognito\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "Cognito" as Cognito
+    participant "Route 53" as R53
+end box
+
+note over GHA : Prerequisite: delete-api-gateway must\ncomplete before this job runs.
+
+GHA -> CF++ : aws cloudformation describe-stacks\nstack: firefly-cognito\noutputs: UserPoolId, CognitoCloudFrontDomain
+CF --> GHA-- : UserPoolId, CognitoCloudFrontDomain
+
+alt CognitoCloudFrontDomain present in outputs
+    GHA -> R53 : Delete Route 53 ALIAS record\n(AuthDomainName → Cognito CloudFront domain)
+    R53 --> GHA : Alias record deleted
+end
+
+GHA -> CF++ : sam delete\nstack: firefly-cognito\n--no-prompts --region
+note over CF : CloudFormation marks User Pool as Retain.\nUser Pool survives stack deletion.
+CF --> GHA-- : DELETE_COMPLETE
+
+GHA -> Cognito++ : aws cognito-idp delete-user-pool\nUserPoolId (from earlier lookup)
+note over Cognito : Manually deletes retained User Pool
+Cognito --> GHA-- : User Pool deleted
+
+alt User Pool already manually deleted
+    Cognito --> GHA : ResourceNotFoundException
+    note over GHA : Script handles gracefully — exits 0
+end
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+@enduml

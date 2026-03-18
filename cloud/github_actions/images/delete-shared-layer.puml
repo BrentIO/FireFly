@@ -1,0 +1,31 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-shared-layer\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "Lambda" as Lambda
+end box
+
+note over GHA : Prerequisites: ALL of the following must complete first:\ndelete-func-s3-firmware-uploaded\ndelete-func-s3-firmware-deleted\ndelete-func-api-firmware-get\ndelete-func-api-firmware-status-patch\ndelete-func-api-firmware-delete\ndelete-func-api-ota-get\ndelete-func-api-firmware-download-get
+
+GHA -> CF++ : sam delete\nstack: firefly-shared-layer\n--no-prompts --region
+CF -> Lambda : Delete layer version
+Lambda --> CF : Layer deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+alt Layer still in use by a Lambda function
+    Lambda --> CF : ResourceConflictException
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Workflow fails.\nEnsure all dependent function stacks\nwere deleted before this job ran.
+end
+
+@enduml

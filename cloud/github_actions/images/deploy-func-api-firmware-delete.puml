@@ -1,0 +1,32 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-func-api-firmware-delete\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "API Gateway" as APIGW
+end box
+
+GHA -> CF++ : describe-stacks\nfirefly-api-gateway\n→ ApiId, AuthorizerId
+CF --> GHA-- : ApiId, AuthorizerId
+
+GHA -> CF : SAM build
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-firmware-delete\nparams: ApiId, AuthorizerId,\n        DynamoDbFirmwareTableName,\n        FirmwarePrivateBucketName,\n        FirmwarePublicBucketName
+CF -> APIGW : Register route\nDELETE /firmware/{zip_name}\n(JWT authorizer)
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt api-gateway stack not found or AuthorizerId absent
+    CF --> GHA : ValidationError
+    note over GHA : Workflow fails\n(deploy-api-gateway must complete first)
+end
+
+alt shared-layer ARN unresolvable
+    CF --> GHA : BUILD_FAILED / ValidationError
+    note over GHA : Workflow fails\n(deploy-shared-layer must run first)
+end
+
+@enduml

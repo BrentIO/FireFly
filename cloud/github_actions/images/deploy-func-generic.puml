@@ -1,0 +1,28 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-func-[NAME]\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "Lambda" as Lambda
+    participant "CloudFormation\n(firefly-api-gateway)" as CFAPI
+end box
+
+GHA -> CFAPI++ : aws cloudformation describe-stacks\nstack: firefly-api-gateway\noutput: ApiId (or relevant outputs)
+CFAPI --> GHA-- : ApiId
+
+GHA -> CF : SAM build\ntemplate: lambdas/[name]/template.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-func-[name]\nparams: ApiId (and others as applicable)
+CF -> Lambda++ : Create/update function\n(Python 3.13, ARM64)
+Lambda --> CF-- : FunctionArn
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt Stack creation/update fails
+    CF --> GHA : ROLLBACK_COMPLETE
+    note over GHA : Workflow fails with exit code != 0
+end
+
+@enduml

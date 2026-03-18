@@ -1,0 +1,31 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-dynamodb-users\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    database "DynamoDB" as DDB
+end box
+
+note over GHA : Prerequisites: delete-func-cognito-pre-signup,\ndelete-func-api-users-delete, and\ndelete-func-api-users-post must all complete first.
+
+GHA -> CF++ : sam delete\nstack: firefly-dynamodb-users\n--no-prompts --region
+CF -> DDB : Delete table
+DDB --> CF : Table deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+alt Deletion protection enabled on table
+    DDB --> CF : AccessDeniedException
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Workflow fails.\nDisable deletion protection manually\nbefore re-running.
+end
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+!include common-sequence.iuml
+
+title delete-api-gateway\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "API Gateway v2" as APIGW
+    participant "Route 53" as R53
+end box
+
+note over GHA : Prerequisites: ALL delete-func-api-* jobs\nmust complete before this job runs\n(10 Lambda function stacks).
+
+GHA -> CF++ : sam delete\nstack: firefly-api-gateway\n--no-prompts --region
+CF -> R53 : Delete Route 53 ALIAS record
+R53 --> CF : Record deleted
+CF -> APIGW : Delete HTTP API and custom domain
+APIGW --> CF : API deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+alt Lambda integrations still exist
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Workflow fails.\nEnsure all delete-func-api-* jobs completed.
+end
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-api-gateway\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "CloudFormation\n(acm-api-gateway)" as CFAcm
+    participant "CloudFormation\n(firefly-cognito)" as CFCognito
+    participant "API Gateway v2" as APIGW
+    participant "Route 53" as R53
+end box
+
+GHA -> CFAcm++ : aws cloudformation describe-stacks\nstack: firefly-acm-api-gateway\noutput: CertificateArn
+CFAcm --> GHA-- : CertificateArn
+
+GHA -> CFCognito++ : aws cloudformation describe-stacks\nstack: firefly-cognito\noutputs: CognitoUserPoolId, CognitoUserPoolClientId
+CFCognito --> GHA-- : CognitoUserPoolId, CognitoUserPoolClientId
+
+GHA -> CF : SAM build\ntemplate: templates/api-gateway.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-api-gateway\nparams: ApiDomainName, CertificateArn,\nHostedZoneId, UiOrigin,\nCognitoUserPoolId, CognitoUserPoolClientId\ncapabilities: CAPABILITY_IAM\nCAPABILITY_NAMED_IAM\nCAPABILITY_AUTO_EXPAND
+CF -> APIGW++ : Create HTTP API\nJWT authorizer: Cognito User Pool\ncustom domain: ApiDomainName
+APIGW -> R53 : Create Route 53 ALIAS record
+R53 --> APIGW : Record created
+APIGW --> CF-- : API created\nApiId
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+GHA -> APIGW++ : aws apigatewayv2 update-api\nAllowOrigins: UiOrigin\nAllowMethods: GET/POST/PUT/PATCH/DELETE/OPTIONS\nAllowHeaders: Content-Type, Authorization\nMaxAge: 300
+APIGW --> GHA-- : CORS configuration updated
+
+alt Cognito stack not deployed or outputs missing
+    CFCognito --> GHA : Stack not found or empty output
+    note over GHA : Workflow fails before SAM deploy.\nDeploy firefly-cognito stack first.
+end
+
+alt CORS update step fails after successful SAM deploy
+    APIGW --> GHA : Error
+    note over GHA : API is deployed but CORS is not configured.\nSAM deploy and CORS update are non-atomic.\nRe-run workflow to retry CORS step.
+end
+
+alt Stack creation/update fails
+    CF --> GHA : ROLLBACK_COMPLETE
+    note over GHA : Workflow fails with exit code != 0
+end
+
+@enduml

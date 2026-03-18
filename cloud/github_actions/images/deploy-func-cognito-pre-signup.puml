@@ -1,0 +1,23 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-func-cognito-pre-signup\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+end box
+
+GHA -> CF : SAM build\nlambdas/func-cognito-pre-signup/template.yaml
+
+GHA -> CF++ : SAM deploy\nstack: firefly-func-cognito-pre-signup\nparams: DynamoDbUsersTableName
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE\n(exports: LambdaArn)
+
+note over CF : Function ARN exported\nfor use by cognito stack\nas pre-signup trigger
+
+alt dynamodb-users table does not exist
+    note over GHA : Function deploys successfully\nbut rejects all sign-ups at runtime\n(table lookup fails)
+end
+
+@enduml

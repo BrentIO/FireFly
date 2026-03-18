@@ -1,0 +1,24 @@
+@startuml
+!include common-sequence.iuml
+
+title deploy-dynamodb-firmware\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    database "DynamoDB" as DDB
+end box
+
+GHA -> CF : SAM build\ntemplate: templates/dynamodb-firmware.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-dynamodb-firmware\nparams: DynamoDbFirmwareTableName
+CF -> DDB++ : Create table\npk (partition key), version (sort key)\nTTL attribute: ttl\nGSIs: product_id-index, zip_name-index
+DDB --> CF-- : Table ACTIVE
+CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
+
+alt Table already exists with data in bad stack state
+    CF --> GHA : DELETE_FAILED / ROLLBACK_COMPLETE
+    note over GHA : DynamoDB will not delete non-empty tables\nby default. Check deletion protection\nand PITR settings.
+end
+
+@enduml
