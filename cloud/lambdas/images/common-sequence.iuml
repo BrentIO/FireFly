@@ -1,5 +1,0 @@
-!include common.iuml
-!pragma teoz true
-skinparam style strictuml
-autonumber
-hide footbox

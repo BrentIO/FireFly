@@ -1,5 +1,5 @@
 @startuml
-!include common-sequence.iuml
+!include ../../images/common-sequence.iuml
 
 title delete-func-api-users-post\n(GitHub Action → CloudFormation)
 

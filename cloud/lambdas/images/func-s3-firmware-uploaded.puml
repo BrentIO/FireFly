@@ -1,5 +1,5 @@
 @startuml
-!include common-sequence.iuml
+!include ../../images/common-sequence.iuml
 
 title func-s3-firmware-uploaded\n(S3 ObjectCreated event — GitHub Action → S3)
 

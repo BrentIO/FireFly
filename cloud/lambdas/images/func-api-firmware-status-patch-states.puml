@@ -1,5 +1,5 @@
 @startuml
-!include common.iuml
+!include ../../images/common.iuml
 
 [*] --> READY_TO_TEST : upload OK\n(func-s3-firmware-uploaded)
 [*] --> ERROR : upload failure\n(func-s3-firmware-uploaded)
