@@ -6,12 +6,18 @@ title deploy-cognito\n(GitHub Action → CloudFormation)
 actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
-    participant "CloudFormation / SAM" as CF
+    participant "CloudFormation" as CF
     participant "CloudFormation\n(acm-cognito)" as CFAcm
     participant "CloudFormation\n(func-cognito-pre-signup)" as CFLambda
     participant "Cognito" as Cognito
     participant "Route 53" as R53
 end box
+
+GHA -> CFAcm++ : describe-stacks\nstack: firefly-acm-cognito\noutput: CertificateArn
+CFAcm --> GHA-- : CertificateArn
+
+GHA -> CFLambda++ : describe-stacks\nstack: firefly-func-cognito-pre-signup\noutput: PreSignUpLambdaArn
+CFLambda --> GHA-- : PreSignUpLambdaArn
 
 GHA -> CF : Check stack status
 alt Stack in ROLLBACK_COMPLETE
@@ -20,7 +26,14 @@ alt Stack in ROLLBACK_COMPLETE
     GHA -> CF : Wait for DELETE_COMPLETE
 end
 
-GHA -> CF : Diagnose existing Cognito domain\nand orphaned User Pools (informational)
+GHA -> Cognito : List all firefly-user-pool pools
+alt Orphaned pools found (not tracked by active stack)
+    GHA -> Cognito : delete-user-pool-domain (if present)
+    GHA -> Cognito : delete-user-pool
+    note over Cognito : Prevents quota exhaustion\nfrom failed previous deploys
+end
+
+GHA -> Cognito : describe-user-pool-domain\n(informational, continue-on-error)
 
 GHA -> R53 : Check if parent domain A record exists
 alt Parent domain A record missing
@@ -28,17 +41,13 @@ alt Parent domain A record missing
     note over R53 : Temporary record removed\nafter successful deploy
 end
 
-GHA -> CFAcm++ : aws cloudformation describe-stacks\nstack: firefly-acm-cognito\noutput: CertificateArn
-CFAcm --> GHA-- : CertificateArn
-
-GHA -> CFLambda++ : aws cloudformation describe-stacks\nstack: firefly-func-cognito-pre-signup\noutput: PreSignUpLambdaArn
-CFLambda --> GHA-- : PreSignUpLambdaArn
-
-GHA -> CF : SAM build\ntemplate: templates/cognito.yaml (implied)
-GHA -> CF++ : SAM deploy\nstack: firefly-cognito\nparams: AuthDomainName, CertificateArn,\nGoogleClientId, GoogleClientSecret,\nUiCallbackUrl, UiLogoutUrl,\nPreSignUpLambdaArn
+GHA -> CF++ : aws cloudformation deploy\nstack: firefly-cognito\nparams: AuthDomainName, CertificateArn,\nGoogleClientId, GoogleClientSecret,\nUiCallbackUrl, UiLogoutUrl,\nPreSignUpLambdaArn
 CF -> Cognito++ : Create User Pool\nGoogle IdP federation\nCustom domain: AuthDomainName\nPre-signup trigger: PreSignUpLambdaArn
 Cognito --> CF-- : User Pool created\nUserPoolId, CloudFront domain
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE\nOutputs: UserPoolId, UserPoolClientId,\nCognitoCloudFrontDomain
+
+GHA -> Cognito++ : describe-user-pool-domain\nresolve CloudFront distribution
+Cognito --> GHA-- : CloudFrontDistribution
 
 GHA -> R53 : Create Route 53 ALIAS record\nAuthDomainName → Cognito CloudFront domain
 R53 --> GHA : Alias record created
