@@ -51,13 +51,15 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 
 ### Steps
 
-1. Configure AWS credentials.
-2. Look up `ApiUrl` from the `firefly-api-gateway` stack output.
-3. Look up UI CloudFront domain from the `firefly-cloudfront-ui` stack output (optional).
-4. Look up UI S3 bucket name from the `firefly-s3-ui` stack output (optional).
+1. Checkout repository.
+2. Configure AWS credentials.
+3. Look up `ApiUrl` from the `firefly-api-gateway` stack output.
+4. Look up UI CloudFront domain from the `firefly-cloudfront-ui` stack output (optional).
 5. Look up `UserPoolId` and `ClientId` from the `firefly-cognito` stack output (optional).
-6. `pip install -r tests/requirements.txt`
-7. `pytest tests/integration/ -v`
+6. Create CI test user via `AdminCreateUser` + `AdminSetUserPassword` (skipped if Cognito stack not found or credentials not set; idempotent — handles existing user gracefully).
+7. `pip install -r tests/requirements.txt`
+8. `pytest tests/integration/ -v`
+9. Delete CI test user via `AdminDeleteUser` — runs with `if: always()` so the user is removed even if tests fail.
 
 **Environment variables passed to pytest:**
 
@@ -66,7 +68,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 | `FIREFLY_API_URL` | `firefly-api-gateway` stack output (`ApiUrl`) |
 | `FIREFLY_FIRMWARE_BUCKET` | From secrets |
 | `FIREFLY_UI_URL` | `firefly-cloudfront-ui` stack output (optional) |
-| `FIREFLY_UI_BUCKET` | `firefly-s3-ui` stack output (optional) |
+| `FIREFLY_UI_BUCKET` | From secrets |
 | `FIREFLY_COGNITO_USER_POOL_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_TEST_USER_EMAIL` | From secrets |
@@ -82,5 +84,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 |---|---|
 | `firefly-api-gateway` stack not found | Test run fails immediately; `FIREFLY_API_URL` is not set. Deploy `api-gateway` first. |
 | Test credentials not configured | Auth-dependent tests fail with 401. Set `FIREFLY_TEST_USER_EMAIL` and `FIREFLY_TEST_USER_PASSWORD` in repository secrets. |
+| CI test user creation fails | Workflow fails before tests run. Check IAM permissions for `AdminCreateUser` and `AdminSetUserPassword`. |
+| CI test user deletion fails | Workflow fails after tests complete (non-`UserNotFoundException` errors cause a non-zero exit). Check IAM permissions for `AdminDeleteUser`. |
 | pytest test failure | Workflow exits non-zero; specific test output identifies which endpoint or function failed. Check CloudWatch logs for the relevant Lambda. |
 | Optional stack not deployed | Tests that depend on that stack are skipped rather than failing the run. |

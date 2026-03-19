@@ -42,25 +42,28 @@ Provisions the Cognito User Pool with Google IdP federation, a custom auth domai
 
 The deploy workflow follows a multi-phase process to handle Cognito's unique requirements:
 
-1. **ROLLBACK_COMPLETE recovery** — If the stack is in `ROLLBACK_COMPLETE`, delete it and wait for `DELETE_COMPLETE` before proceeding.
-2. **Diagnostic check** — Log any existing Cognito custom domain or orphaned User Pools (informational only; does not block deploy).
-3. **Route 53 parent domain workaround** — Cognito requires the parent domain to have an A record before it will accept a custom domain. If the A record is missing, a temporary `1.2.3.4` placeholder is created. This record is removed after deploy.
-4. **SAM deploy** — Deploys the User Pool with Google IdP, custom domain, pre-signup trigger, and app client. CloudFormation events are printed on failure for diagnostics.
-5. **Route 53 alias creation** — After the stack deploys, the Cognito custom domain resolves to a CloudFront distribution managed by Cognito. An ALIAS record must be created manually because Cognito cannot manage Route 53 records itself.
-6. **Temporary A record removal** — If step 3 created a temporary A record, it is deleted now.
+1. **ARN lookups** — Resolve `CertificateArn` and `PreSignUpLambdaArn` from their respective stacks before any mutation begins.
+2. **ROLLBACK_COMPLETE recovery** — If the stack is in `ROLLBACK_COMPLETE`, delete it and wait for `DELETE_COMPLETE` before proceeding.
+3. **Orphaned pool cleanup** — Any `firefly-user-pool` pools not currently tracked by the active stack are deleted (including their custom domains). This prevents quota exhaustion from failed previous deploys.
+4. **Diagnostic check** — Log the current Cognito custom domain status (informational only; `continue-on-error`).
+5. **Route 53 parent domain workaround** — Cognito requires the parent domain to have an A record before it will accept a custom domain. If the A record is missing, a temporary `1.2.3.4` placeholder is created. This record is removed after deploy.
+6. **CloudFormation deploy** — Deploys the User Pool with Google IdP, custom domain, pre-signup trigger, and app client. CloudFormation events are printed on failure for diagnostics.
+7. **Route 53 alias creation** — After the stack deploys, the Cognito custom domain resolves to a CloudFront distribution managed by Cognito. An ALIAS record must be created manually because Cognito cannot manage Route 53 records itself.
+8. **Temporary A record removal** — If step 5 created a temporary A record, it is deleted now.
 
 ### Steps
 
 1. Checkout repository
 2. Configure AWS credentials
-3. Check stack status — if `ROLLBACK_COMPLETE`, delete stack and wait
-4. Diagnose existing Cognito domain and orphaned pools (informational)
-5. Check Route 53 for parent domain A record; create temporary `1.2.3.4` A record if missing
-6. Lookup `CertificateArn` from `firefly-acm-cognito` stack output
-7. Lookup `PreSignUpLambdaArn` from `firefly-func-cognito-pre-signup` stack output
-8. `sam build` and `sam deploy` — stack: `firefly-cognito`; params: `AuthDomainName`, `CertificateArn`, `GoogleClientId`, `GoogleClientSecret`, `UiCallbackUrl`, `UiLogoutUrl`, `PreSignUpLambdaArn`
-9. Create Route 53 ALIAS record: `AuthDomainName` → Cognito CloudFront domain (from stack output)
-10. Delete temporary A record if it was created in step 5
+3. Lookup `CertificateArn` from `firefly-acm-cognito` stack output
+4. Lookup `PreSignUpLambdaArn` from `firefly-func-cognito-pre-signup` stack output
+5. Check stack status — if `ROLLBACK_COMPLETE`, delete stack and wait
+6. Delete orphaned `firefly-user-pool` pools not tracked by the active stack
+7. Diagnose existing Cognito domain (informational, `continue-on-error`)
+8. Check Route 53 for parent domain A record; create temporary `1.2.3.4` A record if missing
+9. `aws cloudformation deploy` — stack: `firefly-cognito`; params: `AuthDomainName`, `CertificateArn`, `GoogleClientId`, `GoogleClientSecret`, `UiCallbackUrl`, `UiLogoutUrl`, `PreSignUpLambdaArn`; print stack events on failure
+10. Create Route 53 ALIAS record: `AuthDomainName` → Cognito CloudFront domain (from `describe-user-pool-domain`)
+11. Delete temporary A record if it was created in step 8
 
 ### Sequence Diagram
 
@@ -77,10 +80,10 @@ The delete workflow must undo the Route 53 alias that was created outside CloudF
 ### Steps
 
 1. Configure AWS credentials
-2. Lookup `UserPoolId` and `CognitoCloudFrontDomain` from `firefly-cognito` stack outputs
-3. If `CognitoCloudFrontDomain` is present, delete the Route 53 ALIAS record for `AuthDomainName`
-4. `sam delete --stack-name firefly-cognito --no-prompts --region`
-5. `aws cognito-idp delete-user-pool --user-pool-id <UserPoolId>` — explicitly deletes the retained User Pool
+2. Lookup `UserPoolId` from `firefly-cognito` stack output and `CloudFrontDistribution` from `describe-user-pool-domain`
+3. If a CloudFront distribution is present, delete the Route 53 ALIAS record for `AuthDomainName`
+4. `aws cloudformation delete-stack --stack-name firefly-cognito` and wait for `DELETE_COMPLETE`
+5. Delete all remaining `firefly-user-pool` pools by name (including their custom domains) — handles the `DeletionPolicy: Retain` that CloudFormation leaves behind
 
 ### Sequence Diagram
 
