@@ -235,6 +235,8 @@ pip install -r tests/requirements.txt
 
 Authentication tests are automatically skipped when the Cognito environment variables are not set.  All other tests pass auth headers when the variables are present, allowing the full test suite to run against a deployed environment that requires authentication.
 
+The `/users` endpoint tests require additional Cognito admin permissions: the test runner's IAM identity must have `cognito-idp:AdminAddUserToGroup`, `cognito-idp:AdminRemoveUserFromGroup`, and `cognito-idp:ListUsers` on the user pool.  The test suite temporarily adds the CI test user to the `super_users` group to exercise those endpoints, then removes them at teardown.
+
 AWS credentials must be available via the standard boto3 credential chain.
 
 ### Running Tests
