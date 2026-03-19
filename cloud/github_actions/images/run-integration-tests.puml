@@ -6,28 +6,46 @@ title run-integration-tests\n(GitHub Action → pytest)
 actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
-    participant "CloudFormation / SAM" as CF
+    participant "CloudFormation" as CF
+    participant "Cognito" as Cognito
 end box
 
 GHA -> CF++ : describe-stacks\nfirefly-api-gateway → ApiUrl
 CF --> GHA-- : ApiUrl
 
-GHA -> CF++ : describe-stacks\nfirefly-cloudfront-ui → UICloudFrontDomain\n(optional)
-CF --> GHA-- : UICloudFrontDomain
-
-GHA -> CF++ : describe-stacks\nfirefly-s3-ui → BucketName\n(optional)
-CF --> GHA-- : BucketName
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront-ui → UiDomain\n(optional)
+CF --> GHA-- : UiDomain
 
 GHA -> CF++ : describe-stacks\nfirefly-cognito → UserPoolId, ClientId\n(optional)
 CF --> GHA-- : UserPoolId, ClientId
+
+alt Cognito stack found
+    GHA -> Cognito++ : AdminCreateUser + AdminSetUserPassword\nCreate CI test user (idempotent)
+    Cognito --> GHA-- : User created / already exists
+end
 
 note over GHA : pip install -r tests/requirements.txt
 
 note over GHA : pytest tests/integration/ -v\nFIREFLY_API_URL, FIREFLY_FIRMWARE_BUCKET,\nFIREFLY_UI_URL, FIREFLY_UI_BUCKET,\nFIREFLY_COGNITO_USER_POOL_ID,\nFIREFLY_COGNITO_CLIENT_ID,\nFIREFLY_TEST_USER_EMAIL,\nFIREFLY_TEST_USER_PASSWORD
 
+alt Cognito stack found (if: always)
+    GHA -> Cognito++ : AdminDeleteUser\nDelete CI test user
+    Cognito --> GHA-- : User deleted
+end
+
 alt api-gateway stack not found
     CF --> GHA : ValidationError
     note over GHA : Workflow fails immediately;\nFIREFLY_API_URL is not set
+end
+
+alt CI test user creation fails
+    Cognito --> GHA : Error (non-UsernameExistsException)
+    note over GHA : Workflow fails before tests run.\nCheck IAM permissions for\nAdminCreateUser / AdminSetUserPassword.
+end
+
+alt CI test user deletion fails
+    Cognito --> GHA : Error (non-UserNotFoundException)
+    note over GHA : Workflow fails after tests complete.\nCheck IAM permissions for AdminDeleteUser.
 end
 
 alt pytest test failure
