@@ -6,6 +6,7 @@ export default defineConfig({
   description: "Software-defined lighting",
   base: '/FireFly/',
   cleanUrls: true,
+  head: [['link', { rel: 'icon', href: '/FireFly/favicon.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
