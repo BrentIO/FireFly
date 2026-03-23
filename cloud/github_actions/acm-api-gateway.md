@@ -17,14 +17,14 @@ None — this workflow has no prerequisites.
 ### Delete
 
 - `delete-api-gateway` — API Gateway must be deleted before the certificate can be released
-- `delete-cloudfront` — CloudFront firmware distribution must be deleted first
+- `delete-cloudfront-firmware` — CloudFront firmware distribution must be deleted first
 - `delete-cloudfront-ui` — CloudFront UI distribution must be deleted first
 
 ## Required By
 
 ### Deploy
 
-- `cloudfront` — uses the `CertificateArn` output for the firmware CloudFront distribution
+- `cloudfront-firmware` — uses the `CertificateArn` output for the firmware CloudFront distribution
 - `cloudfront-ui` — uses the `CertificateArn` output for the UI CloudFront distribution
 - `api-gateway` — uses the `CertificateArn` output for the API custom domain
 
@@ -80,4 +80,4 @@ Deletes the `firefly-acm-api-gateway` CloudFormation stack and the ACM certifica
 |---|---|---|
 | Certificate DNS validation timeout | ACM waits up to 30 minutes for Route 53 CNAME to propagate; stack rolls back if validation does not complete | Verify the Route 53 hosted zone ID is correct and the domain is delegated properly; re-run the workflow |
 | Stack in `ROLLBACK_COMPLETE` | A previous failed deploy left the stack in a terminal state | Manually delete the stack in the AWS Console or via CLI, then re-run |
-| `DELETE_FAILED` — certificate still in use | Certificate is still associated with a CloudFront distribution or API Gateway custom domain | Ensure `delete-cloudfront`, `delete-cloudfront-ui`, and `delete-api-gateway` all completed successfully before re-running delete |
+| `DELETE_FAILED` — certificate still in use | Certificate is still associated with a CloudFront distribution or API Gateway custom domain | Ensure `delete-cloudfront-firmware`, `delete-cloudfront-ui`, and `delete-api-gateway` all completed successfully before re-running delete |

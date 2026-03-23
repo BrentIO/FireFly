@@ -169,7 +169,7 @@ Individual deploy workflows are available for updating a specific stack without 
 | `deploy-func-s3-firmware-deleted` | Deploys the S3 delete trigger Lambda. Requires shared layer. |
 | `deploy-s3-firmware` | Creates the private S3 firmware bucket and wires up event notifications. Requires both S3 trigger Lambdas. |
 | `deploy-s3-firmware-public` | Creates the public S3 bucket for OTA firmware delivery. |
-| `deploy-cloudfront` | Deploys the CloudFront distribution. Requires ACM certificate and public S3 bucket. |
+| `deploy-cloudfront-firmware` | Deploys the CloudFront distribution. Requires ACM certificate and public S3 bucket. |
 | `deploy-func-api-ota-get` | Deploys the OTA firmware manifest Lambda. Requires API Gateway, shared layer, and CloudFront. |
 | `deploy-func-api-firmware-download-get` | Deploys the pre-signed download URL Lambda. Requires API Gateway, shared layer, and private S3 firmware bucket. |
 | `deploy-s3-ui` | Creates the private S3 bucket for UI static files. |
@@ -189,7 +189,7 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 | `delete-all` | Tears down all stacks in the correct order. |
 | `delete-s3-firmware` | Deletes the private S3 firmware bucket stack. Must run before the S3 trigger Lambdas. |
 | `delete-func-api-ota-get` | Deletes the OTA firmware manifest Lambda. Must run before the API Gateway. |
-| `delete-cloudfront` | Deletes the CloudFront distribution. Must run before the public S3 bucket. |
+| `delete-cloudfront-firmware` | Deletes the CloudFront distribution. Must run before the public S3 bucket. |
 | `delete-s3-firmware-public` | Deletes the public S3 firmware bucket. Must run after CloudFront is deleted. |
 | `delete-func-api-health-get` | Deletes the health check Lambda. |
 | `delete-func-api-firmware-get` | Deletes the firmware list/download Lambda. |

@@ -16,17 +16,17 @@ None — this workflow has no prerequisites.
 
 ### Delete
 
-- `delete-cloudfront` — the CloudFront distribution must be deleted before the bucket can be removed
+- `delete-cloudfront-firmware` — the CloudFront distribution must be deleted before the bucket can be removed
 
 ## Required By
 
 ### Deploy
 
-- `cloudfront` — bucket name is passed as a parameter to the CloudFront stack
+- `cloudfront-firmware` — bucket name is passed as a parameter to the CloudFront stack
 
 ### Delete
 
-- `delete-acm-api-gateway` (transitively, via `delete-cloudfront` dependency chain)
+- `delete-acm-api-gateway` (transitively, via `delete-cloudfront-firmware` dependency chain)
 
 ---
 
@@ -80,4 +80,4 @@ Before deleting the CloudFormation stack, a Python pre-deletion script handles b
 | Production bucket is non-empty | Pre-deletion script exits 1; refuses to empty production bucket | Manually verify the bucket contents, empty it via the AWS console or CLI, then re-run |
 | `NoSuchBucket` | Bucket was manually deleted before the workflow ran | Script handles this gracefully and exits 0 |
 | Incomplete multipart uploads blocking empty | Stale multipart uploads prevent clean deletion | Script calls `abort-incomplete-multipart-uploads` automatically; re-run if any uploads were added concurrently |
-| `DELETE_FAILED` — CloudFront origin still active | CloudFront distribution was not deleted before the bucket | Ensure `delete-cloudfront` completed successfully |
+| `DELETE_FAILED` — CloudFront origin still active | CloudFront distribution was not deleted before the bucket | Ensure `delete-cloudfront-firmware` completed successfully |

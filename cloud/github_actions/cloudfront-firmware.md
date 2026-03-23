@@ -1,4 +1,4 @@
-# cloudfront
+# cloudfront-firmware
 
 ## Overview
 
@@ -6,7 +6,7 @@ Provisions the CloudFront distribution that fronts the `firefly-s3-firmware-publ
 
 ## CloudFormation Stack
 
-`firefly-cloudfront`
+`firefly-cloudfront-firmware`
 
 ## Dependencies
 
@@ -36,7 +36,7 @@ None — this stack can be deleted in parallel with most others.
 
 ### Description
 
-Looks up the `CertificateArn` from the `firefly-acm-api-gateway` stack output, then deploys the `firefly-cloudfront` CloudFormation stack. CloudFront distribution propagation takes 15–20 minutes. The stack also creates a Route 53 ALIAS record for the firmware domain.
+Looks up the `CertificateArn` from the `firefly-acm-api-gateway` stack output, then deploys the `firefly-cloudfront-firmware` CloudFormation stack. CloudFront distribution propagation takes 15–20 minutes. The stack also creates a Route 53 ALIAS record for the firmware domain.
 
 ### Steps
 
@@ -44,12 +44,12 @@ Looks up the `CertificateArn` from the `firefly-acm-api-gateway` stack output, t
 2. Configure AWS credentials
 3. Install SAM CLI
 4. Lookup `CertificateArn` from `firefly-acm-api-gateway` stack output
-5. `sam build` — template: `templates/cloudfront.yaml`
-6. `sam deploy` — stack: `firefly-cloudfront`; params: `FirmwareBucketName`, `CertificateArn`, `FirmwareDomain`, `HostedZoneId`
+5. `sam build` — template: `templates/cloudfront-firmware.yaml`
+6. `sam deploy` — stack: `firefly-cloudfront-firmware`; params: `FirmwareBucketName`, `CertificateArn`, `FirmwareDomain`, `HostedZoneId`
 
 ### Sequence Diagram
 
-[![Deploy cloudfront sequence](./images/deploy-cloudfront.svg)](./images/deploy-cloudfront.svg)
+[![Deploy cloudfront-firmware sequence](./images/deploy-cloudfront-firmware.svg)](./images/deploy-cloudfront-firmware.svg)
 
 ---
 
@@ -57,17 +57,17 @@ Looks up the `CertificateArn` from the `firefly-acm-api-gateway` stack output, t
 
 ### Description
 
-Deletes the `firefly-cloudfront` CloudFormation stack, removing the CloudFront distribution and the Route 53 alias record. Distribution deletion takes 15–20 minutes. No pre-deletion cleanup is required; this job runs in parallel with most other delete jobs.
+Deletes the `firefly-cloudfront-firmware` CloudFormation stack, removing the CloudFront distribution and the Route 53 alias record. Distribution deletion takes 15–20 minutes. No pre-deletion cleanup is required; this job runs in parallel with most other delete jobs.
 
 ### Steps
 
 1. Configure AWS credentials
 2. Install SAM CLI
-3. `sam delete --stack-name firefly-cloudfront --no-prompts --region`
+3. `sam delete --stack-name firefly-cloudfront-firmware --no-prompts --region`
 
 ### Sequence Diagram
 
-[![Delete cloudfront sequence](./images/delete-cloudfront.svg)](./images/delete-cloudfront.svg)
+[![Delete cloudfront-firmware sequence](./images/delete-cloudfront-firmware.svg)](./images/delete-cloudfront-firmware.svg)
 
 ---
 

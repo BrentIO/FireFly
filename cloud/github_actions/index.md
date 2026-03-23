@@ -9,7 +9,7 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 | [acm-api-gateway](./acm-api-gateway.md) | `firefly-acm-api-gateway` | ACM certificate for API Gateway and CloudFront custom domains |
 | [acm-cognito](./acm-cognito.md) | `firefly-acm-cognito` | ACM certificate for Cognito custom auth domain (must be us-east-1) |
 | [api-gateway](./api-gateway.md) | `firefly-api-gateway` | HTTP API Gateway with custom domain, Cognito JWT authorizer, CORS |
-| [cloudfront](./cloudfront.md) | `firefly-cloudfront` | CloudFront distribution + Route 53 alias for firmware OTA delivery |
+| [cloudfront-firmware](./cloudfront-firmware.md) | `firefly-cloudfront-firmware` | CloudFront distribution + Route 53 alias for firmware OTA delivery |
 | [cloudfront-ui](./cloudfront-ui.md) | `firefly-cloudfront-ui` | CloudFront distribution + Route 53 alias for the web UI |
 | [cognito](./cognito.md) | `firefly-cognito` | Cognito User Pool with Google IdP, custom domain, pre-signup Lambda |
 | [dynamodb-firmware](./dynamodb-firmware.md) | `firefly-dynamodb-firmware` | DynamoDB table for firmware metadata |
@@ -51,7 +51,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | s3-firmware-public | — |
 | s3-ui | — |
 | func-cognito-pre-signup | dynamodb-users |
-| cloudfront | acm-api-gateway, s3-firmware-public |
+| cloudfront-firmware | acm-api-gateway, s3-firmware-public |
 | cloudfront-ui | acm-api-gateway, s3-ui |
 | cognito | acm-cognito, func-cognito-pre-signup |
 | api-gateway | acm-api-gateway, cognito |
@@ -65,7 +65,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-api-firmware-delete | api-gateway, shared-layer |
 | func-s3-firmware-uploaded | shared-layer |
 | func-s3-firmware-deleted | shared-layer |
-| func-api-ota-get | api-gateway, shared-layer, cloudfront |
+| func-api-ota-get | api-gateway, shared-layer, cloudfront-firmware |
 | func-api-firmware-download-get | api-gateway, shared-layer, s3-firmware |
 | s3-firmware | func-s3-firmware-uploaded, func-s3-firmware-deleted |
 | ui-app | cloudfront-ui, cognito |
@@ -80,7 +80,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | delete-ui-app | — |
 | delete-dynamodb-firmware | — |
 | delete-s3-firmware | — |
-| delete-cloudfront | — |
+| delete-cloudfront-firmware | — |
 | delete-func-api-health-get | — |
 | delete-func-api-users-get | — |
 | delete-func-api-users-post | — |
@@ -93,12 +93,12 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | delete-func-api-firmware-download-get | — |
 | delete-cloudfront-ui | delete-ui-app |
 | delete-s3-ui | delete-cloudfront-ui |
-| delete-s3-firmware-public | delete-cloudfront |
+| delete-s3-firmware-public | delete-cloudfront-firmware |
 | delete-api-gateway | delete-func-api-health-get, delete-func-api-users-get, delete-func-api-users-post, delete-func-api-users-delete, delete-func-api-users-patch, delete-func-api-firmware-get, delete-func-api-firmware-status-patch, delete-func-api-firmware-delete, delete-func-api-ota-get, delete-func-api-firmware-download-get |
 | delete-cognito | delete-api-gateway |
 | delete-func-cognito-pre-signup | delete-cognito |
 | delete-acm-cognito | delete-cognito |
-| delete-acm-api-gateway | delete-api-gateway, delete-cloudfront, delete-cloudfront-ui |
+| delete-acm-api-gateway | delete-api-gateway, delete-cloudfront-firmware, delete-cloudfront-ui |
 | delete-dynamodb-users | delete-func-cognito-pre-signup, delete-func-api-users-delete, delete-func-api-users-post |
 | delete-func-s3-firmware-uploaded | delete-s3-firmware |
 | delete-func-s3-firmware-deleted | delete-s3-firmware |

@@ -10,7 +10,7 @@ box "AWS" #ffdbbb
     collections "S3" as S3
 end box
 
-note over GHA : Prerequisite: delete-cloudfront must\ncomplete before this job runs.
+note over GHA : Prerequisite: delete-cloudfront-firmware must\ncomplete before this job runs.
 
 GHA -> S3 : Check if bucket exists
 alt Bucket does not exist (NoSuchBucket)

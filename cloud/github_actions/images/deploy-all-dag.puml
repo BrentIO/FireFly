@@ -17,7 +17,7 @@ end box
 
 box "Wave 2" #ffe8cc
     participant "func-cognito-pre-signup" as W2A
-    participant "cloudfront" as W2B
+    participant "cloudfront-firmware" as W2B
     participant "cloudfront-ui" as W2C
 end box
 
@@ -58,7 +58,7 @@ W1F --> W2B : needs: s3-firmware-public
 W1G --> W2C : needs: s3-ui
 
 W2A --> W3A : needs: func-cognito-pre-signup
-W2B --> W5A : needs: cloudfront (ota-get only)
+W2B --> W5A : needs: cloudfront-firmware (ota-get only)
 W2C --> W6B : needs: cloudfront-ui
 
 W3A --> W4A : needs: cognito
