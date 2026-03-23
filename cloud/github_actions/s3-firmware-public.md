@@ -26,7 +26,7 @@ None — this workflow has no prerequisites.
 
 ### Delete
 
-- `delete-acm-api-gateway` (transitively, via `delete-cloudfront-firmware` dependency chain)
+- `delete-acm` (transitively, via `delete-cloudfront-firmware` dependency chain)
 
 ---
 

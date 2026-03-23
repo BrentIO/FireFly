@@ -6,8 +6,7 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 
 | Workflow | CloudFormation Stack | Purpose |
 |---|---|---|
-| [acm-api-gateway](./acm-api-gateway.md) | `firefly-acm-api-gateway` | ACM certificate for API Gateway and CloudFront custom domains |
-| [acm-cognito](./acm-cognito.md) | `firefly-acm-cognito` | ACM certificate for Cognito custom auth domain (must be us-east-1) |
+| [acm](./acm.md) | `firefly-acm` | ACM certificate for API Gateway, CloudFront, and Cognito custom domains (us-east-1) |
 | [api-gateway](./api-gateway.md) | `firefly-api-gateway` | HTTP API Gateway with custom domain, Cognito JWT authorizer, CORS |
 | [cloudfront-firmware](./cloudfront-firmware.md) | `firefly-cloudfront-firmware` | CloudFront distribution + Route 53 alias for firmware OTA delivery |
 | [cloudfront-ui](./cloudfront-ui.md) | `firefly-cloudfront-ui` | CloudFront distribution + Route 53 alias for the web UI |
@@ -45,16 +44,15 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 |---|---|
 | dynamodb-firmware | — |
 | dynamodb-users | — |
-| acm-cognito | — |
-| acm-api-gateway | — |
+| acm | — |
 | shared-layer | — |
 | s3-firmware-public | — |
 | s3-ui | — |
 | func-cognito-pre-signup | dynamodb-users |
-| cloudfront-firmware | acm-api-gateway, s3-firmware-public |
-| cloudfront-ui | acm-api-gateway, s3-ui |
-| cognito | acm-cognito, func-cognito-pre-signup |
-| api-gateway | acm-api-gateway, cognito |
+| cloudfront-firmware | acm, s3-firmware-public |
+| cloudfront-ui | acm, s3-ui |
+| cognito | acm, func-cognito-pre-signup |
+| api-gateway | acm, cognito |
 | func-api-health-get | api-gateway |
 | func-api-users-get | api-gateway, cognito |
 | func-api-users-post | api-gateway, dynamodb-users |
@@ -97,8 +95,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | delete-api-gateway | delete-func-api-health-get, delete-func-api-users-get, delete-func-api-users-post, delete-func-api-users-delete, delete-func-api-users-patch, delete-func-api-firmware-get, delete-func-api-firmware-status-patch, delete-func-api-firmware-delete, delete-func-api-ota-get, delete-func-api-firmware-download-get |
 | delete-cognito | delete-api-gateway |
 | delete-func-cognito-pre-signup | delete-cognito |
-| delete-acm-cognito | delete-cognito |
-| delete-acm-api-gateway | delete-api-gateway, delete-cloudfront-firmware, delete-cloudfront-ui |
+| delete-acm | delete-api-gateway, delete-cloudfront-firmware, delete-cloudfront-ui, delete-cognito |
 | delete-dynamodb-users | delete-func-cognito-pre-signup, delete-func-api-users-delete, delete-func-api-users-post |
 | delete-func-s3-firmware-uploaded | delete-s3-firmware |
 | delete-func-s3-firmware-deleted | delete-s3-firmware |

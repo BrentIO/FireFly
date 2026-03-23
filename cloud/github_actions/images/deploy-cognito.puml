@@ -7,13 +7,13 @@ actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
     participant "CloudFormation" as CF
-    participant "CloudFormation\n(acm-cognito)" as CFAcm
+    participant "CloudFormation\n(acm)" as CFAcm
     participant "CloudFormation\n(func-cognito-pre-signup)" as CFLambda
     participant "Cognito" as Cognito
     participant "Route 53" as R53
 end box
 
-GHA -> CFAcm++ : describe-stacks\nstack: firefly-acm-cognito\noutput: CertificateArn
+GHA -> CFAcm++ : describe-stacks\nstack: firefly-acm\noutput: CertificateArn
 CFAcm --> GHA-- : CertificateArn
 
 GHA -> CFLambda++ : describe-stacks\nstack: firefly-func-cognito-pre-signup\noutput: PreSignUpLambdaArn

@@ -12,7 +12,7 @@ Provisions the HTTP API Gateway with a custom domain, a Cognito JWT authorizer, 
 
 ### Deploy
 
-- `acm-api-gateway` — provides `CertificateArn` for the custom domain
+- `acm` — provides `CertificateArn` for the custom domain
 - `cognito` — provides `CognitoUserPoolId` and `CognitoUserPoolClientId` for the JWT authorizer
 
 ### Delete
@@ -27,7 +27,7 @@ All `func-api-*` workflows (11 functions): `func-api-health-get`, `func-api-user
 
 ### Delete
 
-- `delete-acm-api-gateway`
+- `delete-acm`
 - `delete-cognito`
 
 ---
@@ -36,14 +36,14 @@ All `func-api-*` workflows (11 functions): `func-api-health-get`, `func-api-user
 
 ### Description
 
-Looks up the `CertificateArn` from `firefly-acm-api-gateway` and the Cognito pool outputs from `firefly-cognito`, then deploys the `firefly-api-gateway` CloudFormation stack. After the stack reaches `CREATE_COMPLETE` or `UPDATE_COMPLETE`, a separate step calls `aws apigatewayv2 update-api` to configure CORS. These two steps are not atomic — a CORS update failure leaves the API deployed but misconfigured.
+Looks up the `CertificateArn` from `firefly-acm` and the Cognito pool outputs from `firefly-cognito`, then deploys the `firefly-api-gateway` CloudFormation stack. After the stack reaches `CREATE_COMPLETE` or `UPDATE_COMPLETE`, a separate step calls `aws apigatewayv2 update-api` to configure CORS. These two steps are not atomic — a CORS update failure leaves the API deployed but misconfigured.
 
 ### Steps
 
 1. Checkout repository
 2. Configure AWS credentials
 3. Install SAM CLI
-4. Lookup `CertificateArn` from `firefly-acm-api-gateway` stack output
+4. Lookup `CertificateArn` from `firefly-acm` stack output
 5. Lookup `CognitoUserPoolId` and `CognitoUserPoolClientId` from `firefly-cognito` stack outputs
 6. `sam build` — template: `templates/api-gateway.yaml`
 7. `sam deploy` — stack: `firefly-api-gateway`; params: `ApiDomainName`, `CertificateArn`, `HostedZoneId`, `UiOrigin`, `CognitoUserPoolId`, `CognitoUserPoolClientId`; capabilities: `CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND`

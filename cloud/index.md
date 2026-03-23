@@ -12,7 +12,7 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 
 | Stack | Description |
 |---|---|
-| `firefly-acm-api-gateway` | ACM certificate for the API custom domain |
+| `firefly-acm` | ACM certificate for API Gateway, CloudFront, and Cognito custom domains (us-east-1) |
 | `firefly-api-gateway` | HTTP API Gateway v2 with custom domain, access logs, and Cognito JWT authorizer |
 | `firefly-dynamodb-firmware` | DynamoDB firmware table |
 | `firefly-dynamodb-users` | DynamoDB allowed-list table for invitation-only access control |
