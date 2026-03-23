@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title deploy-cloudfront\n(GitHub Action → CloudFormation)
+title deploy-cloudfront-firmware\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -15,8 +15,8 @@ end box
 GHA -> CFLookup++ : aws cloudformation describe-stacks\nstack: firefly-acm-api-gateway\noutput: CertificateArn
 CFLookup --> GHA-- : CertificateArn
 
-GHA -> CF : SAM build\ntemplate: templates/cloudfront.yaml
-GHA -> CF++ : SAM deploy\nstack: firefly-cloudfront\nparams: FirmwareBucketName, CertificateArn,\nFirmwareDomain, HostedZoneId
+GHA -> CF : SAM build\ntemplate: templates/cloudfront-firmware.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-cloudfront-firmware\nparams: FirmwareBucketName, CertificateArn,\nFirmwareDomain, HostedZoneId
 CF -> CFront++ : Create distribution\norigins: s3-firmware-public\nalternate domain: FirmwareDomain\ncertificate: CertificateArn
 note over CFront : Distribution propagation\ntakes 15-20 minutes
 CFront --> CF-- : Distribution created\nDomainName (*.cloudfront.net)

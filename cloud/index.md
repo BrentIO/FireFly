@@ -24,7 +24,7 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-api-users-patch` | Super user status endpoint |
 | `firefly-s3-firmware` | Private S3 firmware bucket with lifecycle rules and event notifications |
 | `firefly-s3-firmware-public` | Public S3 bucket for OTA firmware binary delivery; `revoked/` prefix is access-denied and expires after 90 days |
-| `firefly-cloudfront` | CloudFront distribution fronting the public firmware bucket for OTA delivery |
+| `firefly-cloudfront-firmware` | CloudFront distribution fronting the public firmware bucket for OTA delivery |
 | `firefly-shared-layer` | Shared Python Lambda layer |
 | `firefly-func-api-health-get` | Health check endpoint |
 | `firefly-func-api-firmware-get` | Firmware list and item retrieval endpoints |

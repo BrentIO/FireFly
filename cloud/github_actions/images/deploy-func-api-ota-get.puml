@@ -17,7 +17,7 @@ SSM --> GHA-- : stored
 GHA -> CF++ : describe-stacks\nfirefly-api-gateway\n→ ApiId
 CF --> GHA-- : ApiId
 
-GHA -> CF++ : describe-stacks\nfirefly-cloudfront\n→ CloudFrontDomain
+GHA -> CF++ : describe-stacks\nfirefly-cloudfront-firmware\n→ CloudFrontDomain
 CF --> GHA-- : CloudFrontDomain
 
 GHA -> CF : SAM build
@@ -31,9 +31,9 @@ alt FIRMWARE_TYPE_MAP var missing / SSM put-parameter fails
     note over GHA : Workflow fails\nVerify FIRMWARE_TYPE_MAP is set\nand IAM permissions are correct
 end
 
-alt cloudfront stack not found
+alt cloudfront-firmware stack not found
     CF --> GHA : ValidationError
-    note over GHA : Workflow fails\n(deploy-cloudfront must run first)
+    note over GHA : Workflow fails\n(deploy-cloudfront-firmware must run first)
 end
 
 alt api-gateway stack not found

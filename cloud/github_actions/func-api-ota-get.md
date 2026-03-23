@@ -16,7 +16,7 @@ Manages the Lambda function that serves OTA firmware update checks for devices v
 |---|---|
 | [api-gateway](./api-gateway.md) | API Gateway ID required as SAM parameter |
 | [shared-layer](./shared-layer.md) | Lambda layer ARN must be resolvable at SAM build/deploy time |
-| [cloudfront](./cloudfront.md) | CloudFront domain required as SAM parameter for constructing firmware download URLs |
+| [cloudfront-firmware](./cloudfront-firmware.md) | CloudFront domain required as SAM parameter for constructing firmware download URLs |
 
 ### Delete Dependencies
 
@@ -40,7 +40,7 @@ None — this workflow has no prerequisites.
 
 ### Description
 
-Before deploying, stores the `FIRMWARE_TYPE_MAP` variable in AWS Systems Manager Parameter Store. Then looks up the API Gateway ID from `firefly-api-gateway` and the CloudFront domain from `firefly-cloudfront`. Builds and deploys the function with the SSM path, domain, and table name.
+Before deploying, stores the `FIRMWARE_TYPE_MAP` variable in AWS Systems Manager Parameter Store. Then looks up the API Gateway ID from `firefly-api-gateway` and the CloudFront domain from `firefly-cloudfront-firmware`. Builds and deploys the function with the SSM path, domain, and table name.
 
 The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is not deleted when the stack is deleted. Manual cleanup may be required on full teardown.
 
@@ -49,7 +49,7 @@ The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is no
 1. Configure AWS credentials.
 2. Store `FIRMWARE_TYPE_MAP` in SSM Parameter Store (from GitHub environment var).
 3. Look up `ApiId` from the `firefly-api-gateway` stack output.
-4. Look up `CloudFrontDomain` (`DistributionDomain` or `FirmwareDomain`) from the `firefly-cloudfront` stack output.
+4. Look up `CloudFrontDomain` (`DistributionDomain` or `FirmwareDomain`) from the `firefly-cloudfront-firmware` stack output.
 5. SAM build.
 6. SAM deploy with parameters:
    - `ApiId`
@@ -93,5 +93,5 @@ Runs `sam delete` to remove the CloudFormation stack and the Lambda function. Th
 | Scenario | Behavior |
 |---|---|
 | SSM `put-parameter` fails | The deploy step continues, but the function will fail at runtime when reading the firmware type map. Verify IAM permissions and that the `FIRMWARE_TYPE_MAP` var is set in the GitHub environment. |
-| CloudFront stack not deployed | `describe-stacks` call fails; workflow fails before SAM deploy. Deploy `cloudfront` first. |
+| CloudFront stack not deployed | `describe-stacks` call fails; workflow fails before SAM deploy. Deploy `cloudfront-firmware` first. |
 | `FIRMWARE_TYPE_MAP` var missing from GitHub environment | SSM step fails; workflow halts before SAM deploy. |
