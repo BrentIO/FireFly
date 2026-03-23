@@ -8,8 +8,7 @@ actor "GitHub Actions Runner" as GHA
 box "Wave 1 — No Dependencies" #ffdbbb
     participant "dynamodb-firmware" as W1A
     participant "dynamodb-users" as W1B
-    participant "acm-cognito" as W1C
-    participant "acm-api-gateway" as W1D
+    participant "acm" as W1C
     participant "shared-layer" as W1E
     participant "s3-firmware-public" as W1F
     participant "s3-ui" as W1G
@@ -45,24 +44,23 @@ end box
 GHA -> W1A : deploy (parallel)
 GHA -> W1B : deploy (parallel)
 GHA -> W1C : deploy (parallel)
-GHA -> W1D : deploy (parallel)
 GHA -> W1E : deploy (parallel)
 GHA -> W1F : deploy (parallel)
 GHA -> W1G : deploy (parallel)
 
 W1B --> W2A : needs: dynamodb-users
-W1C --> W3A : needs: acm-cognito (via cognito)
-W1D --> W2B : needs: acm-api-gateway
-W1D --> W2C : needs: acm-api-gateway
+W1C --> W2B : needs: acm
+W1C --> W2C : needs: acm
 W1F --> W2B : needs: s3-firmware-public
 W1G --> W2C : needs: s3-ui
 
 W2A --> W3A : needs: func-cognito-pre-signup
+W1C --> W3A : needs: acm (via cognito)
 W2B --> W5A : needs: cloudfront-firmware (ota-get only)
 W2C --> W6B : needs: cloudfront-ui
 
 W3A --> W4A : needs: cognito
-W1D --> W4A : needs: acm-api-gateway
+W1C --> W4A : needs: acm
 
 W4A --> W5A : needs: api-gateway
 W1E --> W5A : needs: shared-layer

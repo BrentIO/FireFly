@@ -154,7 +154,7 @@ Individual deploy workflows are available for updating a specific stack without 
 | `deploy-dynamodb-users` | Creates the DynamoDB users allowed-list table. |
 | `deploy-func-cognito-pre-signup` | Deploys the Cognito pre-signup Lambda. Requires the users DynamoDB table. |
 | `deploy-cognito` | Deploys the Cognito User Pool with Google IdP. Requires the pre-signup Lambda. |
-| `deploy-acm-api-gateway` | Requests the ACM certificate and validates it via Route 53. Must run before the API Gateway. |
+| `deploy-acm` | Requests the ACM certificate and validates it via Route 53. Must run before API Gateway, CloudFront, and Cognito. |
 | `deploy-api-gateway` | Deploys the HTTP API Gateway with JWT authorizer. Requires ACM certificate and Cognito User Pool. |
 | `deploy-shared-layer` | Publishes the shared Lambda layer used by most functions. |
 | `deploy-func-api-health-get` | Deploys the health check Lambda. Requires API Gateway. |
@@ -196,7 +196,7 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 | `delete-func-api-firmware-status-patch` | Deletes the firmware status update Lambda. |
 | `delete-func-api-firmware-delete` | Deletes the firmware delete Lambda. |
 | `delete-api-gateway` | Deletes the API Gateway. Must run after all API Lambda functions are deleted. |
-| `delete-acm-api-gateway` | Deletes the ACM certificate. Must run after the API Gateway is deleted. |
+| `delete-acm` | Deletes the ACM certificate. Must run after the API Gateway, both CloudFront distributions, and Cognito are deleted. |
 | `delete-func-s3-firmware-uploaded` | Deletes the S3 upload trigger Lambda. Must run after the S3 bucket is deleted. |
 | `delete-func-s3-firmware-deleted` | Deletes the S3 delete trigger Lambda. Must run after the S3 bucket is deleted. |
 | `delete-shared-layer` | Deletes the shared Lambda layer. Must run after all Lambda functions are deleted. |

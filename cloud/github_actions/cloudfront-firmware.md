@@ -12,7 +12,7 @@ Provisions the CloudFront distribution that fronts the `firefly-s3-firmware-publ
 
 ### Deploy
 
-- `acm-api-gateway` — provides the `CertificateArn` for the CloudFront alternate domain
+- `acm` — provides the `CertificateArn` for the CloudFront alternate domain
 - `s3-firmware-public` — the origin bucket must exist before the distribution can reference it
 
 ### Delete
@@ -28,7 +28,7 @@ None — this stack can be deleted in parallel with most others.
 ### Delete
 
 - `delete-s3-firmware-public` — CloudFront must be deleted before the origin bucket
-- `delete-acm-api-gateway` (transitively)
+- `delete-acm` (transitively)
 
 ---
 
@@ -36,14 +36,14 @@ None — this stack can be deleted in parallel with most others.
 
 ### Description
 
-Looks up the `CertificateArn` from the `firefly-acm-api-gateway` stack output, then deploys the `firefly-cloudfront-firmware` CloudFormation stack. CloudFront distribution propagation takes 15–20 minutes. The stack also creates a Route 53 ALIAS record for the firmware domain.
+Looks up the `CertificateArn` from the `firefly-acm` stack output, then deploys the `firefly-cloudfront-firmware` CloudFormation stack. CloudFront distribution propagation takes 15–20 minutes. The stack also creates a Route 53 ALIAS record for the firmware domain.
 
 ### Steps
 
 1. Checkout repository
 2. Configure AWS credentials
 3. Install SAM CLI
-4. Lookup `CertificateArn` from `firefly-acm-api-gateway` stack output
+4. Lookup `CertificateArn` from `firefly-acm` stack output
 5. `sam build` — template: `templates/cloudfront-firmware.yaml`
 6. `sam deploy` — stack: `firefly-cloudfront-firmware`; params: `FirmwareBucketName`, `CertificateArn`, `FirmwareDomain`, `HostedZoneId`
 
@@ -77,4 +77,4 @@ Deletes the `firefly-cloudfront-firmware` CloudFormation stack, removing the Clo
 |---|---|---|
 | CNAME already associated with another distribution | Another CloudFront distribution in the account has the same alternate domain name; CloudFront returns `InvalidRequest` | Remove the alternate domain name from the conflicting distribution in the AWS console, then re-run |
 | Stack left in `UPDATE_IN_PROGRESS` after cancellation | Workflow was cancelled while CloudFront was propagating (15–20 min window) | Wait for the in-progress update to complete (success or rollback) before re-running |
-| `CertificateArn` lookup fails | `firefly-acm-api-gateway` stack not deployed or output not present | Deploy `acm-api-gateway` first |
+| `CertificateArn` lookup fails | `firefly-acm` stack not deployed or output not present | Deploy `acm` first |

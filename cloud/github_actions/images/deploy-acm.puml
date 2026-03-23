@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title deploy-acm-cognito\n(GitHub Action → CloudFormation)
+title deploy-acm\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
@@ -11,8 +11,8 @@ box "AWS" #ffdbbb
     participant "Route 53" as R53
 end box
 
-GHA -> CF : SAM build\ntemplate: templates/acm-cognito.yaml
-GHA -> CF++ : SAM deploy\nstack: firefly-acm-cognito\nparams: CertificateDomainName, HostedZoneId\ncapabilities: CAPABILITY_NAMED_IAM
+GHA -> CF : SAM build\ntemplate: templates/acm.yaml
+GHA -> CF++ : SAM deploy\nstack: firefly-acm\nparams: CertificateDomainName, HostedZoneId
 CF -> ACM++ : Request certificate\ndomain: CertificateDomainName
 ACM -> R53 : Create DNS validation CNAME record
 note over R53 : DNS propagation required\n(up to 30 min)

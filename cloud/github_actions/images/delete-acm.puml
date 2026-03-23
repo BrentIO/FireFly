@@ -1,0 +1,30 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title delete-acm\n(GitHub Action → CloudFormation)
+
+actor "GitHub Actions Runner" as GHA
+
+box "AWS" #ffdbbb
+    participant "CloudFormation / SAM" as CF
+    participant "ACM" as ACM
+end box
+
+note over GHA : Prerequisites: delete-api-gateway,\ndelete-cloudfront-firmware, delete-cloudfront-ui,\nand delete-cognito must all complete before this job runs.
+
+GHA -> CF++ : sam delete\nstack: firefly-acm\n--no-prompts --region us-east-1
+CF -> ACM : Delete certificate
+ACM --> CF : Certificate deleted
+CF --> GHA-- : DELETE_COMPLETE
+
+alt Stack does not exist
+    CF --> GHA : Stack not found
+    note over GHA : Workflow exits 0 (idempotent)
+end
+
+alt Certificate still in use
+    CF --> GHA : DELETE_FAILED
+    note over GHA : Workflow fails.\nEnsure delete-cloudfront-firmware, delete-cloudfront-ui,\ndelete-api-gateway, and delete-cognito completed successfully.
+end
+
+@enduml

@@ -7,13 +7,13 @@ actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
     participant "CloudFormation / SAM" as CF
-    participant "CloudFormation\n(acm-api-gateway)" as CFAcm
+    participant "CloudFormation\n(acm)" as CFAcm
     participant "CloudFormation\n(firefly-cognito)" as CFCognito
     participant "API Gateway v2" as APIGW
     participant "Route 53" as R53
 end box
 
-GHA -> CFAcm++ : aws cloudformation describe-stacks\nstack: firefly-acm-api-gateway\noutput: CertificateArn
+GHA -> CFAcm++ : aws cloudformation describe-stacks\nstack: firefly-acm\noutput: CertificateArn
 CFAcm --> GHA-- : CertificateArn
 
 GHA -> CFCognito++ : aws cloudformation describe-stacks\nstack: firefly-cognito\noutputs: CognitoUserPoolId, CognitoUserPoolClientId

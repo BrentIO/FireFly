@@ -12,7 +12,7 @@ Provisions the Cognito User Pool with Google IdP federation, a custom auth domai
 
 ### Deploy
 
-- `acm-cognito` — provides `CertificateArn` for the Cognito custom domain
+- `acm` — provides `CertificateArn` for the Cognito custom domain
 - `func-cognito-pre-signup` — provides `PreSignUpLambdaArn` for the User Pool trigger
 
 ### Delete
@@ -32,7 +32,7 @@ Provisions the Cognito User Pool with Google IdP federation, a custom auth domai
 ### Delete
 
 - `delete-func-cognito-pre-signup`
-- `delete-acm-cognito`
+- `delete-acm`
 
 ---
 
@@ -55,7 +55,7 @@ The deploy workflow follows a multi-phase process to handle Cognito's unique req
 
 1. Checkout repository
 2. Configure AWS credentials
-3. Lookup `CertificateArn` from `firefly-acm-cognito` stack output
+3. Lookup `CertificateArn` from `firefly-acm` stack output
 4. Lookup `PreSignUpLambdaArn` from `firefly-func-cognito-pre-signup` stack output
 5. Check stack status — if `ROLLBACK_COMPLETE`, delete stack and wait
 6. Delete orphaned `firefly-user-pool` pools not tracked by the active stack

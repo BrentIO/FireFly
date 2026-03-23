@@ -7,12 +7,12 @@ actor "GitHub Actions Runner" as GHA
 
 box "AWS" #ffdbbb
     participant "CloudFormation / SAM" as CF
-    participant "CloudFormation\n(acm-api-gateway)" as CFLookup
+    participant "CloudFormation\n(acm)" as CFLookup
     participant "CloudFront" as CFront
     participant "Route 53" as R53
 end box
 
-GHA -> CFLookup++ : aws cloudformation describe-stacks\nstack: firefly-acm-api-gateway\noutput: CertificateArn
+GHA -> CFLookup++ : aws cloudformation describe-stacks\nstack: firefly-acm\noutput: CertificateArn
 CFLookup --> GHA-- : CertificateArn
 
 GHA -> CF : SAM build\ntemplate: templates/cloudfront-firmware.yaml
