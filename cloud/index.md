@@ -22,6 +22,8 @@ The environment is composed of multiple CloudFormation stacks, each managed by i
 | `firefly-func-api-users-post` | User invite endpoint |
 | `firefly-func-api-users-delete` | User deletion endpoint |
 | `firefly-func-api-users-patch` | Super user status endpoint |
+| `firefly-func-api-appconfig-get` | AppConfig logging configuration list endpoint (super user only) |
+| `firefly-func-api-appconfig-patch` | AppConfig logging configuration update endpoint (super user only) |
 | `firefly-s3-firmware` | Private S3 firmware bucket with lifecycle rules and event notifications |
 | `firefly-s3-firmware-public` | Public S3 bucket for OTA firmware binary delivery; `revoked/` prefix is access-denied and expires after 90 days |
 | `firefly-cloudfront-firmware` | CloudFront distribution fronting the public firmware bucket for OTA delivery |
