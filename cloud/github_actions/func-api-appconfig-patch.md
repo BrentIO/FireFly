@@ -60,13 +60,32 @@ Resolves the HTTP API Gateway ID and JWT Authorizer ID from the `firefly-api-gat
    - `AuthorizerId`
    - `EnvironmentName`
 
+### Sequence Diagram
+
+[![Deploy Sequence](./images/deploy-func-api-appconfig-patch.svg)](./images/deploy-func-api-appconfig-patch.svg)
+
 ## Delete Workflow
 
 ### Description
 
-Runs `sam delete` to remove the `firefly-func-api-appconfig-patch` stack.
+Calls `sam delete` to remove the Lambda function and its associated IAM role and API Gateway route integration.
 
 ### Steps
 
 1. Configure AWS credentials.
-2. `sam delete --stack-name firefly-func-api-appconfig-patch --no-prompts`
+2. SAM delete `firefly-func-api-appconfig-patch`.
+
+### Sequence Diagram
+
+[![Delete Sequence](./images/delete-func-api-appconfig-patch.svg)](./images/delete-func-api-appconfig-patch.svg)
+
+## Failure Scenarios
+
+| Scenario | Behavior |
+|---|---|
+| `firefly-api-gateway` stack not found | `describe-stacks` returns an error; workflow fails before SAM deploy is attempted. Deploy `api-gateway` first. |
+| Authorizer ID lookup fails | Deploy fails; the JWT authorizer is created by the `api-gateway` stack — redeploy `api-gateway` to restore it. |
+| Application name not found in AppConfig | Lambda returns `404 Not Found`. |
+| Application exists but has no `logging` profile in the current environment | Lambda returns `404 Not Found`. |
+| Invalid log level in request body | Lambda returns `400 Bad Request` with details. |
+| Caller is not a super user | Lambda returns `403 Forbidden`. |
