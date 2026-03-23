@@ -44,13 +44,17 @@ The function writes the following item to the `firefly-users` table:
 | `created_at` | ISO-8601 timestamp of the invitation |
 | `expires_at` | Unix timestamp 24 hours after `created_at`; used as the DynamoDB TTL attribute to auto-delete the record if the user does not sign in |
 
+## Environment Access Rules
+
+The caller's environments are looked up from DynamoDB. If the caller attempts to grant an environment they don't have access to, the request is rejected with `403 Forbidden`. Every user — including bootstrapped super users — must have a DynamoDB record.
+
 ## Response Codes
 
 | Code | Reason |
 |---|---|
 | `201 Created` | User added to allowed list |
 | `400 Bad Request` | Missing or invalid email; missing or invalid environments |
-| `403 Forbidden` | Caller is not a super user |
+| `403 Forbidden` | Caller is not a super user, or attempting to grant an environment they don't have access to |
 | `409 Conflict` | Email already exists in the allowed list |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
