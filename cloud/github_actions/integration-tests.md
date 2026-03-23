@@ -56,10 +56,11 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 3. Look up `ApiUrl` from the `firefly-api-gateway` stack output.
 4. Look up UI CloudFront domain from the `firefly-cloudfront-ui` stack output (optional).
 5. Look up `UserPoolId` and `ClientId` from the `firefly-cognito` stack output (optional).
-6. Create CI test user via `AdminCreateUser` + `AdminSetUserPassword` (skipped if Cognito stack not found or credentials not set; idempotent — handles existing user gracefully).
-7. `pip install -r tests/requirements.txt`
-8. `pytest tests/integration/ -v`
-9. Delete CI test user via `AdminDeleteUser` — runs with `if: always()` so the user is removed even if tests fail.
+6. Look up `UsersTableName` from the `firefly-dynamodb-users` stack output (optional).
+7. Create CI test user via `AdminCreateUser` + `AdminSetUserPassword` (skipped if Cognito stack not found or credentials not set; idempotent — handles existing user gracefully).
+8. `pip install -r tests/requirements.txt`
+9. `pytest tests/integration/ -v`
+10. Delete CI test user via `AdminDeleteUser` — runs with `if: always()` so the user is removed even if tests fail.
 
 **Environment variables passed to pytest:**
 
@@ -73,6 +74,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_TEST_USER_EMAIL` | From secrets |
 | `FIREFLY_TEST_USER_PASSWORD` | From secrets |
+| `FIREFLY_DYNAMODB_USERS_TABLE_NAME` | `firefly-dynamodb-users` stack output (optional) |
 
 ### Sequence Diagram
 
