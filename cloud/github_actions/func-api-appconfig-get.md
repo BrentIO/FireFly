@@ -2,7 +2,7 @@
 
 ## Overview
 
-Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configuration** page in the management UI. Returns all AWS AppConfig applications that have a `logging` configuration profile in the current environment, along with each application's current logging rules. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
+Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configuration** page in the management UI. Returns the current logging rules for the shared `firefly` AppConfig application. Returns `{"logging": []}` if the application does not yet exist. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
 
 ## CloudFormation Stack
 
@@ -85,5 +85,5 @@ Calls `sam delete` to remove the Lambda function and its associated IAM role and
 |---|---|
 | `firefly-api-gateway` stack not found | `describe-stacks` returns an error; workflow fails before SAM deploy is attempted. Deploy `api-gateway` first. |
 | Authorizer ID lookup fails | Deploy fails; the JWT authorizer is created by the `api-gateway` stack — redeploy `api-gateway` to restore it. |
-| AppConfig application has no `logging` profile | Application is silently omitted from the response; no error is returned. |
+| `firefly` AppConfig application does not exist | Lambda returns `{"logging": []}` with a 200 status. |
 | Caller is not a super user | Lambda returns `403 Forbidden`. |
