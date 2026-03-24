@@ -23,6 +23,9 @@ GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastruc
 | [func-api-users-get](./func-api-users-get.md) | `firefly-func-api-users-get` | Lambda: GET /users |
 | [func-api-users-patch](./func-api-users-patch.md) | `firefly-func-api-users-patch` | Lambda: PATCH /users/{username} |
 | [func-api-users-post](./func-api-users-post.md) | `firefly-func-api-users-post` | Lambda: POST /users |
+| [func-api-appconfig-get](./func-api-appconfig-get.md) | `firefly-func-api-appconfig-get` | Lambda: GET /appconfig (Configuration page) |
+| [func-api-appconfig-patch](./func-api-appconfig-patch.md) | `firefly-func-api-appconfig-patch` | Lambda: PATCH /appconfig/{application} (Configuration page) |
+| [func-api-appconfig-post](./func-api-appconfig-post.md) | `firefly-func-api-appconfig-post` | Lambda: POST /appconfig (Configuration page) |
 | [func-cognito-pre-signup](./func-cognito-pre-signup.md) | `firefly-func-cognito-pre-signup` | Lambda: Cognito pre-signup trigger (allowlist check) |
 | [func-s3-firmware-deleted](./func-s3-firmware-deleted.md) | `firefly-func-s3-firmware-deleted` | Lambda: S3 delete event on processed/ and errors/ |
 | [func-s3-firmware-uploaded](./func-s3-firmware-uploaded.md) | `firefly-func-s3-firmware-uploaded` | Lambda: S3 put event on incoming/*.zip |
@@ -67,7 +70,10 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-api-firmware-download-get | api-gateway, shared-layer, s3-firmware |
 | s3-firmware | func-s3-firmware-uploaded, func-s3-firmware-deleted |
 | ui-app | cloudfront-ui, cognito |
-| run-integration-tests | s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, ui-app |
+| func-api-appconfig-get | api-gateway |
+| func-api-appconfig-patch | api-gateway |
+| func-api-appconfig-post | api-gateway |
+| run-integration-tests | s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, func-api-appconfig-get, func-api-appconfig-patch, func-api-appconfig-post, ui-app |
 
 ---
 
@@ -92,7 +98,10 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | delete-cloudfront-ui | delete-ui-app |
 | delete-s3-ui | delete-cloudfront-ui |
 | delete-s3-firmware-public | delete-cloudfront-firmware |
-| delete-api-gateway | delete-func-api-health-get, delete-func-api-users-get, delete-func-api-users-post, delete-func-api-users-delete, delete-func-api-users-patch, delete-func-api-firmware-get, delete-func-api-firmware-status-patch, delete-func-api-firmware-delete, delete-func-api-ota-get, delete-func-api-firmware-download-get |
+| delete-func-api-appconfig-get | — |
+| delete-func-api-appconfig-patch | — |
+| delete-func-api-appconfig-post | — |
+| delete-api-gateway | delete-func-api-health-get, delete-func-api-users-get, delete-func-api-users-post, delete-func-api-users-delete, delete-func-api-users-patch, delete-func-api-firmware-get, delete-func-api-firmware-status-patch, delete-func-api-firmware-delete, delete-func-api-ota-get, delete-func-api-firmware-download-get, delete-func-api-appconfig-get, delete-func-api-appconfig-patch, delete-func-api-appconfig-post |
 | delete-cognito | delete-api-gateway |
 | delete-func-cognito-pre-signup | delete-cognito |
 | delete-acm | delete-api-gateway, delete-cloudfront-firmware, delete-cloudfront-ui, delete-cognito |

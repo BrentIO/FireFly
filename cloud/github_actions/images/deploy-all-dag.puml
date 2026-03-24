@@ -29,7 +29,7 @@ box "Wave 4" #fffaf0
 end box
 
 box "Wave 5 — Lambda Functions" #f5fff0
-    participant "func-api-*\nfunc-s3-*\nfunc-api-ota-get\nfunc-api-firmware-download-get\nfunc-api-appconfig-get\nfunc-api-appconfig-patch" as W5A
+    participant "func-api-*\nfunc-s3-*\nfunc-api-ota-get\nfunc-api-firmware-download-get\nfunc-api-appconfig-get\nfunc-api-appconfig-patch\nfunc-api-appconfig-post" as W5A
 end box
 
 box "Wave 6" #f0f5ff
