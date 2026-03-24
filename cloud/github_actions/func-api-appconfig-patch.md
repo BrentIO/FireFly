@@ -102,5 +102,5 @@ Calls `sam delete` to remove the Lambda function and its associated IAM role and
 | Function name does not start with `firefly-func-` | Lambda returns `400 Bad Request`. |
 | Invalid log level in request body | Lambda returns `400 Bad Request` with details. |
 | No staged version exists (`POST /deploy`) | Lambda returns `404 Not Found`. |
-| AppConfig deployment already in progress (`POST /deploy`) | AWS returns `ConflictException`; Lambda returns `500`. Wait for the current deployment to complete before retrying. |
+| AppConfig deployment already in progress (`POST /deploy`) | Lambda returns `409 Conflict`. Wait for the current deployment to complete before retrying. |
 | Caller is not a super user | Lambda returns `403 Forbidden`. |
