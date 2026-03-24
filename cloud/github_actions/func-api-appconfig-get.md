@@ -2,7 +2,7 @@
 
 ## Overview
 
-Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configuration** page in the management UI. Returns the current logging rules for the shared `firefly` AppConfig application. Returns `{"logging": []}` if the application does not yet exist. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
+Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configuration** page in the management UI. Returns all `firefly-func-*` Lambda functions with their individual AppConfig configuration (log level, latest staged version, and deployment status). Functions with no AppConfig application appear with `null` values — they use the default WARNING level until explicitly configured. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
 
 ## CloudFormation Stack
 
@@ -36,13 +36,15 @@ None — this workflow has no prerequisites.
 
 ## IAM Permissions
 
-The Lambda execution role (`firefly-func-api-appconfig-get-role`) is granted the following AppConfig read permissions on `*`:
+The Lambda execution role (`firefly-func-api-appconfig-get-role`) is granted the following permissions on `*`:
 
 - `appconfig:ListApplications`
 - `appconfig:ListEnvironments`
 - `appconfig:ListConfigurationProfiles`
 - `appconfig:ListHostedConfigurationVersions`
 - `appconfig:GetHostedConfigurationVersion`
+- `appconfig:ListDeployments`
+- `lambda:ListFunctions`
 
 ## Deploy Workflow
 
@@ -85,5 +87,6 @@ Calls `sam delete` to remove the Lambda function and its associated IAM role and
 |---|---|
 | `firefly-api-gateway` stack not found | `describe-stacks` returns an error; workflow fails before SAM deploy is attempted. Deploy `api-gateway` first. |
 | Authorizer ID lookup fails | Deploy fails; the JWT authorizer is created by the `api-gateway` stack — redeploy `api-gateway` to restore it. |
-| `firefly` AppConfig application does not exist | Lambda returns `{"logging": []}` with a 200 status. |
+| No functions found | Lambda returns `{"applications": []}` with a 200 status. |
+| Function has no AppConfig application | That function appears in the list with `null` values for all config fields. |
 | Caller is not a super user | Lambda returns `403 Forbidden`. |
