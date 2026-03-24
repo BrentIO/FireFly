@@ -1,0 +1,58 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title DELETE /appconfig/{function_name}
+
+actor Client
+
+box "AWS" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-appconfig-patch" as Lambda
+    participant "AppConfig" as AC
+end box
+
+Client -> APIGW++ : DELETE /appconfig/{function_name}
+APIGW -> Lambda++ : invoke
+
+Lambda -> AC++ : ListApplications (paginated)
+AC --> Lambda-- : applications
+
+alt application not found
+    Lambda --> APIGW-- : 404 Not Found
+    APIGW --> Client-- : 404 Not Found
+else application found
+    Lambda -> AC++ : ListDeployments\nMaxResults=1
+    AC --> Lambda-- : current deployment state
+
+    alt deployment in progress
+        Lambda --> APIGW-- : 409 Conflict
+        APIGW --> Client-- : 409 Conflict
+    else no active deployment
+        Lambda -> AC++ : ListHostedConfigurationVersions (paginated)
+        AC --> Lambda-- : all versions
+
+        loop for each version
+            Lambda -> AC++ : DeleteHostedConfigurationVersion
+            AC --> Lambda-- : success
+        end
+
+        Lambda -> AC++ : DeleteConfigurationProfile
+        AC --> Lambda-- : success
+
+        Lambda -> AC++ : DeleteEnvironment
+        AC --> Lambda-- : success
+
+        Lambda -> AC++ : DeleteApplication
+        AC --> Lambda-- : success
+
+        Lambda --> APIGW-- : 204 No Content
+        APIGW --> Client-- : 204 No Content
+    end
+end
+
+alt caller is not a super user
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+@enduml
