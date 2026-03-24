@@ -2,12 +2,13 @@
 
 ## Overview
 
-Deploys the Lambda function that handles two routes on the **Configuration** page:
+Deploys the Lambda function that handles three routes on the **Configuration** page:
 
 - `PATCH /appconfig/{function_name}` — stage a new configuration version for a specific Lambda function (does **not** deploy automatically)
 - `POST /appconfig/{function_name}/deploy` — deploy the latest staged version for a function to the current environment
+- `DELETE /appconfig/{function_name}` — remove the AppConfig application entirely, reverting the function to the default WARNING log level
 
-Each Lambda function has its own independent AppConfig application. Configuration is stored as a JSON object (`{"logging": "WARNING"}`) and can carry additional keys for future feature flags. Both routes are authenticated via the Cognito JWT authorizer and restricted to super users.
+Each Lambda function has its own independent AppConfig application. Configuration is stored as a JSON object (`{"logging": "WARNING"}`) and can carry additional keys for future feature flags. All routes are authenticated via the Cognito JWT authorizer and restricted to super users.
 
 ## CloudFormation Stack
 
@@ -53,6 +54,10 @@ The Lambda execution role (`firefly-func-api-appconfig-patch-role`) is granted t
 - `appconfig:CreateHostedConfigurationVersion`
 - `appconfig:ListDeployments`
 - `appconfig:StartDeployment`
+- `appconfig:DeleteApplication`
+- `appconfig:DeleteEnvironment`
+- `appconfig:DeleteConfigurationProfile`
+- `appconfig:DeleteHostedConfigurationVersion`
 - `lambda:GetFunction`
 
 > **IAM note:** `lambda:GetFunction` is required to validate that the target function exists before creating an AppConfig application for it.
@@ -103,4 +108,6 @@ Calls `sam delete` to remove the Lambda function and its associated IAM role and
 | Invalid log level in request body | Lambda returns `400 Bad Request` with details. |
 | No staged version exists (`POST /deploy`) | Lambda returns `404 Not Found`. |
 | AppConfig deployment already in progress (`POST /deploy`) | Lambda returns `409 Conflict`. Wait for the current deployment to complete before retrying. |
+| AppConfig application not found (`DELETE`) | Lambda returns `404 Not Found`. |
+| Deployment in progress (`DELETE`) | Lambda returns `409 Conflict`. Wait for the current deployment to complete before deleting. |
 | Caller is not a super user | Lambda returns `403 Forbidden`. |
