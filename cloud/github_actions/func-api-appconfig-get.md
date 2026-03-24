@@ -2,7 +2,7 @@
 
 ## Overview
 
-Deploys the Lambda function that handles `GET /appconfig`. Returns all AppConfig applications that have a `logging` configuration profile in the current environment, along with each application's current logging rules. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
+Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configuration** page in the management UI. Returns all AWS AppConfig applications that have a `logging` configuration profile in the current environment, along with each application's current logging rules. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
 
 ## CloudFormation Stack
 

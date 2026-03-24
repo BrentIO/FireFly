@@ -2,7 +2,7 @@
 
 ## Overview
 
-Deploys the Lambda function that handles `PATCH /appconfig/{application}`. Accepts a replacement logging rules array for the named AppConfig application, creates a new hosted configuration version, and immediately deploys it using the `AppConfig.AllAtOnce` deployment strategy. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
+Deploys the Lambda function that handles `PATCH /appconfig/{application}`. Powers the **Configuration** page edit action in the management UI. Accepts a replacement logging rules array for the named AWS AppConfig application, creates a new hosted configuration version, and immediately deploys it using the `AppConfig.AllAtOnce` deployment strategy. The route is authenticated via the Cognito JWT authorizer and restricted to super users.
 
 ## CloudFormation Stack
 
