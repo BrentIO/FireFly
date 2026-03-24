@@ -1,0 +1,52 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title POST /appconfig/{function_name}/deploy
+
+actor Client
+
+box "AWS" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-appconfig-patch" as Lambda
+    participant "AppConfig" as AC
+end box
+
+Client -> APIGW++ : POST /appconfig/{function_name}/deploy
+APIGW -> Lambda++ : invoke
+
+Lambda -> AC++ : ListApplications (paginated)
+AC --> Lambda-- : applications
+
+alt application not found
+    Lambda --> APIGW-- : 404 Not Found
+    APIGW --> Client-- : 404 Not Found
+else application found
+    Lambda -> AC++ : ListHostedConfigurationVersions\nMaxResults=1
+    AC --> Lambda-- : latest version
+
+    alt no versions exist
+        Lambda --> APIGW-- : 404 Not Found
+        APIGW --> Client-- : 404 Not Found
+    else version exists
+        Lambda -> AC++ : ListDeployments\nMaxResults=1
+        AC --> Lambda-- : current deployment state
+
+        alt deployment already in progress
+            Lambda --> APIGW-- : 409 Conflict
+            APIGW --> Client-- : 409 Conflict
+        else no active deployment
+            Lambda -> AC++ : StartDeployment\n(app_id, env_id, profile_id,\n version, AppConfig.AllAtOnce)
+            AC --> Lambda-- : deployment state (DEPLOYING)
+
+            Lambda --> APIGW-- : 200 OK\n{name, version, environment, status}
+            APIGW --> Client-- : 200 OK
+        end
+    end
+end
+
+alt caller is not a super user
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+@enduml

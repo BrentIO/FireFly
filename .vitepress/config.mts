@@ -313,6 +313,14 @@ export default defineConfig({
                     collapsed: true,
                     items: [
                       {
+                        text: 'func-api-appconfig-get',
+                        link: '/cloud/lambdas/func-api-appconfig-get'
+                      },
+                      {
+                        text: 'func-api-appconfig-patch',
+                        link: '/cloud/lambdas/func-api-appconfig-patch'
+                      },
+                      {
                         text: 'func-api-firmware-delete',
                         link: '/cloud/lambdas/func-api-firmware-delete'
                       },
@@ -405,6 +413,14 @@ export default defineConfig({
                       {
                         text: 'dynamodb-users',
                         link: '/cloud/github_actions/dynamodb-users'
+                      },
+                      {
+                        text: 'func-api-appconfig-get',
+                        link: '/cloud/github_actions/func-api-appconfig-get'
+                      },
+                      {
+                        text: 'func-api-appconfig-patch',
+                        link: '/cloud/github_actions/func-api-appconfig-patch'
                       },
                       {
                         text: 'func-api-firmware-delete',

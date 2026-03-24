@@ -1,0 +1,47 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title GET /appconfig
+
+actor Client
+
+box "AWS" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-appconfig-get" as Lambda
+    participant "Lambda API" as LambdaAPI
+    participant "AppConfig" as AC
+end box
+
+Client -> APIGW++ : GET /appconfig
+APIGW -> Lambda++ : invoke
+
+Lambda -> LambdaAPI++ : ListFunctions (paginated)
+LambdaAPI --> Lambda-- : all functions
+
+Lambda -> Lambda : filter firefly-func-* names
+
+Lambda -> AC++ : ListApplications (paginated)
+AC --> Lambda-- : all AppConfig applications
+
+Lambda -> Lambda : build index\nfunction_name → (app_id, env_id, profile_id)
+
+loop for each configured function
+    Lambda -> AC++ : ListHostedConfigurationVersions\nMaxResults=1
+    AC --> Lambda-- : latest version number
+
+    Lambda -> AC++ : GetHostedConfigurationVersion
+    AC --> Lambda-- : JSON content\n{"logging": "WARNING", ...}
+
+    Lambda -> AC++ : ListDeployments\nMaxResults=1
+    AC --> Lambda-- : deployed_version, state
+end
+
+Lambda --> APIGW-- : 200 OK\n{"applications": [{name, logging, version,\n deployed_version, status}, ...]}
+APIGW --> Client-- : 200 OK
+
+alt caller is not a super user
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+@enduml

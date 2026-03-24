@@ -1,0 +1,59 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title PATCH /appconfig/{function_name}
+
+actor Client
+
+box "AWS" #ffdbbb
+    participant "API Gateway" as APIGW
+    participant "func-api-appconfig-patch" as Lambda
+    participant "Lambda API" as LambdaAPI
+    participant "AppConfig" as AC
+end box
+
+Client -> APIGW++ : PATCH /appconfig/{function_name}\n{"logging": "INFO"}
+APIGW -> Lambda++ : invoke
+
+Lambda -> Lambda : validate function_name prefix\n(must start with firefly-func-)
+Lambda -> LambdaAPI++ : GetFunction({function_name})
+
+alt function not found
+    LambdaAPI --> Lambda-- : ResourceNotFoundException
+    Lambda --> APIGW-- : 404 Not Found
+    APIGW --> Client-- : 404 Not Found
+else function exists
+    LambdaAPI --> Lambda-- : function metadata
+
+    Lambda -> AC++ : ListApplications (paginated)
+    AC --> Lambda-- : applications
+
+    alt application not found
+        Lambda -> AC++ : CreateApplication(Name={function_name})
+        AC --> Lambda-- : app_id
+        Lambda -> AC++ : CreateEnvironment(app_id, Name=env)
+        AC --> Lambda-- : env_id
+        Lambda -> AC++ : CreateConfigurationProfile(app_id, Name="logging")
+        AC --> Lambda-- : profile_id
+    else application exists
+        Lambda -> Lambda : resolve env_id, profile_id\nfrom existing resources
+    end
+
+    Lambda -> AC++ : CreateHostedConfigurationVersion\n(app_id, profile_id, {"logging": "INFO"})
+    AC --> Lambda-- : version_number
+
+    Lambda --> APIGW-- : 200 OK\n{name, logging, version}
+    APIGW --> Client-- : 200 OK
+end
+
+alt caller is not a super user
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+alt invalid log level or missing field
+    Lambda --> APIGW : 400 Bad Request
+    APIGW --> Client : 400 Bad Request
+end
+
+@enduml
