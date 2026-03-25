@@ -59,10 +59,11 @@ Each binary file is written to its partition address. The partition table is fix
 | File pattern | Flash address | Notes |
 |---|---|---|
 | `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
+| `*.partitions.bin` | `0x08000` | Partition table |
 | `*.bin` (application) | `0x10000` | `app0` partition |
 | `config.bin` | `0xC90000` | Config partition |
 | `www.bin` | `0xD10000` | Web UI / LittleFS partition |
-| `*.partitions.bin` | — | Skipped — do not overwrite the partition table |
+| `*.elf`, `*.map`, `manifest.json` | — | Skipped — debug/metadata files |
 
 ### Requirements
 
