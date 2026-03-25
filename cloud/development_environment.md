@@ -90,8 +90,6 @@ The following secrets must be configured in each GitHub environment:
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
 | `S3_UI_BUCKET_NAME` | my-firefly-ui | The S3 bucket name for the UI static files (private, served via CloudFront). |
 | `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
-| `TEST_USER_EMAIL` | | Email of the Cognito test user created via `AdminCreateUser` for integration tests. |
-| `TEST_USER_PASSWORD` | | Password of the Cognito test user. |
 
 ### GitHub Variables
 
@@ -230,10 +228,12 @@ pip install -r tests/requirements.txt
 | `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
 | `FIREFLY_COGNITO_USER_POOL_ID` | For auth tests | Cognito User Pool ID |
 | `FIREFLY_COGNITO_CLIENT_ID` | For auth tests | Cognito App Client ID |
-| `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of the test Cognito user (created via `AdminCreateUser`) |
-| `FIREFLY_TEST_USER_PASSWORD` | For auth tests | Password of the test Cognito user |
+| `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of a Cognito user created via `AdminCreateUser`; in CI this is generated automatically each run |
+| `FIREFLY_TEST_USER_PASSWORD` | For auth tests | Password of the test Cognito user; in CI this is generated automatically each run |
 
 Authentication tests are automatically skipped when the Cognito environment variables are not set.  All other tests pass auth headers when the variables are present, allowing the full test suite to run against a deployed environment that requires authentication.
+
+In CI, the workflow generates a unique email and password at runtime, creates the user, runs tests, then deletes the user unconditionally — no persistent secrets required. For local test runs, set these variables to a manually created Cognito user.
 
 The `/users` endpoint tests require additional Cognito admin permissions: the test runner's IAM identity must have `cognito-idp:AdminAddUserToGroup`, `cognito-idp:AdminRemoveUserFromGroup`, and `cognito-idp:ListUsers` on the user pool.  The test suite temporarily adds the CI test user to the `super_users` group to exercise those endpoints, then removes them at teardown.
 

@@ -57,10 +57,11 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 4. Look up UI CloudFront domain from the `firefly-cloudfront-ui` stack output (optional).
 5. Look up `UserPoolId` and `ClientId` from the `firefly-cognito` stack output (optional).
 6. Look up `UsersTableName` from the `firefly-dynamodb-users` stack output (optional).
-7. Create CI test user via `AdminCreateUser` + `AdminSetUserPassword` (skipped if Cognito stack not found or credentials not set; idempotent — handles existing user gracefully).
-8. `pip install -r tests/requirements.txt`
-9. `pytest tests/integration/ -v`
-10. Delete CI test user via `AdminDeleteUser` — runs with `if: always()` so the user is removed even if tests fail.
+7. Generate transient CI credentials — a unique `ci-test-{random_hex}@test.firefly.local` email and a cryptographically random password are created at runtime. The password is masked immediately with `::add-mask::` and never appears in logs or stored anywhere.
+8. Create CI test user via `AdminCreateUser` + `AdminSetUserPassword` using the generated credentials (skipped if Cognito stack not found).
+9. `pip install -r tests/requirements.txt`
+10. `pytest tests/integration/ -v`
+11. Delete CI test user via `AdminDeleteUser` — runs with `if: always()` so the user is removed even if tests fail.
 
 **Environment variables passed to pytest:**
 
@@ -72,8 +73,8 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 | `FIREFLY_UI_BUCKET` | From secrets |
 | `FIREFLY_COGNITO_USER_POOL_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
-| `FIREFLY_TEST_USER_EMAIL` | From secrets |
-| `FIREFLY_TEST_USER_PASSWORD` | From secrets |
+| `FIREFLY_TEST_USER_EMAIL` | Generated at runtime (transient) |
+| `FIREFLY_TEST_USER_PASSWORD` | Generated at runtime (transient, masked) |
 | `FIREFLY_DYNAMODB_USERS_TABLE_NAME` | `firefly-dynamodb-users` stack output (optional) |
 
 ### Sequence Diagram
@@ -85,7 +86,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 | Scenario | Behavior |
 |---|---|
 | `firefly-api-gateway` stack not found | Test run fails immediately; `FIREFLY_API_URL` is not set. Deploy `api-gateway` first. |
-| Test credentials not configured | Auth-dependent tests fail with 401. Set `FIREFLY_TEST_USER_EMAIL` and `FIREFLY_TEST_USER_PASSWORD` in repository secrets. |
+| Credential generation fails | `openssl` not available on the runner. Unlikely on `ubuntu-latest`; check runner image. |
 | CI test user creation fails | Workflow fails before tests run. Check IAM permissions for `AdminCreateUser` and `AdminSetUserPassword`. |
 | CI test user deletion fails | Workflow fails after tests complete (non-`UserNotFoundException` errors cause a non-zero exit). Check IAM permissions for `AdminDeleteUser`. |
 | pytest test failure | Workflow exits non-zero; specific test output identifies which endpoint or function failed. Check CloudWatch logs for the relevant Lambda. |
