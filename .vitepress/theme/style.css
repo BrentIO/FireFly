@@ -137,3 +137,15 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+/**
+ * Layout: Wider content area
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-layout-max-width: 1920px;
+}
+
+.VPDoc .content-container {
+  max-width: 100% !important;
+}
+
