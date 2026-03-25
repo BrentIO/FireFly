@@ -387,20 +387,16 @@ export default defineConfig({
                         link: '/cloud/github_actions/index'
                       },
                       {
-                        text: 'acm-api-gateway',
-                        link: '/cloud/github_actions/acm-api-gateway'
-                      },
-                      {
-                        text: 'acm-cognito',
-                        link: '/cloud/github_actions/acm-cognito'
+                        text: 'acm',
+                        link: '/cloud/github_actions/acm'
                       },
                       {
                         text: 'api-gateway',
                         link: '/cloud/github_actions/api-gateway'
                       },
                       {
-                        text: 'cloudfront',
-                        link: '/cloud/github_actions/cloudfront'
+                        text: 'cloudfront-firmware',
+                        link: '/cloud/github_actions/cloudfront-firmware'
                       },
                       {
                         text: 'cloudfront-ui',
