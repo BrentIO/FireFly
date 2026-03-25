@@ -67,7 +67,7 @@ The deploy workflow follows a multi-phase process to handle Cognito's unique req
 
 ### Sequence Diagram
 
-[![Deploy cognito sequence](./images/deploy-cognito.svg)](./images/deploy-cognito.svg)
+[![Deploy Cognito sequence](./images/deploy-cognito.svg)](./images/deploy-cognito.svg)
 
 ---
 
@@ -87,7 +87,7 @@ The delete workflow must undo the Route 53 alias that was created outside CloudF
 
 ### Sequence Diagram
 
-[![Delete cognito sequence](./images/delete-cognito.svg)](./images/delete-cognito.svg)
+[![Delete Cognito sequence](./images/delete-cognito.svg)](./images/delete-cognito.svg)
 
 ---
 
