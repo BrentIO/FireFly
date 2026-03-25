@@ -54,16 +54,31 @@ Clicking the button opens the flash dialog, which:
 
 ### Flash Address Mapping
 
-Each binary file is written to its partition address. The partition table is fixed for all FireFly controller hardware.
+Each binary file is written to the correct address before flashing begins.
+
+**Fixed addresses** — defined by the ESP32 architecture and the same on every board:
 
 | File pattern | Flash address | Notes |
 |---|---|---|
 | `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
 | `*.partitions.bin` | `0x08000` | Partition table |
-| `*.bin` (application) | `0x10000` | `app0` partition |
-| `config.bin` | `0xC90000` | Config partition |
-| `www.bin` | `0xD10000` | Web UI / LittleFS partition |
-| `*.elf`, `*.map`, `manifest.json` | — | Skipped — debug/metadata files |
+| `*.bin` (application) | `0x10000` | Standard `app0` offset |
+
+**Dynamic addresses** — resolved at flash time by parsing `partitions.bin` from the ZIP:
+
+| File | Partition name | Notes |
+|---|---|---|
+| `config.bin` | `config` | Offset read from partition table entry |
+| `www.bin` | `www` | Offset read from partition table entry |
+
+The `partitions.bin` inside the ZIP is parsed as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`). The offset field of the matching entry is used as the flash address. This means the correct address is used automatically regardless of flash size or hardware revision — no code changes are required when the partition layout changes.
+
+**Skipped files** — non-`.bin` files are never flashed:
+
+| Pattern | Reason |
+|---|---|
+| `*.elf`, `*.map` | Debug symbols — not needed on device |
+| `manifest.json` | Upload metadata — not a flashable binary |
 
 ### Requirements
 
