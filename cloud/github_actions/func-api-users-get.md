@@ -8,6 +8,13 @@ Deploys the Lambda function that handles `GET /users`. Returns a list of all use
 
 `firefly-func-api-users-get`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-users-get` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

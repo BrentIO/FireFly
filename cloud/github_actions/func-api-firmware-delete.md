@@ -8,6 +8,13 @@ Manages the Lambda function that handles authenticated firmware deletion via `DE
 
 `firefly-func-api-firmware-delete`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-firmware-delete` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

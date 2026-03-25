@@ -8,6 +8,13 @@ Manages the Lambda function that serves OTA firmware update checks for devices v
 
 `firefly-func-api-ota-get`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-ota-get` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

@@ -8,6 +8,13 @@ Deploys the Lambda function that handles `PATCH /users/{email}`. Updates a user'
 
 `firefly-func-api-users-patch`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-users-patch` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies
