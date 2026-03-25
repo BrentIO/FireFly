@@ -24,6 +24,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /users/{email}` request.
 |---|---|
 | `200 OK` | User deleted |
 | `403 Forbidden` | Caller is not a super user |
+| `404 Not Found` | User not found |
 | `409 Conflict` | Target is the last super user |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.

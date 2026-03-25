@@ -51,7 +51,7 @@ alt caller is not a super user
     APIGW --> Client : 403 Forbidden
 end
 
-alt invalid log level or missing field
+alt invalid function_name prefix, invalid log level, or missing field
     Lambda --> APIGW : 400 Bad Request
     APIGW --> Client : 400 Bad Request
 end
