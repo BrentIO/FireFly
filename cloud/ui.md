@@ -6,6 +6,7 @@ The firmware management UI is a Vue 3 single-page application (SPA) that provide
 
 - **Firmware list** — paginated table of all firmware records with sortable columns, text search across file name, product ID, version, and notes, and toggle filters for deleted and released firmware
 - **Firmware detail** — modal view accessible directly via URL (`/firmware/:zip_name`) with all record fields, status transition controls, a lazy pre-signed download link, manifest file disclosure, and a delete button
+- **Flash via USB** — browser-based firmware flashing over Web Serial directly from the firmware detail view (Chrome only; see [Flash via USB](#flash-via-usb))
 - **Dark / light mode** — respects the system preference by default; user override is persisted in `localStorage`
 - **Toast notifications** — success toasts auto-dismiss after 5 seconds; error toasts require manual dismissal
 - **Confirmation dialogs** — destructive actions (delete, transition to RELEASED or REVOKED) require explicit confirmation
@@ -37,6 +38,67 @@ Transitions to `RELEASED` and `REVOKED` require confirmation.
 ## Default List View
 
 The list defaults to showing only actionable firmware — records in `PROCESSING`, `ERROR`, `READY_TO_TEST`, or `TESTING` states.  **Show Deleted** and **Show Released** toggles are off by default and must be enabled explicitly to include those records.
+
+## Flash via USB
+
+The **Flash via USB** button appears in the firmware detail modal for any firmware record that has not been deleted. It is only visible in browsers that support the [Web Serial API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API) (Chrome and Chromium-based browsers). It is hidden in Safari, Firefox, and mobile browsers.
+
+Clicking the button opens the flash dialog, which:
+
+1. Downloads the firmware ZIP from the pre-signed S3 URL.
+2. Extracts all flashable binary files from the ZIP.
+3. Prompts the browser to open a port picker so you can select the device's serial port.
+4. Connects to the ESP32 via esptool-js and detects the chip.
+5. Writes each binary file to the device at its correct flash address.
+6. Resets the device when complete.
+
+### Flash Address Mapping
+
+Each binary file is written to the correct address before flashing begins.
+
+**Fixed addresses** — defined by the ESP32 architecture and the same on every board:
+
+| File pattern | Flash address | Notes |
+|---|---|---|
+| `*.bootloader.bin` | `0x01000` | ESP32 bootloader |
+| `*.partitions.bin` | `0x08000` | Partition table |
+| `*.bin` (application) | `0x10000` | Standard `app0` offset |
+
+**Dynamic addresses** — resolved at flash time by parsing `partitions.bin` from the ZIP:
+
+| File | Partition name | Notes |
+|---|---|---|
+| `config.bin` | `config` | Offset read from partition table entry |
+| `www.bin` | `www` | Offset read from partition table entry |
+
+The `partitions.bin` inside the ZIP is parsed as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`). The offset field of the matching entry is used as the flash address. This means the correct address is used automatically regardless of flash size or hardware revision — no code changes are required when the partition layout changes.
+
+**Skipped files** — non-`.bin` files are never flashed:
+
+| Pattern | Reason |
+|---|---|
+| `*.elf`, `*.map` | Debug symbols — not needed on device |
+| `manifest.json` | Upload metadata — not a flashable binary |
+
+### Erase All Flash
+
+The flash dialog includes an optional **Erase all flash before writing** checkbox (off by default). When enabled, the entire flash chip is erased before any files are written. This is equivalent to the *Erase All Flash Before Sketch Upload* option in the Arduino IDE.
+
+Use this option when:
+- Flashing a device that previously ran firmware from a different project
+- Stale partition data at old offsets needs to be cleared
+
+Leave it off for routine firmware updates on devices that already have the FireFly partition table.
+
+### Requirements
+
+- **Chrome or a Chromium-based browser** — the Web Serial API is not available in other browsers.
+- **USB connection** — the controller must be connected via USB.
+- **Bootloader mode** — most FireFly boards auto-reset into bootloader mode via DTR/RTS when the serial connection opens. If your board does not reset automatically, hold the **BOOT** button while pressing **EN** before clicking **Connect & Flash**.
+
+### Deleted Firmware
+
+The **Flash via USB** button is not shown for firmware with a `DELETED` status. Deleted firmware has been removed from S3 and cannot be downloaded or flashed.
 
 ## Pre-signed Download URL
 
