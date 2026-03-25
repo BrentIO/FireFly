@@ -32,3 +32,7 @@ Invoked by **Cognito** as a [pre-signup Lambda trigger](https://docs.aws.amazon.
 |---|---|
 | `DYNAMODB_USERS_TABLE_NAME` | Name of the `firefly-users` DynamoDB table |
 | `ENVIRONMENT_NAME` | Current environment (`dev` or `production`) |
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-cognito-pre-signup.md) for workflow steps, infrastructure dependencies, and failure scenarios.

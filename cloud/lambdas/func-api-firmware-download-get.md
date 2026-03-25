@@ -40,3 +40,7 @@ See the [API Reference](/cloud/api_reference) for full schema documentation.
     "expires_in": 900
 }
 ```
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-firmware-download-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

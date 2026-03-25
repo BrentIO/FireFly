@@ -64,3 +64,7 @@ The function uses the following rules to identify firmware binaries from the rel
 The `type` field in the manifest must match the `APPLICATION_NAME` constant on the device firmware. The mapping from URL `application` path parameter to firmware type string is configured via the `FIRMWARE_TYPE_MAP` Lambda environment variable (a JSON object).
 
 For example: `{"Controller": "FireFly Controller"}` maps the URL path segment `Controller` to the firmware type string `"FireFly Controller"` expected by the device.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-ota-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

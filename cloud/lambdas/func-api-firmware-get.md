@@ -28,3 +28,7 @@ Invoked by **API Gateway** on an HTTP `GET` request to `/firmware` or `/firmware
 | `GET` | `/firmware/{zip_name}` | Get the full record for a specific build |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-firmware-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

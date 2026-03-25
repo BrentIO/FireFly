@@ -28,3 +28,7 @@ After updating the `release_status`, this function sets a DynamoDB `ttl` attribu
 ::: info Note
 DynamoDB TTL deletion is eventually consistent and may take up to 48 hours after the TTL timestamp before the item is actually removed.
 :::
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-s3-firmware-deleted.md) for workflow steps, infrastructure dependencies, and failure scenarios.

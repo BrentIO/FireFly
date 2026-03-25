@@ -23,3 +23,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /appconfig/{function_name}` reques
 | `DELETE` | `/appconfig/{function_name}` | Remove the AppConfig application; revert to default WARNING |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-appconfig-delete.md) for workflow steps, infrastructure dependencies, and failure scenarios.

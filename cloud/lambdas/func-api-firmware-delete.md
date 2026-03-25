@@ -22,3 +22,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /firmware/{zip_name}` request.
 | `DELETE` | `/firmware/{zip_name}` | Initiates deletion; returns 202 immediately |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-firmware-delete.md) for workflow steps, infrastructure dependencies, and failure scenarios.

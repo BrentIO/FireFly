@@ -18,3 +18,7 @@ Invoked by **API Gateway** on an HTTP `GET /appconfig` request.
 | `GET` | `/appconfig` | List all `firefly-func-*` functions with their configuration state |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-appconfig-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

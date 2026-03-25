@@ -56,3 +56,7 @@ Invoked by **API Gateway** on an HTTP `GET /users` request.
 | `invited_by` | string \| null | Email of the super user who sent the invitation |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-users-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

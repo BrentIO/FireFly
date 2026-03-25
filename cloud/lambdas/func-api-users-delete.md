@@ -28,3 +28,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /users/{email}` request.
 | `409 Conflict` | Target is the last super user |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-users-delete.md) for workflow steps, infrastructure dependencies, and failure scenarios.
