@@ -14,6 +14,13 @@ Each Lambda function has its own independent AppConfig application. Configuratio
 
 `firefly-func-api-appconfig-patch`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-appconfig-patch` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

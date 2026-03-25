@@ -8,6 +8,13 @@ Manages the Lambda function that processes firmware ZIPs uploaded to the private
 
 `firefly-func-s3-firmware-uploaded`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-s3-firmware-uploaded` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

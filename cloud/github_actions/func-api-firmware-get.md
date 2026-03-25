@@ -8,6 +8,13 @@ Manages the Lambda function that handles read operations against the firmware Dy
 
 `firefly-func-api-firmware-get`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-firmware-get` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

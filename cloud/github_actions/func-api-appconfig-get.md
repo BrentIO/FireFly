@@ -8,6 +8,13 @@ Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configur
 
 `firefly-func-api-appconfig-get`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-appconfig-get` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

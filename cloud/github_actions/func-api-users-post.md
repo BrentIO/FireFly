@@ -8,6 +8,13 @@ Deploys the Lambda function that handles `POST /users`. Adds a user to the Dynam
 
 `firefly-func-api-users-post`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-users-post` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies

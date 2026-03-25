@@ -8,6 +8,13 @@ Manages the Lambda function that serves the `GET /health` endpoint. Returns `200
 
 `firefly-func-api-health-get`
 
+## CloudWatch Logs
+
+| Setting | Value |
+|---|---|
+| Log group | `/aws/lambda/firefly-func-api-health` |
+| Retention | 40 days |
+
 ## Dependencies
 
 ### Deploy Dependencies
