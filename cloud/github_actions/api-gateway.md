@@ -81,3 +81,11 @@ Deletes the `firefly-api-gateway` CloudFormation stack, removing the HTTP API, c
 | CORS update fails after successful SAM deploy | `aws apigatewayv2 update-api` call fails; API is deployed but CORS is not configured | Re-run the workflow — SAM deploy is idempotent and the CORS step will retry |
 | `DELETE_FAILED` — Lambda integrations still exist | One or more `delete-func-api-*` jobs did not complete before this job ran | Verify all dependent function stacks are deleted, then re-run |
 | `ROLLBACK_COMPLETE` on deploy | Template error or invalid parameter | Check CloudFormation stack events for the root cause; delete the stack manually if necessary, then re-run |
+
+## CloudWatch Logs
+
+The `firefly-func-api-options-handler` Lambda function created by this stack writes logs to:
+
+| Log Group | Retention |
+|---|---|
+| `/aws/lambda/firefly-func-api-options-handler` | 30 days |
