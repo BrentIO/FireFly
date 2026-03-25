@@ -64,14 +64,14 @@ Each binary file is written to the correct address before flashing begins.
 | `*.partitions.bin` | `0x08000` | Partition table |
 | `*.bin` (application) | `0x10000` | Standard `app0` offset |
 
-**Dynamic addresses** — resolved at flash time by parsing `partitions.bin` from the ZIP:
+**Dynamic addresses** — resolved from the `partition_offsets` map stored in the firmware's DynamoDB record:
 
 | File | Partition name | Notes |
 |---|---|---|
-| `config.bin` | `config` | Offset read from partition table entry |
-| `www.bin` | `www` | Offset read from partition table entry |
+| `config.bin` | `config` | Offset stored at ingestion time |
+| `www.bin` | `www` | Offset stored at ingestion time |
 
-The `partitions.bin` inside the ZIP is parsed as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`). The offset field of the matching entry is used as the flash address. This means the correct address is used automatically regardless of flash size or hardware revision — no code changes are required when the partition layout changes.
+When `func-s3-firmware-uploaded` processes a ZIP, it parses `partitions.bin` as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`) and stores the resulting name → offset map in the DynamoDB record as `partition_offsets`. The browser reads this field directly from the firmware record — no ZIP download is required just to determine flash addresses. This means the correct address is used automatically regardless of flash size or hardware revision, and no code changes are required when the partition layout changes.
 
 **Skipped files** — non-`.bin` files are never flashed:
 
