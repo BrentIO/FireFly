@@ -80,6 +80,16 @@ The `partitions.bin` inside the ZIP is parsed as a sequence of 32-byte ESP32 par
 | `*.elf`, `*.map` | Debug symbols — not needed on device |
 | `manifest.json` | Upload metadata — not a flashable binary |
 
+### Erase All Flash
+
+The flash dialog includes an optional **Erase all flash before writing** checkbox (off by default). When enabled, the entire flash chip is erased before any files are written. This is equivalent to the *Erase All Flash Before Sketch Upload* option in the Arduino IDE.
+
+Use this option when:
+- Flashing a device that previously ran firmware from a different project
+- Stale partition data at old offsets needs to be cleared
+
+Leave it off for routine firmware updates on devices that already have the FireFly partition table.
+
 ### Requirements
 
 - **Chrome or a Chromium-based browser** — the Web Serial API is not available in other browsers.
