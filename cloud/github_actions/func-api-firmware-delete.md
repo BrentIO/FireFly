@@ -13,7 +13,7 @@ Manages the Lambda function that handles authenticated firmware deletion via `DE
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-firmware-delete` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

@@ -13,7 +13,7 @@ Deploys the Lambda function that handles `DELETE /users/{user_id}`. Removes a us
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-users-delete` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

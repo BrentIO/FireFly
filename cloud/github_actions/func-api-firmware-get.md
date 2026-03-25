@@ -13,7 +13,7 @@ Manages the Lambda function that handles read operations against the firmware Dy
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-firmware-get` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

@@ -13,7 +13,7 @@ Manages the Lambda function that acts as the Cognito pre-signup trigger. When a 
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-cognito-pre-signup` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

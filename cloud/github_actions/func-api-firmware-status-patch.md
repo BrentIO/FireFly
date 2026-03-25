@@ -13,7 +13,7 @@ Manages the Lambda function that handles authenticated firmware status transitio
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-firmware-status-patch` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

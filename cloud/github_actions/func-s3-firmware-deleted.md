@@ -13,7 +13,7 @@ Manages the Lambda function that responds to firmware ZIPs deleted from the priv
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-s3-firmware-deleted` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 
