@@ -21,7 +21,7 @@ alt not found
     DynamoDB --> DeleteLambda-- : (no items)
     DeleteLambda --> APIGW-- : 404 Not Found
     APIGW --> Client-- : 404 Not Found
-else already removed (DELETED or REVOKED)
+else already removed or released (DELETED, REVOKED, or RELEASED)
     DynamoDB --> DeleteLambda-- : item\n{pk, version, release_status, ...}
     DeleteLambda --> APIGW-- : 409 Conflict\n{"message": "Firmware is already in state '...'"}
     APIGW --> Client-- : 409 Conflict
