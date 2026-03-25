@@ -13,7 +13,7 @@ Deploys the Lambda function that handles `POST /users`. Adds a user to the Dynam
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-users-post` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

@@ -13,7 +13,7 @@ Deploys the Lambda function that handles `GET /appconfig`. Powers the **Configur
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-appconfig-get` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

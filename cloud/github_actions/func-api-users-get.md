@@ -13,7 +13,7 @@ Deploys the Lambda function that handles `GET /users`. Returns a list of all use
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-users-get` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

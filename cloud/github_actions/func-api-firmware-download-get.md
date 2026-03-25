@@ -13,7 +13,7 @@ Manages the Lambda function that generates pre-signed S3 URLs for firmware ZIP d
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-firmware-download-get` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

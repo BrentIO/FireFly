@@ -13,7 +13,7 @@ Deploys the Lambda function that handles `PATCH /users/{email}`. Updates a user'
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-users-patch` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 

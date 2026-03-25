@@ -19,7 +19,7 @@ Each Lambda function has its own independent AppConfig application. Configuratio
 | Setting | Value |
 |---|---|
 | Log group | `/aws/lambda/firefly-func-api-appconfig-patch` |
-| Retention | 40 days |
+| Retention | 30 days |
 
 ## Dependencies
 
