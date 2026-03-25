@@ -109,3 +109,7 @@ On successful processing, the function writes a record to the firmware table wit
 | `files` | Array of `{ name, sha256 }` objects from the manifest — only returned by single-item GET requests |
 | `partition_offsets` | Map of partition name → flash offset (e.g., `{"config": 13369344, "www": 13697024}`), parsed from `partitions.bin` at ingestion; used by the Flash via USB UI to resolve data partition addresses without downloading the ZIP |
 | `error` | Set only on `ERROR` records; contains the failure reason |
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-s3-firmware-uploaded.md) for workflow steps, infrastructure dependencies, and failure scenarios.

@@ -64,3 +64,7 @@ The caller's environments are looked up from DynamoDB. If the caller attempts to
 | `409 Conflict` | Cannot demote the last super user |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-users-patch.md) for workflow steps, infrastructure dependencies, and failure scenarios.

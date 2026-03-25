@@ -51,3 +51,7 @@ All possible `release_status` values and how they are set:
 | `ERROR` | `func-s3-firmware-uploaded` | Upload validation failed; the `error` field contains the reason |
 
 `REVOKED` and `DELETED` statuses cannot be set via this endpoint and cannot be reversed. The `TESTING` status can be rolled back to `READY_TO_TEST`.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-firmware-status-patch.md) for workflow steps, infrastructure dependencies, and failure scenarios.

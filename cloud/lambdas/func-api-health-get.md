@@ -16,3 +16,7 @@ Invoked by **API Gateway** on an HTTP `GET /health` request.
 | `GET` | `/health` | Returns `{ "status": "OK" }` |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-health-get.md) for workflow steps, infrastructure dependencies, and failure scenarios.

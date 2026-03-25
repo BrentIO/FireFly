@@ -34,3 +34,7 @@ Invoked by **API Gateway** on `PATCH`, `POST`, and `DELETE` requests to `/appcon
 | `DELETE` | `/appconfig/{function_name}` | Remove the AppConfig application; revert to default WARNING |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-appconfig-patch.md) for workflow steps, infrastructure dependencies, and failure scenarios.
