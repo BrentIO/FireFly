@@ -8,10 +8,11 @@ Processes a firmware ZIP uploaded to the `incoming/` S3 prefix. The function val
 2. **Move to `processing/`** — moves the file from `incoming/` to `processing/` to signal active processing.
 3. **Download and extract** — downloads the ZIP to `/tmp` and extracts its contents.
 4. **Compute ZIP SHA-256** — computes a SHA-256 checksum of the ZIP file itself.
-5. **Validate `manifest.json`** — verifies that `manifest.json` is present and contains all required fields.
+5. **Validate `manifest.json`** — verifies that `manifest.json` is present and contains all required fields, including at least one `*.partitions.bin` file.
 6. **Verify file checksums** — for each file listed in the manifest, verifies that the file exists in the ZIP and that its SHA-256 matches the manifest entry.
-7. **Write DynamoDB record** — writes a record with `release_status: READY_TO_TEST`.
-8. **Move to `processed/`** — moves the file from `processing/` to `processed/`.
+7. **Parse partition table** — parses `partitions.bin` as a sequence of 32-byte ESP32 partition table entries and stores the resulting name → offset map as `partition_offsets` in the DynamoDB record.
+8. **Write DynamoDB record** — writes a record with `release_status: READY_TO_TEST`.
+9. **Move to `processed/`** — moves the file from `processing/` to `processed/`.
 
 ### Error Handling
 If any step fails, the function writes an `ERROR` record to DynamoDB (with whatever manifest data was available) and moves the file from `processing/` to `errors/`. The error message is stored in the `error` field of the DynamoDB record.
@@ -53,7 +54,8 @@ All files listed in `files` must be present in the ZIP with matching SHA-256 che
   "commit": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
   "created": "2026-03-15T00:00:00Z",
   "files": [
-    { "name": "firmware.bin", "sha256": "<64-char hex>" }
+    { "name": "firmware.bin", "sha256": "<64-char hex>" },
+    { "name": "firmware.partitions.bin", "sha256": "<64-char hex>" }
   ]
 }
 ```
@@ -105,4 +107,5 @@ On successful processing, the function writes a record to the firmware table wit
 | `zip_name` | UUID filename (e.g., `550e8400-e29b-41d4-a716-446655440000.zip`) — the primary identifier used in all API paths |
 | `release_status` | Initial value is `READY_TO_TEST`; see [func-api-firmware-status-patch](/cloud/lambdas/func-api-firmware-status-patch) for valid transitions |
 | `files` | Array of `{ name, sha256 }` objects from the manifest — only returned by single-item GET requests |
+| `partition_offsets` | Map of partition name → flash offset (e.g., `{"config": 13369344, "www": 13697024}`), parsed from `partitions.bin` at ingestion; used by the Flash via USB UI to resolve data partition addresses without downloading the ZIP |
 | `error` | Set only on `ERROR` records; contains the failure reason |
