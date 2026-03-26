@@ -62,7 +62,6 @@ The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is no
    - `ApiId`
    - `CloudFrontDomain`
    - `FirmwareTypeMapSsmPath`
-   - `EnvironmentName` (target environment)
 
 **Response codes:**
 

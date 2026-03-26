@@ -11,7 +11,7 @@ end box
 
 GHA -> CF : SAM build\nlambdas/func-cognito-pre-signup/template.yaml
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-cognito-pre-signup\nparams: EnvironmentName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-cognito-pre-signup\nparams: SharedLayerArn, AppConfigExtensionLayerArn
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE\n(exports: LambdaArn)
 
 note over CF : Function ARN exported\nfor use by cognito stack\nas pre-signup trigger

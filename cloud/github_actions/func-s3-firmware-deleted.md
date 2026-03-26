@@ -47,7 +47,7 @@ Manages the Lambda function that responds to firmware ZIPs deleted from the priv
 
 ### Description
 
-Builds and deploys the function using SAM. The function receives the firmware bucket name, DynamoDB firmware table name, and environment name.
+Builds and deploys the function using SAM. The function receives the firmware bucket name and DynamoDB firmware table name.
 
 ### Steps
 
@@ -55,7 +55,6 @@ Builds and deploys the function using SAM. The function receives the firmware bu
 2. SAM build `lambdas/func-s3-firmware-deleted/template.yaml`.
 3. SAM deploy with parameters:
    - `FirmwareBucketName` (from secrets)
-   - `EnvironmentName` (target environment)
 
 ### Sequence Diagram
 

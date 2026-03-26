@@ -47,7 +47,7 @@ Manages the Lambda function that processes firmware ZIPs uploaded to the private
 
 ### Description
 
-Builds and deploys the function using SAM. The function receives the firmware bucket name (to move ZIPs between prefixes), the DynamoDB firmware table name (to write metadata), and the environment name (for AppConfig lookups).
+Builds and deploys the function using SAM. The function receives the firmware bucket name (to move ZIPs between prefixes) and the DynamoDB firmware table name (to write metadata).
 
 ### Steps
 
@@ -55,7 +55,6 @@ Builds and deploys the function using SAM. The function receives the firmware bu
 2. SAM build `lambdas/func-s3-firmware-uploaded/template.yaml`.
 3. SAM deploy with parameters:
    - `FirmwareBucketName` (from secrets)
-   - `EnvironmentName` (target environment)
 
 ### Sequence Diagram
 

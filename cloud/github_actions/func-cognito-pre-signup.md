@@ -54,7 +54,6 @@ Builds and deploys the function using SAM. The function ARN is exported as a Clo
 1. Configure AWS credentials.
 2. SAM build `lambdas/func-cognito-pre-signup/template.yaml`.
 3. SAM deploy with parameters:
-   - `EnvironmentName` (target environment)
    - `SharedLayerArn`
    - `AppConfigExtensionLayerArn`
 
