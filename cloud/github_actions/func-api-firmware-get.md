@@ -56,7 +56,6 @@ Looks up the API Gateway ID from the `firefly-api-gateway` stack output, then bu
 3. SAM build.
 4. SAM deploy with parameters:
    - `ApiId`
-   - `DynamoDbFirmwareTableName` (from vars)
 
 ### Sequence Diagram
 

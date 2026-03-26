@@ -14,7 +14,7 @@ CF --> GHA-- : ApiId, AuthorizerId
 
 GHA -> CF : SAM build
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-api-users-get\nparams: ApiId, AuthorizerId,\n        DynamoDbUsersTableName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-users-get\nparams: ApiId, AuthorizerId
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 
 alt api-gateway stack not found

@@ -57,7 +57,6 @@ Resolves the HTTP API Gateway ID and JWT Authorizer ID from the `firefly-api-gat
 5. SAM deploy `firefly-func-api-users-get` with parameters:
    - `ApiId`
    - `AuthorizerId`
-   - `DynamoDbUsersTableName` (from secrets)
 
 ### Sequence Diagram
 
@@ -84,4 +83,4 @@ Calls `sam delete` to remove the Lambda function and its associated IAM role and
 |---|---|
 | `firefly-api-gateway` stack not found | `describe-stacks` returns an error; workflow fails before SAM deploy is attempted. Deploy `api-gateway` first. |
 | Authorizer ID lookup fails | Deploy fails; the JWT authorizer is created by the `api-gateway` stack — redeploy `api-gateway` to restore it. |
-| DynamoDB users table not deployed | Function deploys successfully but returns errors at runtime when querying the table. Deploy `dynamodb-users` and ensure `DynamoDbUsersTableName` is correct. |
+| DynamoDB users table not deployed | Function deploys successfully but returns errors at runtime when querying the table. Deploy `dynamodb-users` first. |

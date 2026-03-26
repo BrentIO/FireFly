@@ -47,7 +47,7 @@ Builds the SAM template and deploys the `firefly-dynamodb-firmware` CloudFormati
 2. Configure AWS credentials
 3. Install SAM CLI
 4. `sam build` — template: `templates/dynamodb-firmware.yaml`
-5. `sam deploy` — stack: `firefly-dynamodb-firmware`; params: `DynamoDbFirmwareTableName` (from `vars.DYNAMODB_FIRMWARE_TABLE_NAME`)
+5. `sam deploy` — stack: `firefly-dynamodb-firmware`; no parameters (table name is hardcoded in the template)
 
 ### Sequence Diagram
 

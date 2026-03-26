@@ -47,14 +47,16 @@ Manages the Lambda function that acts as the Cognito pre-signup trigger. When a 
 
 ### Description
 
-Builds and deploys the function using SAM. The DynamoDB users table name is passed as a parameter. The function ARN is exported as a CloudFormation output so the `cognito` stack can reference it as a trigger.
+Builds and deploys the function using SAM. The function ARN is exported as a CloudFormation output so the `cognito` stack can reference it as a trigger.
 
 ### Steps
 
 1. Configure AWS credentials.
 2. SAM build `lambdas/func-cognito-pre-signup/template.yaml`.
 3. SAM deploy with parameters:
-   - `DynamoDbUsersTableName` (from vars)
+   - `EnvironmentName` (target environment)
+   - `SharedLayerArn`
+   - `AppConfigExtensionLayerArn`
 
 ### Sequence Diagram
 

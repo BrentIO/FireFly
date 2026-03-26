@@ -15,7 +15,7 @@ CF --> GHA-- : ApiId
 
 GHA -> CF : SAM build
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-api-firmware-get\nparams: ApiId, DynamoDbFirmwareTableName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-firmware-get\nparams: ApiId
 CF -> APIGW : Register routes\nGET /firmware\nGET /firmware/{zip_name}
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

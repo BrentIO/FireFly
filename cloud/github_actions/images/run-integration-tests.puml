@@ -19,9 +19,6 @@ CF --> GHA-- : UiDomain
 GHA -> CF++ : describe-stacks\nfirefly-cognito → UserPoolId, ClientId\n(optional)
 CF --> GHA-- : UserPoolId, ClientId
 
-GHA -> CF++ : describe-stacks\nfirefly-dynamodb-users → UsersTableName\n(optional)
-CF --> GHA-- : UsersTableName
-
 alt Cognito stack found
     GHA -> Cognito++ : AdminCreateUser + AdminSetUserPassword\nCreate CI test user (idempotent)
     Cognito --> GHA-- : User created / already exists
@@ -29,7 +26,7 @@ end
 
 note over GHA : pip install -r tests/requirements.txt
 
-note over GHA : pytest tests/integration/ -v\nFIREFLY_API_URL, FIREFLY_FIRMWARE_BUCKET,\nFIREFLY_UI_URL, FIREFLY_UI_BUCKET,\nFIREFLY_COGNITO_USER_POOL_ID,\nFIREFLY_COGNITO_CLIENT_ID,\nFIREFLY_TEST_USER_EMAIL,\nFIREFLY_TEST_USER_PASSWORD,\nFIREFLY_DYNAMODB_USERS_TABLE_NAME
+note over GHA : pytest tests/integration/ -v\nFIREFLY_API_URL, FIREFLY_FIRMWARE_BUCKET,\nFIREFLY_UI_URL, FIREFLY_UI_BUCKET,\nFIREFLY_COGNITO_USER_POOL_ID,\nFIREFLY_COGNITO_CLIENT_ID,\nFIREFLY_TEST_USER_EMAIL,\nFIREFLY_TEST_USER_PASSWORD,\nFIREFLY_DYNAMODB_USERS_TABLE_NAME=firefly-users
 
 alt Cognito stack found (if: always)
     GHA -> Cognito++ : AdminDeleteUser\nDelete CI test user

@@ -22,7 +22,7 @@ CF --> GHA-- : CloudFrontDomain
 
 GHA -> CF : SAM build
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-api-ota-get\nparams: ApiId, DynamoDbFirmwareTableName,\n        CloudFrontDomain, FirmwareTypeMapSsmPath,\n        EnvironmentName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-ota-get\nparams: ApiId, CloudFrontDomain,\n        FirmwareTypeMapSsmPath, EnvironmentName
 CF -> APIGW : Register route\nGET /ota/{product_id}/{application}
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

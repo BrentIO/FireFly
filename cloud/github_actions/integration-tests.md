@@ -75,7 +75,7 @@ Resolves runtime endpoints and configuration by querying CloudFormation stack ou
 | `FIREFLY_COGNITO_CLIENT_ID` | `firefly-cognito` stack output (optional) |
 | `FIREFLY_TEST_USER_EMAIL` | Generated at runtime (transient) |
 | `FIREFLY_TEST_USER_PASSWORD` | Generated at runtime (transient, masked) |
-| `FIREFLY_DYNAMODB_USERS_TABLE_NAME` | `firefly-dynamodb-users` stack output (optional) |
+| `FIREFLY_DYNAMODB_USERS_TABLE_NAME` | Hardcoded: `firefly-users` |
 
 ### Sequence Diagram
 
