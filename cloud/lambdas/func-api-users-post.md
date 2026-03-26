@@ -22,15 +22,13 @@ Invoked by **API Gateway** on an HTTP `POST /users` request.
 
 ```json
 {
-  "email": "user@example.com",
-  "environments": ["dev", "production"]
+  "email": "user@example.com"
 }
 ```
 
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `email` | string | Yes | Google email address; must be a valid email format |
-| `environments` | string[] | Yes | One or both of `"dev"`, `"production"` |
 
 ## DynamoDB Record
 
@@ -39,22 +37,17 @@ The function writes the following item to the `firefly-users` table:
 | Attribute | Description |
 |---|---|
 | `email` | The invited user's email (partition key) |
-| `environments` | List of permitted environments |
 | `invited_by` | Email of the super user who sent the invitation |
 | `created_at` | ISO-8601 timestamp of the invitation |
 | `expires_at` | Unix timestamp 24 hours after `created_at`; used as the DynamoDB TTL attribute to auto-delete the record if the user does not sign in |
-
-## Environment Access Rules
-
-The caller's environments are looked up from DynamoDB. If the caller attempts to grant an environment they don't have access to, the request is rejected with `403 Forbidden`. Every user — including bootstrapped super users — must have a DynamoDB record.
 
 ## Response Codes
 
 | Code | Reason |
 |---|---|
 | `201 Created` | User added to allowed list |
-| `400 Bad Request` | Missing or invalid email; missing or invalid environments |
-| `403 Forbidden` | Caller is not a super user, or attempting to grant an environment they don't have access to |
+| `400 Bad Request` | Missing or invalid email |
+| `403 Forbidden` | Caller is not a super user |
 | `409 Conflict` | Email already exists in the allowed list |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.

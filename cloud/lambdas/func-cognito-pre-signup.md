@@ -6,8 +6,7 @@ Cognito pre-signup Lambda trigger that enforces invitation-only access control. 
 
 For Google federated sign-ins, the function:
 1. Looks up the user's email address in the `firefly-users` DynamoDB table (the allowed list).
-2. Verifies the user has access to the current environment.
-3. Allows the sign-in if both checks pass; raises an exception to block it otherwise.
+2. Allows the sign-in if the email is found and the invitation has not expired; raises an exception to block it otherwise.
 
 Admin-created users (e.g., the first super user bootstrapped via the Cognito console, or test users created with `AdminCreateUser`) always pass through without an allowed-list check.
 
@@ -23,7 +22,7 @@ Invoked by **Cognito** as a [pre-signup Lambda trigger](https://docs.aws.amazon.
 
 | `triggerSource` | Behaviour |
 |---|---|
-| `PreSignUp_ExternalProvider` | Checks allowed list and environment access |
+| `PreSignUp_ExternalProvider` | Checks allowed list |
 | `PreSignUp_AdminCreateUser` | Always allowed (bypasses allowed-list check) |
 
 ## Environment Variables
@@ -31,7 +30,6 @@ Invoked by **Cognito** as a [pre-signup Lambda trigger](https://docs.aws.amazon.
 | Variable | Description |
 |---|---|
 | `DYNAMODB_USERS_TABLE_NAME` | Name of the `firefly-users` DynamoDB table |
-| `ENVIRONMENT_NAME` | Current environment (`dev` or `production`) |
 
 ## Deployment
 
