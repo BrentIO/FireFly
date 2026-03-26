@@ -19,11 +19,11 @@ else federated sign-in (Google)
     alt email not found
         DynUsers --> Lambda-- : (no item)
         Lambda --> Cognito-- : raise Exception\n"not authorized"
-    else environment mismatch
-        DynUsers --> Lambda-- : item\n{environments: [...]}
-        Lambda --> Cognito-- : raise Exception\n"no access to environment"
+    else invitation expired
+        DynUsers --> Lambda-- : item\n{expires_at: ...}
+        Lambda --> Cognito-- : raise Exception\n"invitation expired"
     else allowed
-        DynUsers --> Lambda-- : item\n{environments: [...]}
+        DynUsers --> Lambda-- : item
         Lambda --> Cognito-- : event (allow signup)
     end
 end

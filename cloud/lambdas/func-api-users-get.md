@@ -6,7 +6,7 @@ Returns the combined list of all users: Cognito accounts (users who have signed 
 
 Super user access is required.  Regular users receive `403 Forbidden`.
 
-Environments are sourced from DynamoDB (the authoritative record created at invite time), not from Cognito.  Expired invitations (`expires_at` in the past) are excluded from the response.
+Expired invitations (`expires_at` in the past) are excluded from the response.
 
 ## Invocation
 
@@ -26,7 +26,6 @@ Invoked by **API Gateway** on an HTTP `GET /users` request.
     {
       "email": "user@example.com",
       "name": "User Name",
-      "environments": ["dev", "production"],
       "is_super": false,
       "status": "CONFIRMED",
       "created": "2026-01-01T00:00:00+00:00",
@@ -35,7 +34,6 @@ Invoked by **API Gateway** on an HTTP `GET /users` request.
     {
       "email": "pending@example.com",
       "name": null,
-      "environments": ["dev"],
       "is_super": false,
       "status": "INVITED",
       "created": "2026-01-02T00:00:00+00:00",
@@ -49,7 +47,6 @@ Invoked by **API Gateway** on an HTTP `GET /users` request.
 |---|---|---|
 | `email` | string | User's email address |
 | `name` | string \| null | Display name from Cognito; `null` for invited-only users |
-| `environments` | string[] | Environments the user has access to (from DynamoDB) |
 | `is_super` | boolean | Whether the user is in the `super_users` Cognito group |
 | `status` | string | Cognito `UserStatus` for signed-in users; `"INVITED"` for pending invitations |
 | `created` | string | ISO-8601 timestamp of Cognito account creation or invitation |

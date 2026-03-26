@@ -8,7 +8,7 @@ Sign-in uses the OAuth 2.0 authorization code flow with PKCE.  The browser never
 
 1. User clicks **Sign in with Google** on the login page.
 2. The browser is redirected to the Cognito hosted UI, which forwards to Google's OAuth consent screen.
-3. After Google authentication, Cognito fires the pre-signup Lambda trigger, which checks whether the user's Google email address is on the allowed list for this environment.
+3. After Google authentication, Cognito fires the pre-signup Lambda trigger, which checks whether the user's Google email address is on the allowed list.
 4. If permitted, Cognito issues an authorization code and redirects back to `/callback` in the SPA.
 5. The SPA exchanges the code for an access token, ID token, and refresh token.
 6. Subsequent API requests carry the access token as a `Bearer` token in the `Authorization` header.
@@ -43,10 +43,6 @@ Super users have access to the [Users management](/cloud/administration) section
 The super user constraint ensures at least one super user always exists.  The last super user cannot be deleted or demoted.
 
 Super user status is stored in the Cognito `super_users` group.  The first super user must be added manually via the AWS Cognito console (see [Development Environment](/cloud/development_environment#adding-the-first-super-user)).
-
-### Environment Access
-
-Each user's allowed list entry includes a list of environments (e.g. `dev`, `production`).  The pre-signup Lambda checks that the user's email is permitted for the environment the deployment is running in.  A user can be granted access to one or both environments independently.
 
 ## API Authorization
 
