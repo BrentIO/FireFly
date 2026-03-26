@@ -102,8 +102,6 @@ The following variables must be configured in each GitHub environment:
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
 | `AUTH_DOMAIN_NAME` | auth.somewhere.com | The custom domain for the Cognito hosted UI (e.g., `auth.example.com`). A Route 53 alias record is created automatically during deployment. |
-| `DYNAMODB_FIRMWARE_TABLE_NAME` | firefly-firmware | The name of the firmware table. |
-| `DYNAMODB_USERS_TABLE_NAME` | firefly-users | The name of the users allowed-list table. |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
 | `UI_DOMAIN_NAME` | `ui.somewhere.com` | The custom domain name for the firmware management UI, without the `https://` scheme. |

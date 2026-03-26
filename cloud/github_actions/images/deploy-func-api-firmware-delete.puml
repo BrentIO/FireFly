@@ -15,7 +15,7 @@ CF --> GHA-- : ApiId, AuthorizerId
 
 GHA -> CF : SAM build
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-api-firmware-delete\nparams: ApiId, AuthorizerId,\n        DynamoDbFirmwareTableName,\n        FirmwarePrivateBucketName,\n        FirmwarePublicBucketName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-api-firmware-delete\nparams: ApiId, AuthorizerId,\n        FirmwarePrivateBucketName,\n        FirmwarePublicBucketName
 CF -> APIGW : Register route\nDELETE /firmware/{zip_name}\n(JWT authorizer)
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 

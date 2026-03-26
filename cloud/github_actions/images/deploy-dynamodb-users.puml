@@ -11,7 +11,7 @@ box "AWS" #ffdbbb
 end box
 
 GHA -> CF : SAM build\ntemplate: templates/dynamodb-users.yaml
-GHA -> CF++ : SAM deploy\nstack: firefly-dynamodb-users\nparams: DynamoDbUsersTableName
+GHA -> CF++ : SAM deploy\nstack: firefly-dynamodb-users
 CF -> DDB++ : Create table\n(invitation allowlist)
 DDB --> CF-- : Table ACTIVE
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE

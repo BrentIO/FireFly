@@ -57,7 +57,6 @@ Looks up the API Gateway ID and Cognito JWT Authorizer ID from the `firefly-api-
 4. SAM deploy with parameters:
    - `ApiId`
    - `AuthorizerId`
-   - `DynamoDbFirmwareTableName` (from vars)
    - `FirmwarePrivateBucketName` (from secrets)
    - `FirmwarePublicBucketName` (from secrets)
 

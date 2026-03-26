@@ -55,7 +55,6 @@ Builds and deploys the function using SAM. The function receives the firmware bu
 2. SAM build `lambdas/func-s3-firmware-deleted/template.yaml`.
 3. SAM deploy with parameters:
    - `FirmwareBucketName` (from secrets)
-   - `DynamoDbFirmwareTableName` (from vars)
    - `EnvironmentName` (target environment)
 
 ### Sequence Diagram

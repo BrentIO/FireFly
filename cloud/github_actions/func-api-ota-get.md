@@ -60,7 +60,6 @@ The `FIRMWARE_TYPE_MAP` SSM parameter is not managed by CloudFormation and is no
 5. SAM build.
 6. SAM deploy with parameters:
    - `ApiId`
-   - `DynamoDbFirmwareTableName` (from vars)
    - `CloudFrontDomain`
    - `FirmwareTypeMapSsmPath`
    - `EnvironmentName` (target environment)

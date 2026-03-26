@@ -46,7 +46,7 @@ Builds the SAM template and deploys the `firefly-dynamodb-users` CloudFormation 
 2. Configure AWS credentials
 3. Install SAM CLI
 4. `sam build` — template: `templates/dynamodb-users.yaml`
-5. `sam deploy` — stack: `firefly-dynamodb-users`; params: `DynamoDbUsersTableName` (from `vars.DYNAMODB_USERS_TABLE_NAME`)
+5. `sam deploy` — stack: `firefly-dynamodb-users`; no parameters (table name is hardcoded in the template)
 
 ### Sequence Diagram
 

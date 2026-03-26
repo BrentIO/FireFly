@@ -29,7 +29,7 @@ Invoked by **Cognito** as a [pre-signup Lambda trigger](https://docs.aws.amazon.
 
 | Variable | Description |
 |---|---|
-| `DYNAMODB_USERS_TABLE_NAME` | Name of the `firefly-users` DynamoDB table |
+| `DYNAMODB_USERS_TABLE_NAME` | Name of the `firefly-users` DynamoDB table (hardcoded: `firefly-users`) |
 
 ## Deployment
 

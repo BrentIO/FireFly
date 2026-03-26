@@ -59,7 +59,6 @@ Resolves the HTTP API Gateway ID and JWT Authorizer ID from the `firefly-api-gat
 5. SAM deploy `firefly-func-api-users-delete` with parameters:
    - `ApiId`
    - `AuthorizerId`
-   - `DynamoDbUsersTableName` (from secrets)
 
 ### Sequence Diagram
 
