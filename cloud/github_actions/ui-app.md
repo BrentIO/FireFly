@@ -46,7 +46,7 @@ Looks up runtime configuration from three CloudFormation stacks, installs Node.j
 5. Set up Node.js 20.
 6. Run `npm ci` in the `ui/` directory.
 7. Run `npm run build` with environment variables:
-   - `VITE_API_URL` (from workflow vars)
+   - `VITE_API_URL` (constructed as `https://` + `vars.API_DOMAIN_NAME`)
    - `VITE_COMMIT_SHA` (from `github.sha`)
    - `VITE_COGNITO_DOMAIN` (from `vars.AUTH_DOMAIN_NAME`)
    - `VITE_COGNITO_CLIENT_ID` (from Cognito stack lookup)

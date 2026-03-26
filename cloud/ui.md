@@ -119,7 +119,7 @@ The UI is built and deployed by the `deploy-ui-app` GitHub Actions workflow.  It
 
 The workflow:
 1. Installs Node 20 dependencies (`npm ci`)
-2. Builds the app with Vite, injecting `VITE_API_URL` from the `API_URL` GitHub variable
+2. Builds the app with Vite, injecting `VITE_API_URL` constructed as `https://` + `API_DOMAIN_NAME`
 3. Syncs the build output to the private S3 bucket (`aws s3 sync --delete`)
 4. Invalidates the CloudFront cache (`/*`)
 
