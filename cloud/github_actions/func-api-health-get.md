@@ -12,7 +12,7 @@ Manages the Lambda function that serves the `GET /health` endpoint. Returns `200
 
 | Setting | Value |
 |---|---|
-| Log group | `/aws/lambda/firefly-func-api-health` |
+| Log group | `/aws/lambda/firefly-func-api-health-get` |
 | Retention | 30 days |
 
 ## Dependencies
