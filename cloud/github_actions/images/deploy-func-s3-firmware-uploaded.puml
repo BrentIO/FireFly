@@ -11,7 +11,7 @@ end box
 
 GHA -> CF : SAM build\nlambdas/func-s3-firmware-uploaded/template.yaml
 
-GHA -> CF++ : SAM deploy\nstack: firefly-func-s3-firmware-uploaded\nparams: FirmwareBucketName, EnvironmentName
+GHA -> CF++ : SAM deploy\nstack: firefly-func-s3-firmware-uploaded\nparams: FirmwareBucketName
 CF --> GHA-- : CREATE_COMPLETE / UPDATE_COMPLETE
 
 alt shared-layer stack not found / layer ARN unresolvable

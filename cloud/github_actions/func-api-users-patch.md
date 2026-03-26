@@ -59,7 +59,6 @@ Resolves the HTTP API Gateway ID, JWT Authorizer ID, and Cognito User Pool ID fr
    - `ApiId`
    - `AuthorizerId`
    - `CognitoUserPoolId`
-   - `EnvironmentName`
 
 ### Sequence Diagram
 

@@ -59,7 +59,6 @@ Looks up the API Gateway ID and the Cognito JWT Authorizer ID from the `firefly-
    - `AuthorizerId`
    - `FirmwarePrivateBucketName` (from secrets)
    - `FirmwarePublicBucketName` (from secrets)
-   - `EnvironmentName` (target environment)
 
 **State machine transitions handled:**
 

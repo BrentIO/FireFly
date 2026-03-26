@@ -67,7 +67,6 @@ Resolves the HTTP API Gateway ID and JWT Authorizer ID from the `firefly-api-gat
 4. SAM deploy `firefly-func-api-appconfig-get` with parameters:
    - `ApiId`
    - `AuthorizerId`
-   - `EnvironmentName`
 
 ### Sequence Diagram
 
