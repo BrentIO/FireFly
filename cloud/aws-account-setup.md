@@ -134,7 +134,7 @@ GitHub Actions uses an S3 bucket to stage CloudFormation templates before deploy
 1. Log into the target account
 2. Open **S3** → **Create bucket**
 3. Region: **us-east-1**
-4. Name: choose a globally unique name and record it — this becomes the `SAM_DEPLOYMENT_BUCKET_NAME` GitHub secret for this environment
+4. Name: choose a globally unique name and record it — this becomes the `S3_SAM_DEPLOYMENT_BUCKET_NAME` GitHub secret for this environment
 5. Leave all other settings at defaults → **Create bucket**
 
 ### 3.3 — OIDC Identity Provider and GitHub Actions Role
@@ -164,11 +164,11 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `AWS_ROLE_ARN` | ARN of `firefly-github-actions-role` in FireFly-DEV |
 | `GOOGLE_CLIENT_ID` | OAuth 2.0 Client ID — see [Google Cloud Setup](/cloud/development_environment#google-cloud-setup) |
 | `GOOGLE_CLIENT_SECRET` | OAuth 2.0 Client Secret |
-| `HOSTED_ZONE_ID` | Hosted zone ID of `dev.fireflylx.com` in FireFly-DEV |
+| `ROUTE_53_HOSTED_ZONE_ID` | Hosted zone ID of `dev.fireflylx.com` in FireFly-DEV |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | Your chosen name for the private firmware bucket |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | Your chosen name for the public firmware bucket |
 | `S3_UI_BUCKET_NAME` | Your chosen name for the UI static files bucket |
-| `SAM_DEPLOYMENT_BUCKET_NAME` | SAM bucket created in Step 3.2 |
+| `S3_SAM_DEPLOYMENT_BUCKET_NAME` | SAM bucket created in Step 3.2 |
 
 ### `dev` Environment — Variables
 
