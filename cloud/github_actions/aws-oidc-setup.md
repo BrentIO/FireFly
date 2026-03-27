@@ -68,7 +68,7 @@ jobs:
 ```
 
 ::: info ACM workflows use a hardcoded region
-`deploy-acm.yaml` and `delete-acm.yaml` use `us-east-1` directly instead of `${{ secrets.AWS_REGION }}` because ACM certificates for CloudFront must be provisioned in us-east-1 regardless of the deployment region.
+`deploy-acm.yaml` and `delete-acm.yaml` use `us-east-1` directly instead of <code v-pre>${{ secrets.AWS_REGION }}</code> because ACM certificates for CloudFront must be provisioned in us-east-1 regardless of the deployment region.
 :::
 
 ---
