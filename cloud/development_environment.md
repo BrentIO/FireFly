@@ -1,8 +1,12 @@
 # Cloud Development Environment
 
-This guide walks through bootstrapping an AWS account to use the FireFly Cloud deployment workflows.  You will prepare the IAM policy files, create the required AWS resources, and then configure GitHub with the credentials and settings the workflows need.  Once complete, the workflows will automatically create, update, and delete the CloudFormation stacks that make up the FireFly Cloud — including S3 buckets, API Gateway, DynamoDB, and Lambda functions.
+This guide walks through bootstrapping a single AWS account to use the FireFly Cloud deployment workflows.  You will prepare the IAM policy files, create the required AWS resources, and then configure GitHub with the credentials and settings the workflows need.  Once complete, the workflows will automatically create, update, and delete the CloudFormation stacks that make up the FireFly Cloud — including S3 buckets, API Gateway, DynamoDB, and Lambda functions.
 
-This guide assumes your Route 53 is already configured for your account with a custom domain name.
+::: info Multi-Account Setup
+FireFly Cloud uses separate DEV and PROD accounts.  If you are setting up the full account structure for the first time, start with the [AWS Account Setup](/cloud/aws-account-setup) guide, which covers IAM Identity Center, DNS delegation, and walks you through this guide for each account.
+:::
+
+This guide assumes Route 53 is already configured for the account with a hosted zone and custom domain name.
 
 ::: info AWS Region Support
 Only **us-east-1** region is supported.

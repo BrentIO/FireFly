@@ -511,6 +511,10 @@ export default defineConfig({
                 link: '/cloud/api_reference'
               },
               {
+                text: 'AWS Account Setup',
+                link: '/cloud/aws-account-setup'
+              },
+              {
                 text: 'Development Environment',
                 link: '/cloud/development_environment'
               },
