@@ -79,10 +79,8 @@ The following secrets must be configured in each GitHub environment:
 
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
-| `AWS_ACCESS_KEY_ID` | firefly-github-actions | The access key for IAM user. |
 | `AWS_ACCOUNT_ID` | 1234567890 | Your AWS account ID. |
 | `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
-| `AWS_SECRET_ACCESS_KEY` | | The access key secret for IAM user `firefly-github-actions`. |
 | `GOOGLE_CLIENT_ID` | | OAuth 2.0 Client ID from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
 | `GOOGLE_CLIENT_SECRET` | | OAuth 2.0 Client Secret from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
@@ -98,9 +96,11 @@ The following variables must be configured in each GitHub environment:
 | Name | Example Value | Description |
 | ---- | ------------- | ----------- |
 | `API_DOMAIN_NAME` | api.somewhere.com | The domain name for the API gateway. |
+| `APPCONFIG_EXTENSION_LAYER_ARM64_ARN` | arn:aws:lambda:us-east-1:027255383542:layer:AWS-AppConfig-Extension-Arm64:250 | ARN for the AppConfig layer; refer to the [AWS version reference](https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-lambda-extensions-versions.html) for the correct ARN |
+| `AUTH_DOMAIN_NAME` | auth.somewhere.com | The custom domain for the Cognito hosted UI (e.g., `auth.example.com`). A Route 53 alias record is created automatically during deployment. |
 | `CERTIFICATE_DOMAIN_NAME` | *.somewhere.com | A wildcard to your domain. |
 | `CLOUD_FORMATION_EXECUTION_ROLE_NAME` | firefly-cloudformation-execution-role | Name of the execution role. |
-| `AUTH_DOMAIN_NAME` | auth.somewhere.com | The custom domain for the Cognito hosted UI (e.g., `auth.example.com`). A Route 53 alias record is created automatically during deployment. |
+| `CLEANUP_TEST_RECORDS` | true | Deletes all test records in DynamoDB from the integration tests when `true` |
 | `FIRMWARE_DOMAIN_NAME` | firmware.somewhere.com | The domain name for the CloudFront firmware distribution. |
 | `FIRMWARE_TYPE_MAP` | `{"Controller":"FireFly Controller"}` | JSON mapping from URL application name to the firmware type string expected by the device. |
 | `UI_DOMAIN_NAME` | `ui.somewhere.com` | The custom domain name for the firmware management UI, without the `https://` scheme. |
