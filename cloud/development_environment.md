@@ -23,6 +23,7 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 The following policy files require updates:
 - `policies/firefly-github-actions-cloudformation-access-policy.json`
 - `policies/firefly-cloudformation-execution-policy.json`
+- `policies/firefly-github-actions-role_trust-relationships.json`
 
 ## Step 2: AWS Setup
 
@@ -31,17 +32,10 @@ The following policy files require updates:
 1. Create an S3 bucket to store CloudFormation deployment templates.  This bucket must be in the same region you plan to deploy to.
 2. Name it to match the `SAM_DEPLOYMENT_BUCKET_NAME` value you used in Step 1.
 
-### IAM Users
-
-1. Create the user that will execute the deployment and deletion of the stacks.  For example, `firefly-github-actions`.
-2. Create security credentials for `firefly-github-actions` with an access key and secret.
-
-::: info Note
-Do not create or attach permissions for the user at this time.
-:::
 
 ### IAM Roles
 
+#### CloudFormation Execution Role
 1. Create a new role named `firefly-cloudformation-execution-role`.
 2. Create a trust relationship using statements in `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
 
@@ -49,13 +43,16 @@ Do not create or attach permissions for the user at this time.
 Do not create or attach permissions for the role at this time.
 :::
 
+#### GitHub Actions Role
+Follow the [GitHub Actions AWS Setup](/cloud/github_actions/aws-oidc-setup) guide to create the OIDC identity provider and the `firefly-github-actions-role` IAM role that GitHub Actions uses to authenticate to AWS.
+
 ### IAM Policies
 
 #### CloudFormation Access Policy
-This policy allows the IAM user to execute CloudFormation scripts and assume the CloudFormation Execution role.
+This policy allows the GitHub Actions role to execute CloudFormation scripts and assume the CloudFormation Execution role.
 1. Create a new policy using the updated statements in `policies/firefly-github-actions-cloudformation-access-policy.json`.
 2. Name the policy `firefly-github-actions-cloudformation-access-policy`.
-3. Attach IAM user entity `firefly-github-actions` to the policy.
+3. Attach IAM role entity `firefly-github-actions-role` to the policy.
 
 #### CloudFormation Execution Policy
 This policy allows CloudFormation to deploy and delete the individual AWS services in each stack.
@@ -81,6 +78,7 @@ The following secrets must be configured in each GitHub environment:
 | ---- | ------------- | ----------- |
 | `AWS_ACCOUNT_ID` | 1234567890 | Your AWS account ID. |
 | `AWS_REGION` | us-east-1 | The AWS region you plan to deploy to. |
+| `AWS_ROLE_ARN` | arn:aws:iam::1234567890:role/firefly-github-actions-role | ARN of the IAM role GitHub Actions assumes via OIDC. |
 | `GOOGLE_CLIENT_ID` | | OAuth 2.0 Client ID from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
 | `GOOGLE_CLIENT_SECRET` | | OAuth 2.0 Client Secret from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
 | `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
@@ -203,7 +201,9 @@ Stacks must be deleted in reverse dependency order.  **Delete All** handles this
 
 ### Integration Tests
 
-The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the `firefly-api-gateway` stack output and the UI URL from the `firefly-cloudfront-ui` stack output, then runs the full test suite against the live environment.  UI tests are automatically skipped if the `firefly-cloudfront-ui` stack does not exist.
+The **Run Integration Tests** (`run-integration-tests`) workflow can be run independently to validate a deployed environment without making any changes.  It looks up the API URL from the `firefly-api-gateway` stack output and the UI URL from the `firefly-cloudfront-ui` stack output, then runs the test suite against the live environment.  UI tests are automatically skipped if the `firefly-cloudfront-ui` stack does not exist.
+
+AppConfig tests are excluded by default because they trigger AWS AppConfig deployments and add significant time to the run.  To include them, check **Include AppConfig tests** when triggering the workflow manually.
 
 ## Running Tests Locally
 
@@ -225,14 +225,12 @@ pip install -r tests/requirements.txt
 | `FIREFLY_UI_BUCKET` | For UI S3 tests | Name of the private S3 bucket serving the UI static files |
 | `FIREFLY_COGNITO_USER_POOL_ID` | For auth tests | Cognito User Pool ID |
 | `FIREFLY_COGNITO_CLIENT_ID` | For auth tests | Cognito App Client ID |
-| `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of a Cognito user created via `AdminCreateUser`; in CI this is generated automatically each run |
-| `FIREFLY_TEST_USER_PASSWORD` | For auth tests | Password of the test Cognito user; in CI this is generated automatically each run |
+| `FIREFLY_TEST_USER_EMAIL` | For auth tests | Email of an existing Cognito test user. |
+| `FIREFLY_TEST_USER_PASSWORD` | For auth tests | Password for the Cognito test user. |
 
 Authentication tests are automatically skipped when the Cognito environment variables are not set.  All other tests pass auth headers when the variables are present, allowing the full test suite to run against a deployed environment that requires authentication.
 
-In CI, the workflow generates a unique email and password at runtime, creates the user, runs tests, then deletes the user unconditionally — no persistent secrets required. For local test runs, set these variables to a manually created Cognito user.
-
-The `/users` endpoint tests require additional Cognito admin permissions: the test runner's IAM identity must have `cognito-idp:AdminAddUserToGroup`, `cognito-idp:AdminRemoveUserFromGroup`, and `cognito-idp:ListUsers` on the user pool.  The test suite temporarily adds the CI test user to the `super_users` group to exercise those endpoints, then removes them at teardown.
+The `/users` endpoint tests require additional Cognito admin permissions: the test runner's IAM identity must have `cognito-idp:AdminAddUserToGroup`, `cognito-idp:AdminRemoveUserFromGroup`, and `cognito-idp:ListUsers` on the user pool.  The test suite temporarily adds the test user to the `super_users` group to exercise those endpoints, then removes them at teardown.
 
 AWS credentials must be available via the standard boto3 credential chain.
 
