@@ -164,7 +164,7 @@ Secrets and variables must be set at the **environment** level, not at the repos
 | `AWS_ROLE_ARN` | ARN of `firefly-github-actions-role` in FireFly-DEV |
 | `GOOGLE_CLIENT_ID` | OAuth 2.0 Client ID — see [Google Cloud Setup](/cloud/development_environment#google-cloud-setup) |
 | `GOOGLE_CLIENT_SECRET` | OAuth 2.0 Client Secret |
-| `HOSTED_ZONE_ID` | Hosted zone ID of `dev.fireflylx.com` in FireFly-DEV |
+| `ROUTE_53_HOSTED_ZONE_ID` | Hosted zone ID of `dev.fireflylx.com` in FireFly-DEV |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | Your chosen name for the private firmware bucket |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | Your chosen name for the public firmware bucket |
 | `S3_UI_BUCKET_NAME` | Your chosen name for the UI static files bucket |

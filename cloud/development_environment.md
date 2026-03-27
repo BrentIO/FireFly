@@ -22,7 +22,7 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 - `S3_FIRMWARE_PUBLIC_BUCKET_NAME` — the S3 bucket name you plan to use for public OTA firmware delivery.
 - `S3_UI_BUCKET_NAME` — the S3 bucket name you plan to use for the UI static files.
 - `S3_SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
-- `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
+- `ROUTE_53_HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
 
 The following policy files require updates:
 - `policies/firefly-github-actions-cloudformation-access-policy.json`
@@ -85,7 +85,7 @@ The following secrets must be configured in each GitHub environment:
 | `AWS_ROLE_ARN` | arn:aws:iam::1234567890:role/firefly-github-actions-role | ARN of the IAM role GitHub Actions assumes via OIDC. |
 | `GOOGLE_CLIENT_ID` | | OAuth 2.0 Client ID from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
 | `GOOGLE_CLIENT_SECRET` | | OAuth 2.0 Client Secret from Google Cloud Console. See [Google Cloud Setup](#google-cloud-setup). |
-| `HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
+| `ROUTE_53_HOSTED_ZONE_ID` | AB1234567 | The Hosted Zone ID for your Route 53 instance. |
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | my-firmware-private | The S3 bucket name for storing firmware ZIPs (private). |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
 | `S3_UI_BUCKET_NAME` | my-firefly-ui | The S3 bucket name for the UI static files (private, served via CloudFront). |
