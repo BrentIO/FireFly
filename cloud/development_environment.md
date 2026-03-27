@@ -21,7 +21,7 @@ Before creating anything in AWS, update the placeholder values in the policy fil
 - `S3_FIRMWARE_PRIVATE_BUCKET_NAME` — the S3 bucket name you plan to use to store firmware ZIPs.
 - `S3_FIRMWARE_PUBLIC_BUCKET_NAME` — the S3 bucket name you plan to use for public OTA firmware delivery.
 - `S3_UI_BUCKET_NAME` — the S3 bucket name you plan to use for the UI static files.
-- `SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
+- `S3_SAM_DEPLOYMENT_BUCKET_NAME` — the name of the S3 bucket where CloudFormation deployment templates will be stored.
 - `HOSTED_ZONE_ID` — the Hosted Zone ID for your Route 53 instance.
 
 The following policy files require updates:
@@ -34,7 +34,7 @@ The following policy files require updates:
 ### SAM Deployment Bucket
 
 1. Create an S3 bucket to store CloudFormation deployment templates.  This bucket must be in the same region you plan to deploy to.
-2. Name it to match the `SAM_DEPLOYMENT_BUCKET_NAME` value you used in Step 1.
+2. Name it to match the `S3_SAM_DEPLOYMENT_BUCKET_NAME` value you used in Step 1.
 
 
 ### IAM Roles
@@ -89,7 +89,7 @@ The following secrets must be configured in each GitHub environment:
 | `S3_FIRMWARE_PRIVATE_BUCKET_NAME` | my-firmware-private | The S3 bucket name for storing firmware ZIPs (private). |
 | `S3_FIRMWARE_PUBLIC_BUCKET_NAME` | my-firmware-public | The S3 bucket name for OTA firmware binary delivery (public). |
 | `S3_UI_BUCKET_NAME` | my-firefly-ui | The S3 bucket name for the UI static files (private, served via CloudFront). |
-| `SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
+| `S3_SAM_DEPLOYMENT_BUCKET_NAME` | my-sam-deployment-bucket | The name of the bucket where deployment templates will be stored. |
 
 ### GitHub Variables
 
