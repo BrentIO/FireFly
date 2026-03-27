@@ -2,6 +2,8 @@
 
 GitHub Actions workflows that deploy and delete all FireFly-Cloud AWS infrastructure. Each workflow manages a single CloudFormation stack. Two orchestration workflows (`deploy-all` and `delete-all`) coordinate the full set in dependency order.
 
+**Setup:** [AWS OIDC configuration](./aws-oidc-setup.md) — how to configure the AWS IAM identity provider and role that GitHub Actions uses to authenticate.
+
 ## Workflow Index
 
 | Workflow | CloudFormation Stack | Purpose |
