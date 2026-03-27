@@ -41,7 +41,9 @@ The following policy files require updates:
 
 #### CloudFormation Execution Role
 1. Create a new role named `firefly-cloudformation-execution-role`.
-2. Create a trust relationship using statements in `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
+   - Trusted entity type: **AWS service**
+   - Service: **CloudFormation**
+2. After the role is created, go to **Trust relationships** → **Edit trust policy** and replace the generated policy with the contents of `policies/firefly-cloudformation-execution-role_trust-relationships.json`.
 
 ::: info Note
 Do not create or attach permissions for the role at this time.
