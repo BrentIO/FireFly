@@ -10,13 +10,35 @@ box "AWS" #ffdbbb
     database "S3" as S3
 end box
 
-GHA -> S3++ : aws s3 rm s3://{BucketName} --recursive
-S3 --> GHA-- : Objects deleted
+GHA -> CF : describe_stack_resource\nstack: firefly-s3-firmware\nresource: S3Bucket
+alt Stack does not exist
+    CF --> GHA : ValidationError / ResourceNotFoundException
+    note over GHA : Script exits 0 (idempotent)
+end
+CF --> GHA : PhysicalResourceId (bucket name)
+
+GHA -> S3 : head_bucket
+opt Bucket does not exist (manually deleted)
+    S3 --> GHA : 404 / NoSuchBucket
+    note over GHA : Script exits 0 (idempotent)
+end
+
+alt TARGET_ENV == production AND bucket is non-empty
+    S3 --> GHA : Versions or DeleteMarkers present
+    note over GHA : Script exits 1.\nRefuses to empty production bucket.\nManually empty the bucket in the\nAWS console, then re-run.
+end
+
+GHA -> S3 : Delete all object versions\nand delete markers (paginated)
+GHA -> S3 : Abort incomplete multipart uploads
+GHA -> S3 : Verify bucket is empty
+S3 --> GHA : Bucket empty
 
 GHA -> CF++ : SAM delete\nstack: firefly-s3-firmware
+CF -> S3 : Delete bucket
+S3 --> CF : Bucket deleted
 CF --> GHA-- : DELETE_COMPLETE
 
-alt bucket empty but delete still fails
+alt Stack delete fails
     CF --> GHA : DELETE_FAILED
     note over GHA : Investigate CloudFormation events\nfor resource-level error
 end
