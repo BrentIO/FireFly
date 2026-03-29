@@ -67,13 +67,18 @@ Before deploying, the workflow resolves the ARNs of both S3-triggered Lambda fun
 
 ### Description
 
-Empties the bucket before calling `sam delete` so CloudFormation is not blocked by a non-empty bucket.
+Resolves the bucket name from CloudFormation, empties it, then calls `sam delete`. The emptying step is idempotent: if the stack does not exist or the bucket was already manually deleted, the step exits cleanly. A production safety guard prevents auto-emptying a non-empty production bucket.
 
 ### Steps
 
 1. Configure AWS credentials.
-2. Empty the bucket: `aws s3 rm s3://{BucketName} --recursive`.
-3. SAM delete `firefly-s3-firmware`.
+2. Resolve physical bucket name from the `firefly-s3-firmware` CloudFormation stack resource. If the stack does not exist, exit cleanly.
+3. Check that the bucket exists. If it was already manually deleted, exit cleanly.
+4. **Production guard:** if `TARGET_ENV == production` and the bucket contains any object versions or delete markers, exit with an error. Manually empty the bucket in the AWS console before re-running.
+5. Delete all object versions and delete markers (paginated).
+6. Abort any incomplete multipart uploads.
+7. Verify the bucket is empty.
+8. SAM delete `firefly-s3-firmware`.
 
 ### Sequence Diagram
 
@@ -84,5 +89,7 @@ Empties the bucket before calling `sam delete` so CloudFormation is not blocked 
 | Scenario | Behavior |
 |---|---|
 | Lambda ARN lookup fails (function stack not deployed) | `describe-stacks` call returns an error; workflow fails before SAM deploy is attempted. Deploy `func-s3-firmware-uploaded` and `func-s3-firmware-deleted` first. |
-| Bucket non-empty at delete time | Workflow empties the bucket with `aws s3 rm --recursive` before calling `sam delete`, so CloudFormation never sees a non-empty bucket. |
+| Bucket manually deleted before workflow runs | `head_bucket` returns 404; workflow exits cleanly and proceeds to `sam delete`, which handles the already-absent bucket resource idempotently. |
+| Bucket non-empty at delete time | Workflow deletes all object versions, delete markers, and incomplete multipart uploads before calling `sam delete`, so CloudFormation never sees a non-empty bucket. |
+| Bucket non-empty in production | Production safety guard exits with an error rather than auto-emptying. Manually empty the bucket in the AWS console, then re-run the workflow. |
 | S3 event notification already exists | SAM handles idempotently via CloudFormation update; existing notifications are replaced in-place. |
