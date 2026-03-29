@@ -2,7 +2,7 @@
 
 ## Overview
 
-Manages the Lambda function that handles authenticated firmware status transitions via `PATCH /firmware/{zip_name}/status`. Drives the release state machine: `READY_TO_TEST` → `TESTING` → `RELEASED` → `REVOKED`. When transitioning to `RELEASED`, the function copies binaries to the public S3 bucket. When transitioning to `REVOKED`, it moves the public-bucket object to the `revoked/` prefix and sets a TTL.
+Manages the Lambda function that handles authenticated firmware status transitions via `PATCH /firmware/{zip_name}/status`. Drives the release state machine: `READY_TO_TEST` → `TESTING` → `RELEASED` → `REVOKED`. When transitioning to `RELEASED`, the function copies binaries to the public S3 bucket. When transitioning to `REVOKED`, it moves the public-bucket object to the `revoked/` prefix.
 
 ## CloudFormation Stack
 
@@ -65,7 +65,7 @@ Looks up the API Gateway ID and the Cognito JWT Authorizer ID from the `firefly-
 | Transition | Side Effect |
 |---|---|
 | → `RELEASED` | Copies firmware binaries to public S3 bucket |
-| → `REVOKED` | Moves public S3 object to `revoked/` prefix; sets DynamoDB TTL |
+| → `REVOKED` | Moves public S3 object to `revoked/` prefix; see [Firmware Lifecycle](/cloud/firmware_lifecycle) |
 
 ### Sequence Diagram
 

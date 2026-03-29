@@ -2,7 +2,7 @@
 
 ## Overview
 
-Provisions the public S3 bucket that hosts released firmware binaries. The bucket is fronted by CloudFront for OTA delivery. A bucket policy denies `s3:GetObject` on the `revoked/` prefix (access-denied for revoked firmware), and a lifecycle rule expires objects under `revoked/` after 90 days.
+Provisions the public S3 bucket that hosts released firmware binaries. The bucket is fronted by CloudFront for OTA delivery. A bucket policy denies `s3:GetObject` on the `revoked/` prefix (access-denied for revoked firmware). See [Firmware Lifecycle](/cloud/firmware_lifecycle) for retention details.
 
 ## CloudFormation Stack
 
