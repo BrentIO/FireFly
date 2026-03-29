@@ -57,7 +57,7 @@ Before deploying, the workflow resolves the ARNs of both S3-triggered Lambda fun
 - Private (no public access)
 - S3 event notification: `incoming/*.zip` ObjectCreated → `func-s3-firmware-uploaded`
 - S3 event notification: `processed/` and `errors/` ObjectRemoved → `func-s3-firmware-deleted`
-- Lifecycle rules: `incoming/` 1 day, `processing/` 1 day, `errors/` 7 days, `processed/` 30 days
+- Lifecycle rules: see [Firmware Lifecycle](/cloud/firmware_lifecycle)
 
 ### Sequence Diagram
 

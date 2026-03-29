@@ -18,7 +18,7 @@ Status transitions have S3 side effects that are performed **before** DynamoDB i
 
 **`TESTING` → `RELEASED`:** The firmware ZIP is downloaded from the private bucket (`processed/{zip_name}`), extracted, and each file (excluding `config.bin` and `manifest.json`) is uploaded to the public bucket at `{product_id}/{application}/{version}/{filename}`. These files are then accessible via the CloudFront distribution.
 
-**`RELEASED` → `REVOKED`:** All objects under `{product_id}/{application}/{version}/` in the public bucket are moved to `revoked/{product_id}/{application}/{version}/`. A bucket policy `Deny` on the `revoked/` prefix makes these files immediately inaccessible. A 90-day S3 lifecycle rule on the `revoked/` prefix expires the objects automatically. The DynamoDB TTL is also set to 10 days when the record is marked `REVOKED`.
+**`RELEASED` → `REVOKED`:** All objects under `{product_id}/{application}/{version}/` in the public bucket are moved to `revoked/{product_id}/{application}/{version}/`. A bucket policy `Deny` on the `revoked/` prefix makes these files immediately inaccessible. See [Firmware Lifecycle](/cloud/firmware_lifecycle) for retention details.
 
 ## Invocation
 Invoked by **API Gateway** on an HTTP `PATCH /firmware/{zip_name}/status` request with a JSON body containing the desired `release_status`.
@@ -46,7 +46,7 @@ All possible `release_status` values and how they are set:
 | `READY_TO_TEST` | `func-s3-firmware-uploaded` | Upload validated successfully; awaiting testing |
 | `TESTING` | This function | Firmware is under active test |
 | `RELEASED` | This function | Firmware is publicly released |
-| `REVOKED` | This function | Previously released firmware that has been pulled; binaries moved to `revoked/` prefix in public bucket, DynamoDB TTL set |
+| `REVOKED` | This function | Previously released firmware that has been pulled; binaries moved to `revoked/` prefix in public bucket; see [Firmware Lifecycle](/cloud/firmware_lifecycle) |
 | `DELETED` | `func-s3-firmware-deleted` | Firmware deleted from S3; set automatically for any non-`RELEASED`/`REVOKED` record |
 | `ERROR` | `func-s3-firmware-uploaded` | Upload validation failed; the `error` field contains the reason |
 

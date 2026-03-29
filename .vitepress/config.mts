@@ -302,6 +302,10 @@ export default defineConfig({
                     text: 'Authentication',
                     link: '/cloud/authentication'
                   },
+                  {
+                    text: 'Firmware Lifecycle',
+                    link: '/cloud/firmware_lifecycle'
+                  },
                 ]
               },
               {

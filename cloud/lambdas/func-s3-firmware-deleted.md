@@ -1,7 +1,7 @@
 # func-s3-firmware-deleted
 
 ## Description
-Responds to a firmware ZIP being deleted from S3. The function updates the corresponding DynamoDB record's `release_status` and sets a TTL so the record is automatically purged after 10 days.
+Responds to a firmware ZIP being deleted from S3. The function updates the corresponding DynamoDB record's `release_status` to `DELETED`. See [Firmware Lifecycle](/cloud/firmware_lifecycle) for retention details.
 
 The function processes events from both the `processed/` and `errors/` prefixes. Deletions from any other prefix are ignored.
 
@@ -20,14 +20,6 @@ Invoked by an **S3 event notification** when a `.zip` file is deleted from the `
 
 ## API Endpoints
 This function is not invoked via API Gateway and has no associated API endpoints.
-
-## TTL Behavior
-
-After updating the `release_status`, this function sets a DynamoDB `ttl` attribute on the record to 10 days from the time of deletion.  DynamoDB will automatically delete the record once the TTL expires, keeping the table free of stale entries.
-
-::: info Note
-DynamoDB TTL deletion is eventually consistent and may take up to 48 hours after the TTL timestamp before the item is actually removed.
-:::
 
 ## Deployment
 
