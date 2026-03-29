@@ -1,9 +1,13 @@
 # FFC0806-2305
 
+::: warning Version never built
+This hardware version was an interrim design that was never sent to manufacturing.
+:::
+
 ## Description
 This controller model was a test bed for software development and manufacturing.
 
-**Status:** Unreleased
+**Status:** Never built
 
 **Hex:** 0x08062305
 
