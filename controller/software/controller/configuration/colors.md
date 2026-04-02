@@ -4,4 +4,4 @@ Colors are used by buttons.  To improve the user experience, different color but
 
 See our [Best Practices](/best_practices) guide for more detail on how to use colors to improve your systems' usability.
 
-[![Colors](./colors.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/colors.png)
+[![Colors](./colors.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/colors.png)

@@ -4,7 +4,7 @@ Circuits are controlled by a high-voltage relay.  A circuit is attached to a sin
 
 An ID can be set for the circuit, as well as a short description, [area](./areas.md), and [icon](./icons.md).
 
-[![Circuits](./circuits.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/circuits.png)
+[![Circuits](./circuits.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/circuits.png)
 
 
 ## Custom Relay Models
@@ -14,7 +14,7 @@ There relay models discussed in the [High Voltage Relays section](/controller/ha
 When no circuits remain with the custom model, it will be deleted.
 
 
-[![Add New Circuit](./circuit_new.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/circuit_new.png)
+[![Add New Circuit](./circuit_new.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/circuit_new.png)
 
 
 

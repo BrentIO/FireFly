@@ -4,7 +4,7 @@ Clients are devices with human interfaces attached, such as buttons or switches.
 
 An ID can be set for the client, as well as a short description and [area](./areas.md).  A MAC address must also be assigned, though one can be generated on a temporary basis until the actual MAC address is known.  When a MAC address has been generated, `ff:ff:ff:ff:ff:ff` will be used and will be highlighted on the configuration page.
 
-[![Client](./clients.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/clients.png)
+[![Client](./clients.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/clients.png)
 
 
 ## Extended Clients
@@ -40,7 +40,7 @@ You can move button and switches up and down to arrange them as desired.  When y
 
 If you hover over the button or switch, you will see a list of actions that will be performed when a change is observed.  This is helpful to think through your user experience.
 
-[![Client Buttons](./clients-buttons.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/clients-buttons.png)
+[![Client Buttons](./clients-buttons.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/clients-buttons.png)
 
 ### Short Press versus Long Press Actions
 

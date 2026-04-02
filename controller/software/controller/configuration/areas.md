@@ -5,4 +5,4 @@ Areas are used by Home Assistant to logically group items together that are in t
 Several areas come pre-defined in the database, and you may add as many as you need.
 
 
-[![Areas](./areas.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/areas.png)
+[![Areas](./areas.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/areas.png)

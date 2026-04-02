@@ -8,7 +8,7 @@ To assign a Client to a controller port, simply drag-and-drop.  To unassign a Cl
 Drag-and-drop functionality is not supported on Android.
 :::
 
-[![Inputs](./inputs.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/inputs.png)
+[![Inputs](./inputs.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/inputs.png)
 
 ## Extended Clients
 Extended Clients are clients that have more than four physical inputs.  Extended Clients are denoted on the Inputs page with a lighter color.

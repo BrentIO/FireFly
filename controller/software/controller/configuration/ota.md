@@ -19,4 +19,4 @@ Using `$$pid$$` requires the external EEPROM to be present and programmed.
 
 Additional information about [OTA updates](/controller/support/ota_updates) can be found on the support page.
 
-[![OTA](./ota.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/ota.png)
+[![OTA](./ota.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/ota.png)
