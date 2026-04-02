@@ -80,3 +80,8 @@ jobs:
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
             --s3-bucket ${{ secrets.S3_SAM_DEPLOYMENT_BUCKET_NAME }}
+
+  publish-docs:
+    needs: deploy-infrastructure
+    uses: ./.github/workflows/deploy-docs.yaml
+    secrets: inherit
