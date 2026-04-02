@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-docs:
+  publish-docs:
     environment: production
     runs-on: ubuntu-latest
     permissions:
