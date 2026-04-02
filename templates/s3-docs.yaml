@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Private S3 bucket for the FireFly documentation static site
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: Name of the S3 bucket to create for the documentation static files
+
+Resources:
+
+  DocsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  BucketName:
+    Value: !Ref DocsBucket
+    Description: Name of the S3 bucket hosting the documentation static files

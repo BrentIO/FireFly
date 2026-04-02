@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFront distribution for the FireFly documentation static site
+
+Parameters:
+  DocsBucketName:
+    Type: String
+    Description: Name of the private S3 bucket containing the documentation static files
+
+  CertificateArn:
+    Type: String
+    Description: ARN of the ACM certificate for the docs domain (must be in us-east-1)
+
+  DocsDomain:
+    Type: String
+    Description: Custom domain name for the documentation (e.g., docs.fireflylx.com)
+
+  HostedZoneId:
+    Type: String
+    Description: Route53 Hosted Zone ID for the docs domain
+
+Resources:
+
+  DocsOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: firefly-docs-oac
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  DocsDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Aliases:
+          - !Ref DocsDomain
+        Origins:
+          - Id: DocsS3Origin
+            DomainName: !Sub "${DocsBucketName}.s3.${AWS::Region}.amazonaws.com"
+            OriginAccessControlId: !GetAtt DocsOriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS]
+          CachedMethods: [GET, HEAD]
+          TargetOriginId: DocsS3Origin
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          DefaultTTL: 0
+          MaxTTL: 0
+          MinTTL: 0
+          Compress: true
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        HttpVersion: http2
+        PriceClass: PriceClass_100
+
+  DocsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref DocsBucketName
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${DocsBucketName}/*"
+            Condition:
+              StringEquals:
+                "AWS:SourceArn": !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${DocsDistribution}"
+
+  DocsDnsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DocsDomain
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt DocsDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+Outputs:
+  DistributionId:
+    Value: !Ref DocsDistribution
+    Description: CloudFront distribution ID
+
+  DistributionDomain:
+    Value: !GetAtt DocsDistribution.DomainName
+    Description: CloudFront distribution domain name
+
+  DocsDomain:
+    Value: !Ref DocsDomain
+    Description: Custom documentation domain name

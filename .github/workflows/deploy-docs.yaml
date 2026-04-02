@@ -1,53 +1,51 @@
-# Sample workflow for building and deploying a VitePress site to GitHub Pages
-#
-name: Deploy VitePress site to Pages
+name: 🚀 Deploy Documentation
 
 on:
-  # Runs on pushes targeting the `main` branch. Change this to `master` if you're
-  # using the `master` branch as the default branch.
   push:
     branches: [main]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
-  pages: write
   id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: pages
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  # Build job
-  build:
+  deploy-docs:
+    environment: production
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      - name: Setup Node
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+
       - name: Install dependencies
         run: npm install
+
       - name: Install PlantUML
         run: |
           wget -q https://github.com/plantuml/plantuml/releases/download/v1.2026.2/plantuml-1.2026.2.jar -O /opt/plantuml.jar
           echo '#!/bin/sh' | sudo tee /usr/local/bin/plantuml
           echo 'exec java -jar /opt/plantuml.jar "$@"' | sudo tee -a /usr/local/bin/plantuml
           sudo chmod +x /usr/local/bin/plantuml
+
       - name: Generate PlantUML diagrams
         run: |
           find . -name "*.puml" -print0 | while IFS= read -r -d '' f; do
@@ -56,6 +54,7 @@ jobs:
             (cd "$dir" && plantuml -tsvg "$base")
             echo "Generated: ${f%.puml}.svg"
           done
+
       - name: Verify SVG output
         run: |
           echo "Generated SVG files:"
@@ -69,30 +68,32 @@ jobs:
             fi
           done
           if [ "$missing" -eq 1 ]; then exit 1; fi
+
       - name: Copy SVGs to public for direct URL access
         run: |
           mkdir -p public/cloud/lambdas/images
           cp cloud/lambdas/images/*.svg public/cloud/lambdas/images/
           mkdir -p public/cloud/github_actions/images
           cp cloud/github_actions/images/*.svg public/cloud/github_actions/images/
+
       - name: Build with VitePress
         run: npm run docs:build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: .vitepress/dist
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Sync to S3
+        run: aws s3 sync .vitepress/dist/ s3://${{ secrets.S3_DOCS_BUCKET_NAME }} --delete
+
+      - name: Look up CloudFront distribution ID
+        id: lookup-dist
+        run: |
+          DIST_ID=$(aws cloudformation describe-stacks \
+            --stack-name firefly-cloudfront-docs \
+            --query "Stacks[0].Outputs[?OutputKey=='DistributionId'].OutputValue" \
+            --output text)
+
+          echo "dist_id=$DIST_ID" >> $GITHUB_OUTPUT
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.lookup-dist.outputs.dist_id }} \
+            --paths "/*"
