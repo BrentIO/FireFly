@@ -39,6 +39,19 @@ jobs:
 
           echo "cert_arn=$CERT_ARN" >> $GITHUB_OUTPUT
 
+      - name: Delete firefly-s3-docs if in ROLLBACK_COMPLETE
+        run: |
+          STATUS=$(aws cloudformation describe-stacks \
+            --stack-name firefly-s3-docs \
+            --region ${{ secrets.AWS_REGION }} \
+            --query "Stacks[0].StackStatus" \
+            --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+          if [ "$STATUS" = "ROLLBACK_COMPLETE" ] || [ "$STATUS" = "ROLLBACK_FAILED" ]; then
+            echo "Stack is in $STATUS — deleting before redeploy"
+            aws cloudformation delete-stack --stack-name firefly-s3-docs --region ${{ secrets.AWS_REGION }}
+            aws cloudformation wait stack-delete-complete --stack-name firefly-s3-docs --region ${{ secrets.AWS_REGION }}
+          fi
+
       - name: Deploy s3-docs
         run: |
           sam deploy \
