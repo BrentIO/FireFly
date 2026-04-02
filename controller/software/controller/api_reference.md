@@ -5,7 +5,7 @@ import SwaggerUIBundle from './api_reference.vue'
 # API Reference
 The API documentation below is rendered from the most recent version available on GitHub.  You should verify the version shown matches the firmware version on your device.
 
-A Visual Token can be found on the [OLED screen](/controller/support/OLED_screens/#auth-token), which randomizes the code.  Once authorized, the token is usually valid for 1 hour.
+A Visual Token can be found on the [OLED screen](/controller/support/OLED_screens/#auth-token), which randomizes the code.  Once authorized, the token is valid for 30 minutes.
 
 > [!NOTE]
 > This page is best viewed in `light` mode.
