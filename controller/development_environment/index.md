@@ -217,12 +217,13 @@ The folder structure should look like this:
 	---> ...
 -> Hardware-Registration-and-Configuration
 	---> www
-		-----> auxillary_data.json
 		-----> ...
 	---> Hardware-Registration-and-Configuration.ino
 
 	---> swagger.yaml
 	---> ...
+-> devices.json
+-> ...
 -> common
 	---> hardware.h
 	---> externalEEPROM.h
@@ -279,7 +280,7 @@ Location (see table above) = `0xC90000`.  To flash the image:
 ## Adding a new hardware version
 Hardware configurationsk are abstracted from the main applications to allow for compilation with minimal hardware-specific design considerations.  Each hardware model is defined in `hardware.h`.
 
-Additionally, the peripheral information must be added to `./www/auxillary_data.json` file.  Adding the product HEX and the product ID to the auxillary_data.json file will add it to the Product ID drop down in the Identification area of the configuration.
+Additionally, the peripheral information must be added to `devices.json` at the repository root.  Adding the product HEX and the product ID to the `devices.json` file will add it to the Product ID drop down in the Identification area of the configuration.
 
 ## Filter Large JSON documents
 
