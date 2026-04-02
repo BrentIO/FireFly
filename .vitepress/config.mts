@@ -4,9 +4,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Project FireFly",
   description: "Software-defined lighting",
-  base: '/FireFly/',
+  base: '/',
   cleanUrls: true,
-  head: [['link', { rel: 'icon', href: '/FireFly/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
