@@ -6,17 +6,17 @@ Controllers can be added even when all of their details are not yet known.  An e
 Although you might be using the configuration UI from a Controller, that Controller may not be shown because data is stored in your browser.  You will still need to add the Controller manually or by IP address.
 :::
 
-[![Controllers](./controllers.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/controllers.png)
+[![Controllers](./controllers.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/controllers.png)
 
 To add a controller, you can type the information manually, or you can add it by IP address.  When adding by IP address, a visual token will also be required.
 
-[![Add Controllers](./controllers_add.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/controllers_add.png)
+[![Add Controllers](./controllers_add.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/controllers_add.png)
 
-[![Controller Added](./controller_added.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/controller_added.png)
+[![Controller Added](./controller_added.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/controller_added.png)
 
 After a controller is added, you will need to authenticate if you want to take any actions on it.  Doing so will require a visual token.  After authentication, multiple options will be displayed.  Note that some information is only collected from the Controller at its most recent authentication.  Forcing an update to occur may render some information stale, though a logout and re-authentication will update the data to the most recent values.  It may be necessary to update the IP address of the device to re-authenticate.
 
-[![Controller Authenticated](./controller_authenticated.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/controller_authenticated.png)
+[![Controller Authenticated](./controller_authenticated.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/controller_authenticated.png)
 
 
 ## Errors and Events

@@ -6,4 +6,4 @@ Resetting the database will delete all configuration data and restore the databa
 Once reset, any configuration changes are lost forever.
 :::
 
-[![Configuration: Reset](./reset.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/reset.png)
+[![Configuration: Reset](./reset.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/reset.png)

@@ -16,4 +16,4 @@ All information configured about FireFly is contained in this file and the data 
 
 The file uses the [Dexie.js](https://dexie.org/docs/ExportImport/dexie-export-import) database format.
 
-[![Import](./import.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/import.png)
+[![Import](./import.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/import.png)

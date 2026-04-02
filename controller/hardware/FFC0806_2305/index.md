@@ -18,7 +18,7 @@ This controller model was a test bed for software development and manufacturing.
 - Recommended: 12VDC 3A
 - Maximum: 26VDC
 
-[![Pinout](./power_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/power_pinout.svg)
+[![Pinout](./power_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/power_pinout.svg)
 
 
 ## MCU
@@ -57,7 +57,7 @@ Espressif Systems ESP32-WROVER-E-N16R8 with 16MB Flash Storage
 
 - 3 double-stack 90 degree 5.08mm pluggable terminal block
 
-[![Pinout](./output_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/output_pinout.svg)
+[![Pinout](./output_pinout.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/output_pinout.svg)
 
 | Pin | Wire Color | Meaning |
 | --- | ---------- | ------- |
@@ -99,19 +99,19 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 | Power Supply: 9VDC                | Texas Instruments     | LM2940S-9.0/NOPB          | LCSC/JLCPCB       | C134005                           |                   | |
 
 ## Reference Designs
-[Schematic](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/Schematic.pdf)
+[Schematic](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/Schematic.pdf)
 
-[EasyEDA Project](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/EasyEDA.zip)
+[EasyEDA Project](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/EasyEDA.zip)
 
-[Gerber Files](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/Gerber.zip)
+[Gerber Files](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/Gerber.zip)
 
-[BOM](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/BOM.csv)
+[BOM](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/BOM.csv)
 
-[Pick and Place](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/PickAndPlace.csv)
+[Pick and Place](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/PickAndPlace.csv)
 
-[![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/pcb-top.png)
+[![PCB Top](./pcb-top.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/pcb-top.png)
 
-[![PCB Bottom](./pcb-bottom.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/hardware/FFC0806_2305/pcb-bottom.png)
+[![PCB Bottom](./pcb-bottom.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/hardware/FFC0806_2305/pcb-bottom.png)
 
 
 ## 3D Printed Parts

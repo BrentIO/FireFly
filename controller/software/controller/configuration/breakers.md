@@ -10,4 +10,4 @@ The same rules of thumb used for traditional controls should apply to a FireFly 
 Breakers should not have a utilization over 80% for safety reasons.  If you notice more than 80% utilization, you should redesign your panel to shift some of the load to another breaker.
 :::
 
-[![Breakers](./breakers.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/breakers.png)
+[![Breakers](./breakers.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/breakers.png)

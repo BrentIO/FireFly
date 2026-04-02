@@ -6,4 +6,4 @@ Tags can be up to 20 characters in length, per the [API Documentation](/controll
 
 <Badge type="warning" text="TODO" /> Documentation on the use of tags via MQTT is coming soon.
 
-[![Tags](./tags.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/tags.png)
+[![Tags](./tags.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/tags.png)

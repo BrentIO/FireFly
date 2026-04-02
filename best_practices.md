@@ -42,7 +42,7 @@ Use consistent button colors to further aid in the meaning of a button.  Short a
 
 
 :white_check_mark: Use this design:
-[![Ideal Design](./best_practices_ideal_example.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/best_practices_ideal_example.svg)
+[![Ideal Design](./best_practices_ideal_example.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/best_practices_ideal_example.svg)
 
 - The blue button must control the primary light in the room, which is why it is at the top
 - The yellow buttons are together, and can be identified by the user as a "group"
@@ -50,7 +50,7 @@ Use consistent button colors to further aid in the meaning of a button.  Short a
 
 
 :no_entry: Avoid this design:
-[![Avoid Design](./best_practices_avoid_example.svg)](https://raw.githubusercontent.com/BrentIO/FireFly/main/best_practices_avoid_example.svg)
+[![Avoid Design](./best_practices_avoid_example.svg)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/best_practices_avoid_example.svg)
 
 - The yellow buttons are separated and therefore confusing, and because it is the top-most button, it must be the primary light
 - The blue button's use is unknown because it separates the dimming buttons

@@ -5,4 +5,4 @@ Certificates are required when the OTA server uses HTTPS.  Multiple certificates
 See more information about [certificate management](/controller/support/certificate_management).
 
 
-[![Certificates](./certificates.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/certificates.png)
+[![Certificates](./certificates.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/certificates.png)

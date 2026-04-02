@@ -8,4 +8,4 @@ To assign a circuit to a controller port, simply drag-and-drop.  To unassign a c
 Drag-and-drop functionality is not supported on Android.
 :::
 
-[![Outputs](./outputs.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/outputs.png)
+[![Outputs](./outputs.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/outputs.png)

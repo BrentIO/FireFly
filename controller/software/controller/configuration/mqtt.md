@@ -25,4 +25,4 @@ Using `$$uuid$$` requires the external EEPROM to be present and programmed.
 :::
 
 
-[![MQTT](./mqtt.png)](https://raw.githubusercontent.com/BrentIO/FireFly/main/controller/software/controller/configuration/mqtt.png)
+[![MQTT](./mqtt.png)](https://raw.githubusercontent.com/BrentIO/FireFly-Docs/main/controller/software/controller/configuration/mqtt.png)
