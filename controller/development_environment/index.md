@@ -49,9 +49,9 @@ Update the index:
 arduino-cli core update-index
 ```
 
-Install ESP32 core, version 2.0.17:
+Install ESP32 core, version 3.3.7:
 ```bash
-arduino-cli core install esp32:esp32@2.0.17
+arduino-cli core install esp32:esp32@3.3.7
 ```
 
 Verify the installation was successful, and optionally remove any other cores:
@@ -64,7 +64,7 @@ Expect:
 
 | ID | Installed | Latest | Name |
 | --- | --- | --- | --- |
-| esp32:esp32 | 2.0.17 | 2.0.17 | esp32 |
+| esp32:esp32 | 3.3.7 | 3.3.7 | esp32 |
 
 
 ### Updating
@@ -73,9 +73,9 @@ Expect:
  arduino-cli core uninstall esp32:esp32
  ```
 
-Specify the version number to upgrade the ESP to 2.0.17:
+Specify the version number to upgrade the ESP to 3.3.7:
 ```bash
-arduino-cli core install esp32:esp32@2.0.17
+arduino-cli core install esp32:esp32@3.3.7
 ```
 
 ## Installing and Configuring Libraries
@@ -104,7 +104,7 @@ Download each library below as a zip file or download from GitHub.
 | BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
 | BrentIO_AsyncWebServer_ESP32_W5500 | 2025.5.2 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
 | BrentIO_ESP Async WebServer | 2024.7.1 | https://github.com/BrentIO/ESPAsyncWebServer |
-| BrentIO_esp32FOTA | 2025.11.2 | https://github.com/BrentIO/esp32FOTA |
+| BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
 | BrentIO_PubSubClient | 2025.4.1 | https://github.com/BrentIO/pubsubclient |
@@ -113,7 +113,7 @@ Download each library below as a zip file or download from GitHub.
 | LinkedList | 1.3.3 | https://github.com/ivanseidel/LinkedList |
 | NTPClient | 3.2.1 | https://github.com/arduino-libraries/NTPClient |
 | PCA9685_RT | 0.7.3 | https://github.com/RobTillaart/PCA9685_RT |
-| Regexp | 1.1 | https://github.com/nickgammon/Regexp |
+| Regexp | 0.1.1 | https://github.com/nickgammon/Regexp |
 
 Install each library above using the following command:
 ```bash
@@ -131,9 +131,9 @@ Steps:
 
 1. Close Visual Studio Code
 
-2. Create a symlink adjacent to the main boards file. Example for ESP Core version 2.0.17:
+2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
 ```bash
-ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.17/boards.local.txt
+ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
 ```
 
 3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
@@ -371,7 +371,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli config set board_manager.additional_urls \
         https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json && \
       HOME=$H arduino-cli core update-index && \
-      HOME=$H arduino-cli core install esp32:esp32@2.0.17; \
+      HOME=$H arduino-cli core install esp32:esp32@3.3.7; \
     done
 
 # ---------------------------------------------------------
@@ -387,7 +387,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncTCP.git#2024.2.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2025.5.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/ESPAsyncWebServer.git#2024.7.1 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2025.11.2 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2026.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCA95x5.git#2023.10.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCT2075.git#2023.10.3 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/pubsubclient.git#2025.4.1 && \
@@ -396,7 +396,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/ivanseidel/LinkedList.git#v1.3.3 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/NTPClient.git#3.2.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/RobTillaart/PCA9685_RT.git#0.7.3 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/nickgammon/Regexp.git#v1.1; \
+      HOME=$H arduino-cli lib install --git-url https://github.com/nickgammon/Regexp.git#0.1.1; \
     done
 ```
 Usage for Intel CPU: `docker build --no-cache --platform=linux/amd64 -t act-arduino-ubuntu-24-04:latest .`
