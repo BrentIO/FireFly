@@ -49,9 +49,9 @@ Update the index:
 arduino-cli core update-index
 ```
 
-Install ESP32 core, version 3.3.7:
+Install ESP32 core, version 2.0.17:
 ```bash
-arduino-cli core install esp32:esp32@3.3.7
+arduino-cli core install esp32:esp32@2.0.17
 ```
 
 Verify the installation was successful, and optionally remove any other cores:
@@ -64,7 +64,7 @@ Expect:
 
 | ID | Installed | Latest | Name |
 | --- | --- | --- | --- |
-| esp32:esp32 | 3.3.7 | 3.3.7 | esp32 |
+| esp32:esp32 | 2.0.17 | 2.0.17 | esp32 |
 
 
 ### Updating
@@ -73,9 +73,9 @@ Expect:
  arduino-cli core uninstall esp32:esp32
  ```
 
-Specify the version number to upgrade the ESP to 3.3.7:
+Specify the version number to upgrade the ESP to 2.0.17:
 ```bash
-arduino-cli core install esp32:esp32@3.3.7
+arduino-cli core install esp32:esp32@2.0.17
 ```
 
 ## Installing and Configuring Libraries
@@ -131,9 +131,9 @@ Steps:
 
 1. Close Visual Studio Code
 
-2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
+2. Create a symlink adjacent to the main boards file. Example for ESP Core version 2.0.17:
 ```bash
-ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
+ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.17/boards.local.txt
 ```
 
 3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
@@ -371,7 +371,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli config set board_manager.additional_urls \
         https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json && \
       HOME=$H arduino-cli core update-index && \
-      HOME=$H arduino-cli core install esp32:esp32@3.3.7; \
+      HOME=$H arduino-cli core install esp32:esp32@2.0.17; \
     done
 
 # ---------------------------------------------------------
