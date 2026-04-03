@@ -109,7 +109,6 @@ Download each library below as a zip file or download from GitHub.
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
 | BrentIO_PubSubClient | 2025.4.1 | https://github.com/BrentIO/pubsubclient |
 | Ethernet | 2.0.2 | https://github.com/arduino-libraries/Ethernet |
-| I2C_EEPROM | 1.9.4 | https://github.com/RobTillaart/I2C_EEPROM |
 | LinkedList | 1.3.3 | https://github.com/ivanseidel/LinkedList |
 | NTPClient | 3.2.1 | https://github.com/arduino-libraries/NTPClient |
 | PCA9685_RT | 0.7.3 | https://github.com/RobTillaart/PCA9685_RT |
@@ -226,7 +225,7 @@ The folder structure should look like this:
 -> ...
 -> common
 	---> hardware.h
-	---> externalEEPROM.h
+	---> deviceIdentity.h
 	---> ...
 ```
 
@@ -392,7 +391,6 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCT2075.git#2023.10.3 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/pubsubclient.git#2025.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/Ethernet.git#2.0.2 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/RobTillaart/I2C_EEPROM.git#1.9.4 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/ivanseidel/LinkedList.git#v1.3.3 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/arduino-libraries/NTPClient.git#3.2.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/RobTillaart/PCA9685_RT.git#0.7.3 && \
