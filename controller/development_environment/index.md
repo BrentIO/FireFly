@@ -99,7 +99,7 @@ Download each library below as a zip file or download from GitHub.
 | Adafruit_BusIO | 1.17.4 | https://github.com/adafruit/Adafruit_BusIO |
 | Adafruit-GFX-Library | 1.12.5 | https://github.com/adafruit/Adafruit-GFX-Library |
 | Adafruit_SSD1306 | 2.5.16 | https://github.com/adafruit/Adafruit_SSD1306 |
-| ArduinoJson | 6.21.5 | https://github.com/bblanchon/ArduinoJson |
+| ArduinoJson | 7.4.1 | https://github.com/bblanchon/ArduinoJson |
 | ArduinoStreamUtils | 1.9.2 | https://github.com/bblanchon/ArduinoStreamUtils |
 | BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
 | BrentIO_AsyncWebServer_ESP32_W5500 | 2025.5.2 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
@@ -381,7 +381,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit_BusIO.git#1.17.4 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit-GFX-Library.git#1.12.5 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit_SSD1306.git#2.5.16 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoJson.git#v6.21.5 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoJson.git#v7.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoStreamUtils.git#v1.9.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncTCP.git#2024.2.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2025.5.2 && \
