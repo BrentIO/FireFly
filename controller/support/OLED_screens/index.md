@@ -96,6 +96,11 @@ The software application name and version are displayed.  There are some [abbrev
 
 ![Error](./images/error.svg)
 
+## HW/FW Mismatch
+If the firmware’s product hex does not match the hardware’s product hex stored in NVS, the system will display an error and halt the boot process.
+
+![HW/FW Mismatch](./images/hw_fw_mismatch.svg)
+
 
 ## Auth Token
 Displays the current authorization token active on the controller.  This is used for both security and to ensure the correct controller is being configured.  A random sequence of letters and numbers are displayed and will refresh when the countdown timer bar reaches zero.
