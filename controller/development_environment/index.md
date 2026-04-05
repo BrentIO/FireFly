@@ -49,9 +49,9 @@ Update the index:
 arduino-cli core update-index
 ```
 
-Install ESP32 core, version 2.0.17:
+Install ESP32 core, version 3.3.7:
 ```bash
-arduino-cli core install esp32:esp32@2.0.17
+arduino-cli core install esp32:esp32@3.3.7
 ```
 
 Verify the installation was successful, and optionally remove any other cores:
@@ -64,7 +64,7 @@ Expect:
 
 | ID | Installed | Latest | Name |
 | --- | --- | --- | --- |
-| esp32:esp32 | 2.0.17 | 2.0.17 | esp32 |
+| esp32:esp32 | 3.3.7 | 3.3.7 | esp32 |
 
 
 ### Updating
@@ -73,9 +73,9 @@ Expect:
  arduino-cli core uninstall esp32:esp32
  ```
 
-Specify the version number to upgrade the ESP to 2.0.17:
+Specify the version number to upgrade the ESP to 3.3.7:
 ```bash
-arduino-cli core install esp32:esp32@2.0.17
+arduino-cli core install esp32:esp32@3.3.7
 ```
 
 ## Installing and Configuring Libraries
@@ -101,9 +101,9 @@ Download each library below as a zip file or download from GitHub.
 | Adafruit_SSD1306 | 2.5.16 | https://github.com/adafruit/Adafruit_SSD1306 |
 | ArduinoJson | 7.4.1 | https://github.com/bblanchon/ArduinoJson |
 | ArduinoStreamUtils | 1.9.2 | https://github.com/bblanchon/ArduinoStreamUtils |
-| BrentIO_AsyncTCP | 2024.2.1 | https://github.com/BrentIO/AsyncTCP |
-| BrentIO_AsyncWebServer_ESP32_W5500 | 2025.5.2 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
-| BrentIO_ESP Async WebServer | 2024.7.1 | https://github.com/BrentIO/ESPAsyncWebServer |
+| AsyncTCP | 3.4.9 | https://github.com/ESP32Async/AsyncTCP |
+| BrentIO_AsyncWebServer_ESP32_W5500 | 2026.4.2 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
+| ESPAsyncWebServer | 3.9.6 | https://github.com/ESP32Async/ESPAsyncWebServer |
 | BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
 | BrentIO_PCT2075 | 2023.10.3 | https://github.com/BrentIO/PCT2075 |
@@ -130,9 +130,9 @@ Steps:
 
 1. Close Visual Studio Code
 
-2. Create a symlink adjacent to the main boards file. Example for ESP Core version 2.0.17:
+2. Create a symlink adjacent to the main boards file. Example for ESP Core version 3.3.7:
 ```bash
-ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.17/boards.local.txt
+ln -s ./FireFly-Controller/boards.local.txt ~/Library/Arduino15/packages/esp32/hardware/esp32/3.3.7/boards.local.txt
 ```
 
 3. Open Visual Studio Code. Select the board labeled `ESP32 Wrover Module` and select the 16MB partition scheme.  This will allow the solution to compile.  However, the partitions will not be respected and may inaccurately reflect the amount of space remaining.
@@ -370,7 +370,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli config set board_manager.additional_urls \
         https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json && \
       HOME=$H arduino-cli core update-index && \
-      HOME=$H arduino-cli core install esp32:esp32@2.0.17; \
+      HOME=$H arduino-cli core install esp32:esp32@3.3.7; \
     done
 
 # ---------------------------------------------------------
@@ -383,9 +383,9 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/adafruit/Adafruit_SSD1306.git#2.5.16 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoJson.git#v7.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoStreamUtils.git#v1.9.2 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncTCP.git#2024.2.1 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2025.5.2 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/ESPAsyncWebServer.git#2024.7.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/ESP32Async/AsyncTCP.git#v3.4.9 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2026.4.2 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/ESP32Async/ESPAsyncWebServer.git#v3.9.6 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2026.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCA95x5.git#2023.10.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCT2075.git#2023.10.3 && \
