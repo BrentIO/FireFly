@@ -102,7 +102,7 @@ Download each library below as a zip file or download from GitHub.
 | ArduinoJson | 7.4.1 | https://github.com/bblanchon/ArduinoJson |
 | ArduinoStreamUtils | 1.9.2 | https://github.com/bblanchon/ArduinoStreamUtils |
 | AsyncTCP | 3.4.9 | https://github.com/ESP32Async/AsyncTCP |
-| BrentIO_AsyncWebServer_ESP32_W5500 | 2026.4.1 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
+| BrentIO_AsyncWebServer_ESP32_W5500 | 2026.4.2 | https://github.com/BrentIO/AsyncWebServer_ESP32_W5500 |
 | ESPAsyncWebServer | 3.9.6 | https://github.com/ESP32Async/ESPAsyncWebServer |
 | BrentIO_esp32FOTA | 2026.4.1 | https://github.com/BrentIO/esp32FOTA |
 | BrentIO_PCA95x5 | 2023.10.2 | https://github.com/BrentIO/PCA95x5 |
@@ -384,7 +384,7 @@ RUN for H in /github/home /home/runner; do \
       HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoJson.git#v7.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/bblanchon/ArduinoStreamUtils.git#v1.9.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/ESP32Async/AsyncTCP.git#v3.4.9 && \
-      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2026.4.1 && \
+      HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/AsyncWebServer_ESP32_W5500.git#2026.4.2 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/ESP32Async/ESPAsyncWebServer.git#v3.9.6 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/esp32FOTA.git#2026.4.1 && \
       HOME=$H arduino-cli lib install --git-url https://github.com/BrentIO/PCA95x5.git#2023.10.2 && \
