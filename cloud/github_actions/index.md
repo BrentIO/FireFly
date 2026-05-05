@@ -83,7 +83,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-s3-firmware-deleted | shared-layer |
 | func-api-ota-get | api-gateway, shared-layer, cloudfront-firmware |
 | func-api-firmware-download-get | api-gateway, shared-layer, s3-firmware |
-| s3-firmware | func-s3-firmware-uploaded, func-s3-firmware-deleted |
+| s3-firmware | func-s3-firmware-uploaded, func-s3-firmware-deleted, cloudfront-fmc |
 | fmc-app | cloudfront-fmc, cognito |
 | func-api-appconfig-get | api-gateway |
 | func-api-appconfig-patch | api-gateway |
@@ -92,7 +92,7 @@ Deployments run in parallel within each wave. A job only starts after all jobs i
 | func-api-devices-get | api-gateway, dynamodb-devices, shared-layer |
 | func-api-registration-keys-post | api-gateway, dynamodb-registration-keys, shared-layer |
 | func-api-registration-keys-get | api-gateway, dynamodb-registration-keys, shared-layer |
-| run-integration-tests | s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, func-api-appconfig-get, func-api-appconfig-patch, func-api-devices-register-post, func-api-devices-registration-get, func-api-devices-get, func-api-registration-keys-post, func-api-registration-keys-get, fmc-app |
+| run-integration-tests | dynamodb-firmware, s3-firmware, func-api-firmware-get, func-api-firmware-status-patch, func-api-firmware-delete, func-api-health-get, func-api-ota-get, func-api-firmware-download-get, func-api-users-get, func-api-users-post, func-api-users-delete, func-api-users-patch, func-api-appconfig-get, func-api-appconfig-patch, func-api-devices-register-post, func-api-devices-registration-get, func-api-devices-get, func-api-registration-keys-post, func-api-registration-keys-get, fmc-app |
 
 ---
 
