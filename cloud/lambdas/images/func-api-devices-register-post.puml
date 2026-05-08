@@ -5,7 +5,7 @@ title POST /devices/register
 
 actor "HW-Reg\nApplication" as Client
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "func-api-devices-register-post" as Lambda
     participant "registration_keys\ntable" as KeysTable

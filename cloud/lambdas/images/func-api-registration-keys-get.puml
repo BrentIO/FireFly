@@ -5,7 +5,7 @@ title GET /registration-keys
 
 actor "FMC User" as Client
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway\n(Cognito JWT)" as APIGW
     participant "func-api-registration-keys-get" as Lambda
     participant "registration_keys\ntable" as KeysTable

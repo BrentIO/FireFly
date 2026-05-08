@@ -5,7 +5,7 @@ title GET /devices/{uuid}/registration
 
 actor "HW-Reg\nApplication" as Client
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "func-api-devices-registration-get" as Lambda
     participant "devices\ntable" as DevicesTable
