@@ -148,15 +148,18 @@ export default defineConfig({
                             text: 'Reports: Bill of Materials',
                             link: '/controller/software/controller/configuration/bom'
                           },
-                          { 
+                          {
                             text: 'Reports: Control Circuits',
                             link: '/controller/software/controller/configuration/control_circuits'
+                          },
+                          {
+                            text: 'Online Configurator',
+                            link: 'https://configurator.fireflylx.com'
                           }
-
 
                         ]
                       },
-                      { 
+                      {
                         text: 'API Reference',
                         link: '/controller/software/controller/api_reference'
                       },
