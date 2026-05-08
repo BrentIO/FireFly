@@ -5,7 +5,7 @@ title deploy-fmc-app\n(GitHub Action → S3 + CloudFront)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
     participant "S3" as S3
     participant "CloudFront" as CDN

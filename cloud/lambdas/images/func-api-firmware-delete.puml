@@ -5,7 +5,7 @@ title DELETE /firmware/{zip_name}
 
 actor Client
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "func-api-firmware-delete" as DeleteLambda
     participant "func-s3-firmware-deleted" as DeletedLambda

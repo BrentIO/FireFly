@@ -5,7 +5,7 @@ title delete-api-gateway\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
     participant "API Gateway v2" as APIGW
     participant "Route 53" as R53

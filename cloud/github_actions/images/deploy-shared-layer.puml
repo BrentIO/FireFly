@@ -5,7 +5,7 @@ title deploy-shared-layer\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
     participant "Lambda" as Lambda
     collections "S3\n(SAM artifacts)" as S3

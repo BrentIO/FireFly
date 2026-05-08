@@ -5,7 +5,7 @@ title run-integration-tests\n(GitHub Action → pytest)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation" as CF
     participant "Cognito" as Cognito
 end box

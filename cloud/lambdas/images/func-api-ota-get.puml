@@ -5,7 +5,7 @@ title GET /ota/{class}/{product_hex}
 
 actor Controller
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "func-api-ota-get" as Lambda
     database DynamoDB

@@ -5,7 +5,7 @@ title deploy-acm\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
     participant "ACM" as ACM
     participant "Route 53" as R53
