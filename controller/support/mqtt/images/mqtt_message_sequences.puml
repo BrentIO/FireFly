@@ -1,0 +1,118 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+autonumber off
+
+title MQTT Message Sequences
+
+participant "Controller" as ctl
+participant "MQTT Broker" as mqtt
+participant "Home Assistant" as ha
+
+ha -> mqtt : Subscribe Auto Discovery topics
+
+== setup() — MQTT Connect ==
+
+ctl -> mqtt : Connect()\n**Will Topic:** FireFly/{UUID}/availability\n**Will QoS:** 2  **Will Retain:** true\n**Will Message:** ""offline""
+
+group Firmware Update Entity
+    ctl -> mqtt : Publish Auto Discovery [update] **retained**
+    mqtt -> ha : Publish Auto Discovery [update]
+    ctl -> mqtt : Subscribe command topic
+    ha -> ha : Create update entity\n(initially Unavailable)
+end
+
+group mqtt_publishUpdateServiceAvailability(NEVER_ATTEMPTED)
+    ctl -> mqtt : Publish update service availability: ""offline"" **retained**
+    mqtt -> ha : Publish update service availability: ""offline""
+    ha -> ha : Firmware Update → Unavailable
+end
+
+group Temperature Sensor(s)
+    ctl -> mqtt : Publish Auto Discovery [sensor/temperature] **retained**\n//(one per sensor)//
+    mqtt -> ha : Publish Auto Discovery [sensor/temperature]
+    ha -> ha : Create temperature sensor(s)\n(initially Unavailable)
+end
+
+group For Each Output (Light / Fan / Switch)
+    ctl -> mqtt : Publish Auto Discovery [light|fan|switch] **retained**
+    mqtt -> ha : Publish Auto Discovery [light|fan|switch]
+    ctl -> mqtt : Subscribe command topic (and brightness command if VARIABLE)
+    ha -> ha : Create output entity\n(initially Unavailable)
+end
+
+group Diagnostic Sensors (Start Time, IP Address, MAC Address, Error Count, HTTP Server)
+    ctl -> mqtt : Publish Auto Discovery [sensor] **retained**\n//(one message per sensor)//
+    mqtt -> ha : Publish Auto Discovery [sensor]
+    ha -> ha : Create diagnostic sensors\n(initially Unavailable)
+end
+
+note over ctl, ha
+  **Debug builds only**
+  mqtt_autoDiscovery_heapFree() and
+  mqtt_autoDiscovery_heapLargestFreeBlock()
+  publish two additional sensor auto discovery messages.
+end note
+
+group Publish Availability + Initial State
+    ctl -> mqtt : Publish availability: ""online"" **retained**
+    mqtt -> ha : Publish availability: ""online""
+    ha -> ha : All entities → Available
+    ctl -> mqtt : Publish states: temperature(s), start time,\nIP address, MAC address, error count,\nHTTP server state **retained**
+    mqtt -> ha : Publish states
+    ha -> ha : Entities reflect current values
+end
+
+== loop() — Ongoing ==
+
+group OTA Firmware Check (timer-based)
+    ctl -> ctl : OTA timer elapsed
+    ctl -> mqtt : Publish update service availability: ""online"" **retained**
+    mqtt -> ha : Publish update service availability: ""online""
+    ha -> ha : Firmware Update → Available for check
+    ctl -> mqtt : Publish firmware update state: JSON **retained**
+    mqtt -> ha : Publish firmware update state: JSON
+    ha -> ha : Firmware entity: Up-to-date or Update Available
+end
+
+group Temperature State (on change threshold)
+    ctl -> ctl : Temperature change exceeds threshold
+    ctl -> mqtt : Publish temperature state: value **retained**
+    mqtt -> ha : Publish temperature state: value
+    ha -> ha : Temperature → new value
+end
+
+group Error Count (on error log change)
+    ctl -> ctl : Error log size changed
+    ctl -> mqtt : Publish error count: value **retained**
+    mqtt -> ha : Publish error count: value
+    ha -> ha : Error Count → new value
+end
+
+note over ctl, ha
+  **Debug builds only (timer-based)**
+  Publishes heap free and heap largest free block sensor states.
+end note
+
+== Edge Cases ==
+
+group Update Server Unavailable
+    ctl -> ctl : OTA timer elapsed — server unreachable
+    ctl -> mqtt : Publish update service availability: ""offline"" **retained**
+    mqtt -> ha : Publish update service availability: ""offline""
+    ha -> ha : Firmware Update → Unavailable
+end
+
+group Temperature Hardware Failure
+    ctl -> ctl : Temperature hardware error
+    ctl -> mqtt : Publish temperature state: ""0"" **retained**
+    mqtt -> ha : Publish temperature state: ""0""
+    ha -> ha : Temperature → 0
+end
+
+group Network / MQTT Connection Failure (Last Will and Testament)
+    ctl -x mqtt : Connection lost
+    mqtt -> ha : Last Will and Testament\nTopic: FireFly/{UUID}/availability\n""offline"" **retained**
+    ha -> ha : All entities → Unavailable\n(Firmware Update, all sensors, all outputs)
+end
+
+@enduml
