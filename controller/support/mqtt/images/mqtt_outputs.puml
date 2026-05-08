@@ -1,0 +1,32 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Outputs
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+== Auto Discovery ==
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/{light|fan|switch}/{outputID}/config\n""JSON payload""\n//(one per output)//
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/{light|fan|switch}/{outputID}/config\n//(one per output)//
+ha -> ha : **Create output entity**\n(initially Unavailable)
+ctl -> mqtt : **Subscribe**\nFireFly/circuits/{outputID}/set
+
+ctl -> mqtt : **Publish initial output state**\nFireFly/circuits/{outputID}/state\n""0""\nretained
+mqtt -> ha : **Publish initial output state**\nFireFly/circuits/{outputID}/state\n""0""\nretained
+ha -> ha : **Set Output Entity**\n""Off""
+
+== Output State Change ==
+
+ha -> mqtt : **Publish output command**\nFireFly/circuits/{outputID}/set\n""<value>""
+mqtt -> ctl : **Publish output command**\nFireFly/circuits/{outputID}/set\n""<value>""
+ctl -> ctl : **Apply output value**
+ctl -> mqtt : **Publish output state**\nFireFly/circuits/{outputID}/state\n""<value>""\nretained
+mqtt -> ha : **Publish output state**\nFireFly/circuits/{outputID}/state\n""<value>""\nretained
+ha -> ha : **Set Output Entity**\nnew value
+
+@enduml

@@ -1,0 +1,62 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Diagnostic Sensors
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+== Auto Discovery ==
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-time-start/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-time-start/config
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-ip-address/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-ip-address/config
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-mac-address/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-mac-address/config
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-count-errors/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-count-errors/config
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/switch/FireFly-{UUID}-http-server/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/switch/FireFly-{UUID}-http-server/config
+
+ha -> ha : **Create diagnostic sensors**\n(initially Unavailable)
+
+ctl -> mqtt : **Publish start time**\nFireFly/{UUID}/time-start/state\n""<epoch>""\nretained
+mqtt -> ha : **Publish start time**\nFireFly/{UUID}/time-start/state\n""<epoch>""\nretained
+
+ctl -> mqtt : **Publish IP address**\nFireFly/{UUID}/ip-address/state\n""<ip>""\nretained
+mqtt -> ha : **Publish IP address**\nFireFly/{UUID}/ip-address/state\n""<ip>""\nretained
+
+ctl -> mqtt : **Publish MAC address**\nFireFly/{UUID}/mac-address/state\n""<mac>""\nretained
+mqtt -> ha : **Publish MAC address**\nFireFly/{UUID}/mac-address/state\n""<mac>""\nretained
+
+ctl -> mqtt : **Publish error count**\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+mqtt -> ha : **Publish error count**\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+
+ctl -> mqtt : **Publish HTTP server state**\nFireFly/{UUID}/http-server/state\n""ON"" or ""OFF""\nretained
+mqtt -> ha : **Publish HTTP server state**\nFireFly/{UUID}/http-server/state\n""ON"" or ""OFF""\nretained
+
+ha -> ha : **Set diagnostic sensors**\ncurrent values
+
+== Error Count Change ==
+
+ctl -> ctl : **Error log size changed**
+ctl -> mqtt : **Publish error count**\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+mqtt -> ha : **Publish error count**\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+ha -> ha : **Set Error Count**\nnew value
+
+== HTTP Server State Change ==
+
+ctl -> ctl : **HTTP server started or stopped**
+ctl -> mqtt : **Publish HTTP server state**\nFireFly/{UUID}/http-server/state\n""ON"" or ""OFF""\nretained
+mqtt -> ha : **Publish HTTP server state**\nFireFly/{UUID}/http-server/state\n""ON"" or ""OFF""\nretained
+ha -> ha : **Set HTTP Server Entity**\nnew value
+
+@enduml
