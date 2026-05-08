@@ -1,0 +1,34 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Debug Diagnostics\n//(debug builds only)//
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+== Auto Discovery ==
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-heap-free/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-heap-free/config
+ha -> ha : **Create heap-free sensor**\n(initially Unavailable)
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-heap-largest-free-block/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-heap-largest-free-block/config
+ha -> ha : **Create heap-largest-free-block sensor**\n(initially Unavailable)
+
+== Heap State ==
+
+ctl -> ctl: **Timer expired**
+
+ctl -> mqtt : **Publish heap free**\nFireFly/{UUID}/heap-free/state\n""<bytes>""
+mqtt -> ha : **Publish heap free**\nFireFly/{UUID}/heap-free/state\n""<bytes>""
+ha -> ha : **Set Heap Free**\nnew value
+
+ctl -> mqtt : **Publish heap largest free block**\nFireFly/{UUID}/heap-largest-free-block/state\n""<bytes>""
+mqtt -> ha : **Publish heap largest free block**\nFireFly/{UUID}/heap-largest-free-block/state\n""<bytes>""
+ha -> ha : **Set Heap Largest Free Block**\nnew value
+
+@enduml

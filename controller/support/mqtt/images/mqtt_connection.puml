@@ -1,0 +1,27 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Connection & Availability
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+ha -> mqtt : **Subscribe**\nhomeassistant/#
+
+ctl -> mqtt : **Connect to MQTT and set Last Will**\nFireFly/{UUID}/availability\n""offline""\nQoS 2\nretained
+
+ctl -> mqtt : **Publish availability online**\nFireFly/{UUID}/availability\n""online""\nretained
+mqtt -> ha : **Publish availability online**\nFireFly/{UUID}/availability\n""online""\nretained
+ha -> ha : **Set all entities available**
+
+opt Network / MQTT Connection Failure
+    mqtt -x ctl : **Heartbeat connection request**
+    mqtt -> mqtt : **Connection lost**
+    mqtt -> ha : **Publish Last Will and Testament**\nFireFly/{UUID}/availability\n""offline""\nretained
+    ha -> ha : **Set all entities unavailable**\n""Unavailable""
+end
+
+@enduml

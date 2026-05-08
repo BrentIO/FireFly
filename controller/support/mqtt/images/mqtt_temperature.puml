@@ -1,0 +1,37 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Temperature Sensors
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+== Auto Discovery ==
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-temperature-{location}/config\n""JSON payload""\n//(one per sensor)//
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-temperature-{location}/config\n//(one per sensor)//
+ha -> ha : **Create temperature sensor**\n(initially Unavailable)
+
+ctl -> mqtt : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
+mqtt -> ha : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
+ha -> ha : **Set Temperature Sensor**\ncurrent value
+
+== Temperature State Change (on threshold) ==
+
+ctl -> ctl : **Temperature change exceeds threshold**
+ctl -> mqtt : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
+mqtt -> ha : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
+ha -> ha : **Set Temperature Sensor**\nnew value
+
+== Temperature Hardware Failure ==
+
+opt Temperature Hardware Failure
+    ctl -> mqtt : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
+    mqtt -> ha : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
+    ha -> ha : **Set Temperature Sensor Entity**\n""Unavailable""
+end
+
+@enduml

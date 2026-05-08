@@ -1,0 +1,47 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Firmware Update
+
+box "On-Premises" $OnPrem
+    participant "Controller" as ctl
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+box "AWS" $AWS
+    participant "FireFly-Cloud" as cloud
+end box
+
+== Auto Discovery ==
+
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/update/FireFly-{UUID}-update/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/update/FireFly-{UUID}-update/config
+ha -> ha : **Create firmware update entity**\n(initially Unavailable)
+ctl -> mqtt : **Subscribe**\nFireFly/{UUID}/update/set
+
+ctl -> mqtt : **Publish updates unavailable**\nFireFly/{UUID}/update/availability\n""offline""\nretained
+mqtt -> ha : **Publish updates unavailable**\nFireFly/{UUID}/update/availability\n""offline""\nretained
+ha -> ha : **Set Firmware Update Entity**\n""Unavailable""
+
+== OTA Check ==
+
+ctl -> ctl : **OTA firmware check time elapsed**
+ctl -> cloud : **Check for new OTA firmware**\nGET /ota/controller/{product_hex}
+
+alt 200 OK
+    cloud --> ctl : **200 OK**\n""JSON payload""
+    ctl -> mqtt : **Publish updates online**\nFireFly/{UUID}/update/availability\n""online""\nretained
+    mqtt -> ha : **Publish updates online**\nFireFly/{UUID}/update/availability\n""online""\nretained
+    ha -> ha : **Set Firmware Update Entity**\n""Available""
+    ctl -> mqtt : **Publish firmware update state**\nFireFly/{UUID}/update/state\n""JSON payload""
+    mqtt -> ha : **Publish firmware update state**\nFireFly/{UUID}/update/state\n""JSON payload""
+    ha -> ha : **Set Firmware Update Entity**\nUp-to-date or Update Available
+else Unavailable or non-200 Response
+    cloud --x ctl : Unavailable or non-200 Response
+    ctl -> mqtt : **Publish updates offline**\nFireFly/{UUID}/update/availability\n""offline""\nretained
+    mqtt -> ha : **Publish updates offline**\nFireFly/{UUID}/update/availability\n""offline""\nretained
+    ha -> ha : **Set Firmware Update Entity**\n""Unavailable""
+end
+
+@enduml
