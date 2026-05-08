@@ -12,6 +12,10 @@ Requires a valid Cognito JWT (any authenticated user).
 
 Invoked by **API Gateway** on an HTTP `POST /registration-keys` request.
 
+## Sequence Diagram
+
+[![Sequence Diagram](./images/func-api-registration-keys-post.svg)](./images/func-api-registration-keys-post.svg)
+
 ## API Endpoints
 
 | Method | Path | Auth | Description |

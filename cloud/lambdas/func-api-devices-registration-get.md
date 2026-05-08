@@ -10,6 +10,10 @@ This endpoint has **no** Cognito JWT authorizer — it is authenticated solely b
 
 Invoked by **API Gateway** on an HTTP `GET /devices/{uuid}/registration` request (no JWT authorizer).
 
+## Sequence Diagram
+
+[![Sequence Diagram](./images/func-api-devices-registration-get.svg)](./images/func-api-devices-registration-get.svg)
+
 ## API Endpoints
 
 | Method | Path | Auth | Description |

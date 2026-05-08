@@ -12,6 +12,10 @@ This endpoint does **not** require a Cognito JWT — it is authenticated solely 
 
 Invoked by **API Gateway** on an HTTP `POST /devices/register` request.
 
+## Sequence Diagram
+
+[![Sequence Diagram](./images/func-api-devices-register-post.svg)](./images/func-api-devices-register-post.svg)
+
 ## API Endpoints
 
 | Method | Path | Auth | Description |
