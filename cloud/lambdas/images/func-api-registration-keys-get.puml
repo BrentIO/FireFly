@@ -1,0 +1,38 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title GET /registration-keys
+
+actor "FMC User" as Client
+
+box "AWS" $AWS
+    participant "API Gateway\n(Cognito JWT)" as APIGW
+    participant "func-api-registration-keys-get" as Lambda
+    participant "registration_keys\ntable" as KeysTable
+end box
+
+Client -> APIGW++ : GET /registration-keys\nAuthorization: Bearer <JWT>
+APIGW -> Lambda++ : invoke (with JWT claims)
+
+Lambda -> Lambda : extract sub from JWT claims
+
+alt no sub in claims (unauthenticated)
+    Lambda --> APIGW : 401 Unauthorized
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> KeysTable++ : Scan\nFilterExpression:\n  generated_by_sub = <sub>\n  AND ttl > now
+KeysTable --> Lambda-- : matching items
+
+Lambda -> Lambda : build response list\n[{key, generated_at, expires_at}]\nsorted by generated_at ascending
+
+Lambda --> APIGW-- : 200 OK\n{"registration_keys": [...]}
+APIGW --> Client-- : 200 OK\n{"registration_keys": [...]}
+
+note right of Lambda
+  Empty list returned when
+  no active keys exist for
+  this user.
+end note
+
+@enduml

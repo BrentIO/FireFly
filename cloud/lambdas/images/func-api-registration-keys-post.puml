@@ -1,0 +1,33 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title POST /registration-keys
+
+actor "FMC User" as Client
+
+box "AWS" $AWS
+    participant "API Gateway\n(Cognito JWT)" as APIGW
+    participant "func-api-registration-keys-post" as Lambda
+    participant "registration_keys\ntable" as KeysTable
+end box
+
+Client -> APIGW++ : POST /registration-keys\nAuthorization: Bearer <JWT>
+APIGW -> Lambda++ : invoke (with JWT claims)
+
+Lambda -> Lambda : extract sub and email\nfrom JWT claims
+
+alt no sub in claims (unauthenticated)
+    Lambda --> APIGW : 401 Unauthorized
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> Lambda : generate 6-char uppercase\nalphanumeric key (SystemRandom)
+Lambda -> Lambda : compute ttl = now + 1800s
+
+Lambda -> KeysTable++ : PutItem\n{key, ttl, generated_at,\n generated_by_sub, generated_by_email}
+KeysTable --> Lambda-- : success
+
+Lambda --> APIGW-- : 201 Created\n{"key": "AB1234"}
+APIGW --> Client-- : 201 Created\n{"key": "AB1234"}
+
+@enduml

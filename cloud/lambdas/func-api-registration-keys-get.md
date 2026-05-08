@@ -10,6 +10,10 @@ Requires a valid Cognito JWT (any authenticated user).
 
 Invoked by **API Gateway** on an HTTP `GET /registration-keys` request.
 
+## Sequence Diagram
+
+[![Sequence Diagram](./images/func-api-registration-keys-get.svg)](./images/func-api-registration-keys-get.svg)
+
 ## API Endpoints
 
 | Method | Path | Auth | Description |

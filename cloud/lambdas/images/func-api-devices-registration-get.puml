@@ -1,0 +1,52 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title GET /devices/{uuid}/registration
+
+actor "HW-Reg\nApplication" as Client
+
+box "AWS" $AWS
+    participant "API Gateway" as APIGW
+    participant "func-api-devices-registration-get" as Lambda
+    participant "devices\ntable" as DevicesTable
+end box
+
+Client -> APIGW++ : GET /devices/{uuid}/registration\nX-Device-UUID: <uuid>\nX-Device-Nonce: <base64 32-byte nonce>\nX-Device-Signature: <base64 DER ECDSA sig>
+APIGW -> Lambda++ : invoke
+
+Lambda -> Lambda : validate X-Device-UUID, X-Device-Nonce,\nX-Device-Signature headers present
+
+alt any required header missing
+    Lambda --> APIGW : 400 Bad Request
+    APIGW --> Client : 400 Bad Request
+end
+
+Lambda -> Lambda : verify X-Device-UUID matches {uuid} path param
+
+alt UUID header mismatch
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+Lambda -> DevicesTable++ : GetItem(uuid)
+DevicesTable --> Lambda-- : device item (or absent)
+
+alt device not found
+    Lambda --> APIGW : 401 Device not registered
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> Lambda : Base64-decode nonce and signature
+Lambda -> Lambda : reconstruct EllipticCurvePublicKey\nfrom stored 65-byte uncompressed point
+
+Lambda -> Lambda : verify ECDSA P-256 SHA-256\nsignature over nonce bytes
+
+alt signature invalid
+    Lambda --> APIGW : 401 Signature verification failed
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda --> APIGW-- : 200 OK\n{uuid, product_id, product_hex,\n device_class, registration_date,\n registering_application,\n registering_version}
+APIGW --> Client-- : 200 OK
+
+@enduml

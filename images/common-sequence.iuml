@@ -3,3 +3,6 @@
 skinparam style strictuml
 autonumber
 hide footbox
+
+!$AWS = "#ffdbbb"
+!$OnPrem = "#18bcf2"

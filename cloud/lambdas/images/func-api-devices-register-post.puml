@@ -1,0 +1,49 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title POST /devices/register
+
+actor "HW-Reg\nApplication" as Client
+
+box "AWS" $AWS
+    participant "API Gateway" as APIGW
+    participant "func-api-devices-register-post" as Lambda
+    participant "registration_keys\ntable" as KeysTable
+    participant "devices\ntable" as DevicesTable
+end box
+
+Client -> APIGW++ : POST /devices/register\nX-Registration-Key: AB1234\n{uuid, product_id, product_hex,\n device_class, public_key,\n registering_application,\n registering_version, mcu, ...}
+APIGW -> Lambda++ : invoke
+
+Lambda -> Lambda : validate X-Registration-Key header\n(required, exactly 6 chars)
+Lambda -> Lambda : validate required body fields
+Lambda -> Lambda : validate uuid format (RFC 4122)
+Lambda -> Lambda : validate product_hex format (0xXXXXXXXX)
+Lambda -> Lambda : validate public_key\n(65-byte Base64 uncompressed P-256 point)
+
+Lambda -> KeysTable++ : GetItem(key=AB1234)
+KeysTable --> Lambda-- : key item (generated_by_email, ttl)
+
+alt key not found or expired
+    Lambda --> APIGW : 401 Invalid or expired registration key
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> DevicesTable++ : GetItem(uuid)
+DevicesTable --> Lambda-- : item (or absent)
+
+alt device already registered
+    Lambda --> APIGW : 204 No Content (idempotent)
+    APIGW --> Client : 204 No Content
+end
+
+Lambda -> DevicesTable++ : PutItem (ConditionExpression: uuid not_exists)\n{uuid, product_id, product_hex, device_class,\n public_key, registration_date, mcu,\n registering_application, registering_version,\n registered_by_email, [network], [partitions]}
+DevicesTable --> Lambda-- : success
+
+Lambda -> KeysTable++ : DeleteItem(key=AB1234)
+KeysTable --> Lambda-- : success
+
+Lambda --> APIGW-- : 204 No Content
+APIGW --> Client-- : 204 No Content
+
+@enduml
