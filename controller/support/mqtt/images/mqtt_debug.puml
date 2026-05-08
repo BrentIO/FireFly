@@ -19,7 +19,9 @@ ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-
 mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-heap-largest-free-block/config
 ha -> ha : **Create heap-largest-free-block sensor**\n(initially Unavailable)
 
-== Heap State (timer-based) ==
+== Heap State ==
+
+ctl -> ctl: **Timer expired**
 
 ctl -> mqtt : **Publish heap free**\nFireFly/{UUID}/heap-free/state\n""<bytes>""
 mqtt -> ha : **Publish heap free**\nFireFly/{UUID}/heap-free/state\n""<bytes>""

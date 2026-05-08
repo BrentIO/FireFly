@@ -29,7 +29,6 @@ ha -> ha : **Set Temperature Sensor**\nnew value
 == Temperature Hardware Failure ==
 
 opt Temperature Hardware Failure
-    ctl -> ctl : **Temperature hardware error returned from library**
     ctl -> mqtt : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
     mqtt -> ha : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
     ha -> ha : **Set Temperature Sensor Entity**\n""Unavailable""

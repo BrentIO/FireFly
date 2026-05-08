@@ -24,13 +24,13 @@ ctl -> mqtt : **Publish updates unavailable**\nFireFly/{UUID}/update/availabilit
 mqtt -> ha : **Publish updates unavailable**\nFireFly/{UUID}/update/availability\n""offline""\nretained
 ha -> ha : **Set Firmware Update Entity**\n""Unavailable""
 
-== OTA Check (timer-based) ==
+== OTA Check ==
 
 ctl -> ctl : **OTA firmware check time elapsed**
 ctl -> cloud : **Check for new OTA firmware**\nGET /ota/controller/{product_hex}
 
 alt 200 OK
-    cloud -> ctl : **200 OK**\n""JSON payload""
+    cloud --> ctl : **200 OK**\n""JSON payload""
     ctl -> mqtt : **Publish updates online**\nFireFly/{UUID}/update/availability\n""online""\nretained
     mqtt -> ha : **Publish updates online**\nFireFly/{UUID}/update/availability\n""online""\nretained
     ha -> ha : **Set Firmware Update Entity**\n""Available""
