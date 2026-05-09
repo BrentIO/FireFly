@@ -11,10 +11,13 @@ end box
 
 == Auto Discovery ==
 
-ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/{light|fan|switch}/{outputID}/config\n""JSON payload""\n//(one per output)//
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/{light|fan|switch}/{outputID}/config\n""JSON payload"" (includes per-chip availability_topic\nand controller-level availability_topic; availability_mode: all)\n//(one per output)//
 mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/{light|fan|switch}/{outputID}/config\n//(one per output)//
 ha -> ha : **Create output entity**\n(initially Unavailable)
 ctl -> mqtt : **Subscribe**\nFireFly/circuits/{outputID}/set
+
+ctl -> mqtt : **Publish per-chip availability** retained\nFireFly/{UUID}/outputs/controller/{chip_address}/availability\n""online""\n//(one per chip)//
+mqtt -> ha : **Publish per-chip availability**\nFireFly/{UUID}/outputs/controller/{chip_address}/availability\n""online""
 
 ctl -> mqtt : **Publish initial output state**\nFireFly/circuits/{outputID}/state\n""0""\nretained
 mqtt -> ha : **Publish initial output state**\nFireFly/circuits/{outputID}/state\n""0""\nretained
@@ -28,5 +31,13 @@ ctl -> ctl : **Apply output value**
 ctl -> mqtt : **Publish output state**\nFireFly/circuits/{outputID}/state\n""<value>""\nretained
 mqtt -> ha : **Publish output state**\nFireFly/circuits/{outputID}/state\n""<value>""\nretained
 ha -> ha : **Set Output Entity**\nnew value
+
+== Output Controller Hardware Failure ==
+
+opt Output Controller Hardware Failure
+    ctl -> mqtt : **Publish per-chip availability** retained\nFireFly/{UUID}/outputs/controller/{chip_address}/availability\n""offline""
+    mqtt -> ha : **Publish per-chip availability**\nFireFly/{UUID}/outputs/controller/{chip_address}/availability\n""offline""
+    ha -> ha : **Set affected Output Entities**\n""Unavailable""
+end
 
 @enduml
