@@ -22,12 +22,12 @@ To build and locally preview the docs site, run the following from the **repo ro
 
 Usage for Intel CPU:
 ```bash
-docker run --rm -it --platform linux/amd64 -p 4173:4173 -v $(pwd):/docs act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
+docker run --rm --platform linux/amd64 -p 4173:4173 -v $(pwd):/docs:ro act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
 ```
 
 Usage for Apple Silicon:
 ```bash
-docker run --rm -it --platform linux/arm64 -p 4173:4173 -v $(pwd):/docs act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
+docker run --rm --platform linux/arm64 -p 4173:4173 -v $(pwd):/docs:ro act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
 ```
 
 ## Configure ACT for Visual Studio Code

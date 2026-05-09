@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-cd /docs
+echo "==> Copying source to workspace..."
+cp -r /docs /workspace
+cd /workspace
 
 echo "==> Cleaning previous build..."
 rm -rf .vitepress/dist .vitepress/cache
