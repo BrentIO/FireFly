@@ -87,10 +87,10 @@ jobs:
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/asyncapi.yaml" \
             -o public/asyncapi/controller.yaml
 
-      - name: Generate AsyncAPI HTML reference
+      - name: Copy AsyncAPI web component bundle
         run: |
-          npx -y @asyncapi/cli generate fromTemplate public/asyncapi/controller.yaml @asyncapi/html-template \
-            --output public/asyncapi/html
+          cp node_modules/@asyncapi/web-component/lib/asyncapi-web-component.js public/asyncapi/web-component.js
+          cp node_modules/@asyncapi/react-component/styles/default.min.css public/asyncapi/default.min.css
 
       - name: Copy static assets to public for direct URL access
         run: |
