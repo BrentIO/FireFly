@@ -6,12 +6,12 @@ title FireFly-Cloud Device Registration
 actor "FireFly-Cloud\nAdmin" as Admin
 actor "Manufacturing\nOperator" as Op
 
-box "FireFly-Cloud"
+box "FireFly-Cloud" $AWS
     participant "API Gateway" as APIGW
     database DynamoDB
 end box
 
-box "FireFly Controller (ESP32)"
+box "FireFly Controller (ESP32)" $OnPrem
     participant "HW-Reg\nFirmware" as HWReg
 end box
 

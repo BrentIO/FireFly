@@ -5,11 +5,11 @@ title Client Provisioning — Controller SoftAP Flow
 
 actor User
 
-box "Client Device\n(ESP8266)"
+box "Client Device\n(ESP8266)" $OnPrem
     participant "Client\nFirmware" as Client
 end box
 
-box "Controller (ESP32)"
+box "Controller (ESP32)" $OnPrem
     participant "SoftAP\n(SSID: FireFly-Provisioning)" as AP
     participant "HTTP API" as API
 end box

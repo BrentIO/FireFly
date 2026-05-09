@@ -5,11 +5,11 @@ title Controller-to-Controller Provisioning — SoftAP Flow
 
 actor User
 
-box "Target Controller (ESP32)"
+box "Target Controller (ESP32)" $OnPrem
     participant "Target\nFirmware" as Target
 end box
 
-box "Source Controller (ESP32)"
+box "Source Controller (ESP32)" $OnPrem
     participant "SoftAP\n(SSID: FireFly-Provisioning)" as AP
     participant "HTTP API" as API
 end box
