@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 import { SwaggerUIBundle } from "swagger-ui-dist";
 import "swagger-ui-dist/swagger-ui.css";
-import { useSwaggerDark } from "../../.vitepress/theme/useSwaggerDark";
+import { useSwaggerDark } from "../.vitepress/theme/useSwaggerDark";
 
 useSwaggerDark();
 
