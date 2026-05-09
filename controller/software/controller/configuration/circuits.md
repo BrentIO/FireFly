@@ -7,6 +7,19 @@ An ID can be set for the circuit, as well as a short description, [area](./areas
 [![Circuits](./circuits.png)](./circuits.png)
 
 
+## Variable Outputs and Start Brightness
+
+Circuits assigned a proportional (VARIABLE) relay model support dimming from 0–100%.  When a button configured with an [INCREASE action](./controllers.md) activates a VARIABLE output that is currently off, it uses the circuit's **Start Brightness** value rather than the default of 10%.
+
+| Property | Value |
+| -------- | ----- |
+| Default | 10% |
+| Valid range | 5–100% |
+| Applies to | INCREASE button actions when the circuit is currently off |
+
+The Start Brightness field is only shown in the circuit editor when a VARIABLE relay model is selected.  For BINARY relay models the field is hidden and has no effect.
+
+
 ## Custom Relay Models
 
 There relay models discussed in the [High Voltage Relays section](/controller/hardware/relays.md) have been pre-populated in the database and cannot be removed.  However, you can optionally add your own if using a different manufacturer or model.  To add a new relay model, simply select `Custom` from the drop-down.  Once you add the circuit, the relay model will be available to add in the drop-down with any additional new circuits.
