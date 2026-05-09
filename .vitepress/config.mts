@@ -163,6 +163,10 @@ export default defineConfig({
                         text: 'API Reference',
                         link: '/controller/software/controller/api_reference'
                       },
+                      {
+                        text: 'MQTT Reference',
+                        link: '/controller/software/controller/mqtt_reference'
+                      },
                     ]
                   },
                   {

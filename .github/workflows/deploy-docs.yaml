@@ -81,6 +81,12 @@ jobs:
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Cloud/main/docs/openapi.yaml" \
             -o public/openapi/cloud.yaml
 
+      - name: Download AsyncAPI specs
+        run: |
+          mkdir -p public/asyncapi
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/asyncapi.yaml" \
+            -o public/asyncapi/controller.yaml
+
       - name: Copy static assets to public for direct URL access
         run: |
           find . \( -name "*.svg" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.webp" \) \
