@@ -1,0 +1,54 @@
+@startuml
+!include ../../../../../images/common.iuml
+
+title Extended Client — Channel Mapping and Port Assignment
+
+skinparam defaultTextAlignment left
+skinparam rectangle {
+    BorderColor black
+    BackgroundColor white
+}
+skinparam package {
+    BorderColor black
+    BackgroundColor white
+    FontStyle bold
+}
+
+package "Controller" as CTL {
+    rectangle "Port A (odd-numbered)\nPrimary client" as PA #lightblue
+    rectangle "Port B (even-numbered)\nSecondary client" as PB #lightyellow
+}
+
+package "Client Device (HID)" as HID {
+    package "RJ-45 Jack A  →  Primary" as JA {
+        rectangle "Pin 1: White/Orange → Logical Channel 1" as JA1
+        rectangle "Pin 2: Orange       → Logical Channel 2" as JA2
+        rectangle "Pin 3: White/Green  → Logical Channel 3" as JA3
+        rectangle "Pin 4: Blue         → +9 VDC" as JA4
+        rectangle "Pin 5: White/Blue   → +9 VDC" as JA5
+        rectangle "Pin 6: Green        → Logical Channel 4" as JA6
+        rectangle "Pin 7: White/Brown  → Ground" as JA7
+        rectangle "Pin 8: Brown        → Ground" as JA8
+    }
+
+    package "RJ-45 Jack B  →  Secondary (extended)" as JB {
+        rectangle "Pin 1: White/Orange → Logical Channel 5" as JB1
+        rectangle "Pin 2: Orange       → Logical Channel 6" as JB2
+        rectangle "Pin 3: White/Green  → (unused)" as JB3
+        rectangle "Pin 4: Blue         → +9 VDC" as JB4
+        rectangle "Pin 5: White/Blue   → +9 VDC" as JB5
+        rectangle "Pin 6: Green        → (unused)" as JB6
+        rectangle "Pin 7: White/Brown  → Ground" as JB7
+        rectangle "Pin 8: Brown        → Ground" as JB8
+    }
+}
+
+PA -right-> JA : Cat6 cable
+PB -right-> JB : Cat6 cable
+
+note bottom of CTL
+  Both ports must be assigned to the same Controller.
+  The UI prevents assigning them to different Controllers.
+end note
+
+@enduml
