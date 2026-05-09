@@ -11,9 +11,12 @@ end box
 
 == Auto Discovery ==
 
-ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-temperature-{location}/config\n""JSON payload""\n//(one per sensor)//
+ctl -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-temperature-{location}/config\n""JSON payload"" (includes availability_topic per sensor\nand controller-level availability_topic; availability_mode: all)\n//(one per sensor)//
 mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-temperature-{location}/config\n//(one per sensor)//
 ha -> ha : **Create temperature sensor**\n(initially Unavailable)
+
+ctl -> mqtt : **Publish per-sensor availability** retained\nFireFly/{UUID}/temperature/{location}/availability\n""online""\n//(one per sensor)//
+mqtt -> ha : **Publish per-sensor availability**\nFireFly/{UUID}/temperature/{location}/availability\n""online""
 
 ctl -> mqtt : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
 mqtt -> ha : **Publish temperature state**\nFireFly/{UUID}/temperature/{location}/state\n""<float>""\nretained
@@ -29,8 +32,8 @@ ha -> ha : **Set Temperature Sensor**\nnew value
 == Temperature Hardware Failure ==
 
 opt Temperature Hardware Failure
-    ctl -> mqtt : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
-    mqtt -> ha : **Publish failed sensor value**\nFireFly/{UUID}/temperature/{location}/state\n""0""\nretained
+    ctl -> mqtt : **Publish per-sensor availability** retained\nFireFly/{UUID}/temperature/{location}/availability\n""offline""
+    mqtt -> ha : **Publish per-sensor availability**\nFireFly/{UUID}/temperature/{location}/availability\n""offline""
     ha -> ha : **Set Temperature Sensor Entity**\n""Unavailable""
 end
 
