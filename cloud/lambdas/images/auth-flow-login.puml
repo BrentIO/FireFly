@@ -16,7 +16,9 @@ box "AWS" $AWS
     database "DynamoDB\nfirefly-users" as DynUsers
 end box
 
-participant "Google\nOAuth 2.0" as Google
+box "Vendor" $Vendor
+    participant "Google\nOAuth 2.0" as Google
+end box
 
 User -> SPA++ : clicks "Sign in with Google"
 SPA -> SPA : generate PKCE\ncode_verifier + code_challenge

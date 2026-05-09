@@ -6,3 +6,4 @@ hide footbox
 
 !$AWS = "#ffdbbb"
 !$OnPrem = "#a8e5fa"
+!$Vendor = "#ffa6ed"
