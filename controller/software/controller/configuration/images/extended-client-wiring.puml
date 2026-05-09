@@ -43,8 +43,8 @@ package "Client Device (HID)" as HID {
     }
 }
 
-PA -right-> JA : Cat6 cable
-PB -right-> JB : Cat6 cable
+PA --> JA : Cat6 cable
+PB --> JB : Cat6 cable
 
 note bottom of CTL
   Both ports must be assigned to the same Controller.
