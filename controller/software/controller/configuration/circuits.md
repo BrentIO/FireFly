@@ -19,12 +19,6 @@ Circuits assigned a proportional (VARIABLE) relay model support dimming from 0â€
 
 The Start Brightness field is only shown in the circuit editor when a VARIABLE relay model is selected.  For BINARY relay models the field is hidden and has no effect.
 
-> [!NOTE]
-> Start Brightness only affects button TOGGLE actions.  MQTT commands always set the output to the exact brightness value specified, regardless of this setting.  For example, sending `17` over MQTT to an output that is currently off will set it to 17% brightness.
-
-> [!WARNING]
-> The firmware enforces a minimum brightness threshold of 5%.  Any value below 5% is treated as 0% (off).  Setting Start Brightness to a value below 5% will cause a TOGGLE action to turn the output off immediately rather than on.
-
 
 ## Custom Relay Models
 
