@@ -89,7 +89,7 @@ jobs:
 
       - name: Generate AsyncAPI HTML reference
         run: |
-          npx -y @asyncapi/cli generate fromFile public/asyncapi/controller.yaml @asyncapi/html-template \
+          npx -y @asyncapi/cli generate fromTemplate public/asyncapi/controller.yaml @asyncapi/html-template \
             --output public/asyncapi/html
 
       - name: Copy static assets to public for direct URL access
