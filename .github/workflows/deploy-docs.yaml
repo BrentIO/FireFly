@@ -27,6 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configure AWS credentials
+        if: ${{ !env.ACT }}
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
@@ -109,9 +110,11 @@ jobs:
         run: npm run docs:build
 
       - name: Sync to S3
+        if: ${{ !env.ACT }}
         run: aws s3 sync .vitepress/dist/ s3://${{ secrets.S3_DOCS_BUCKET_NAME }} --delete
 
       - name: Look up CloudFront distribution ID
+        if: ${{ !env.ACT }}
         id: lookup-dist
         run: |
           DIST_ID=$(aws cloudformation describe-stacks \
@@ -122,6 +125,7 @@ jobs:
           echo "dist_id=$DIST_ID" >> $GITHUB_OUTPUT
 
       - name: Invalidate CloudFront cache
+        if: ${{ !env.ACT }}
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ steps.lookup-dist.outputs.dist_id }} \
