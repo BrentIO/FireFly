@@ -26,8 +26,6 @@ When more than four HIDs are needed at a single location, two client records are
 
 The secondary client must have its own port assignment on a Controller, because it uses a physically separate RJ-45 connection.  Both ports must be assigned to the **same Controller** — the configuration UI enforces this rule and will not allow the primary and secondary ports to be assigned to different Controllers.
 
-Where possible, the primary client should be assigned to an odd-numbered port and the secondary to an adjacent even-numbered port.  This ensures both connections share the same power rail.
-
 [![Extended Client Wiring Diagram](./images/extended-client-wiring.svg)](./images/extended-client-wiring.svg)
 
 ### Channel Mapping

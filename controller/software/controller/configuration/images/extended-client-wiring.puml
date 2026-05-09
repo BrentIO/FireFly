@@ -15,8 +15,8 @@ skinparam package {
 }
 
 package "Controller" as CTL {
-    rectangle "Port A (odd-numbered)\nPrimary client" as PA #lightblue
-    rectangle "Port B (even-numbered)\nSecondary client" as PB #lightyellow
+    rectangle "Port A\nPrimary client" as PA #lightblue
+    rectangle "Port B\nSecondary client" as PB #lightyellow
 }
 
 package "Client Device (HID)" as HID {
