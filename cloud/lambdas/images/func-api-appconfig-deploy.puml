@@ -5,7 +5,7 @@ title POST /appconfig/{function_name}/deploy
 
 actor Client
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "func-api-appconfig-patch" as Lambda
     participant "AppConfig" as AC

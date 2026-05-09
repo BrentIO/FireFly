@@ -3,7 +3,7 @@
 
 title Cognito Pre-Signup Trigger
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "Cognito" as Cognito
     participant "func-cognito-pre-signup" as Lambda
     database "DynamoDB\nfirefly-users" as DynUsers

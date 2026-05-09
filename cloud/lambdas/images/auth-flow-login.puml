@@ -9,7 +9,7 @@ box "Browser"
     participant "SPA\n(Vue)" as SPA
 end box
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "API Gateway" as APIGW
     participant "Cognito\nHosted UI" as Cognito
     participant "func-cognito-\npre-signup" as PreSignup

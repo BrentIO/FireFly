@@ -5,7 +5,7 @@ title deploy-func-api-firmware-get\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
     participant "API Gateway" as APIGW
 end box

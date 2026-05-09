@@ -5,7 +5,7 @@ title delete-func-api-users-post\n(GitHub Action → CloudFormation)
 
 actor "GitHub Actions Runner" as GHA
 
-box "AWS" #ffdbbb
+box "AWS" $AWS
     participant "CloudFormation / SAM" as CF
 end box
 
