@@ -13,7 +13,7 @@ Each client can support up to four buttons or switches.  When more than four inp
 
 ### Physical Wiring Constraints
 
-A Cat6 cable carries four usable signal channels along with power (+9 VDC) and ground wires.  This means a single RJ-45 run from a Controller port to a client device can support at most four human interface devices (HIDs).
+A Cat6 cable carries four usable signal channels along with power (+9 VDC on hardware prior to version 2603; +12 VDC on version 2603 and later) and ground wires.  This means a single RJ-45 run from a Controller port to a client device can support at most four human interface devices (HIDs).
 
 Client hardware includes two RJ-45 jacks — one for the primary connection (channels 1–4) and one for the secondary, or extended, connection (channels 5–6).  When the second jack is wired to a separate Controller port, the client can accommodate up to six HIDs in total.
 
