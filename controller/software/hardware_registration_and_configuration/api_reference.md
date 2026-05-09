@@ -7,7 +7,4 @@ The API documentation below is rendered from the most recent version available o
 
 A Visual Token can be found on the [OLED screen](/controller/support/OLED_screens/#auth-token), which randomizes the code.  Once authorized, the token is valid for 1 hour.
 
-> [!NOTE]
-> This page is best viewed in `light` mode.
-
 <SwaggerUIBundle />

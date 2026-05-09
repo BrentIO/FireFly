@@ -16,6 +16,20 @@ Usage for Apple Silicon:
 docker build --no-cache --platform=linux/arm64 -t act-docs-ubuntu-24-04:latest -f .act/dockerfile .
 ```
 
+## Local Preview
+
+To build and locally preview the docs site, run the following from the **repo root**. The container will build the site, then serve it on `http://localhost:4173`. Kill the container to stop; restart it to do a clean rebuild.
+
+Usage for Intel CPU:
+```bash
+docker run --rm --platform linux/amd64 -p 4173:4173 -v $(pwd):/docs:ro act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
+```
+
+Usage for Apple Silicon:
+```bash
+docker run --rm --platform linux/arm64 -p 4173:4173 -v $(pwd):/docs:ro act-docs-ubuntu-24-04:latest bash /docs/.act/preview-entrypoint.sh
+```
+
 ## Configure ACT for Visual Studio Code
 
 To run the ACT docker image through Visual Studio Code, use the [GitHub Local Actions](https://marketplace.visualstudio.com/items?itemName=SanjulaGanepola.github-local-actions) plug-in. The following settings must be applied:
