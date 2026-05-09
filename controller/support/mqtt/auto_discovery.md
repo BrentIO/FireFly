@@ -14,7 +14,17 @@ FireFly uses the default topic root of `homeassistant` for auto discovery.  You 
 ## MQTT Message Sequences
 During the `setup()` process (and eventually `loop()` process), the controller will execute the following MQTT actions after making a connection to the broker:
 
-[![MQTT Message Sequences](./images/mqtt_message_sequences.svg)](./images/mqtt_message_sequences.svg)
+[![MQTT Connection](./images/mqtt_connection.svg)](./images/mqtt_connection.svg)
+
+[![MQTT Firmware Update](./images/mqtt_firmware_update.svg)](./images/mqtt_firmware_update.svg)
+
+[![MQTT Temperature Sensors](./images/mqtt_temperature.svg)](./images/mqtt_temperature.svg)
+
+[![MQTT Outputs](./images/mqtt_outputs.svg)](./images/mqtt_outputs.svg)
+
+[![MQTT Diagnostics](./images/mqtt_diagnostics.svg)](./images/mqtt_diagnostics.svg)
+
+[![MQTT Debug](./images/mqtt_debug.svg)](./images/mqtt_debug.svg)
 
 
 ## Retained Messages and Last Will & Testament
