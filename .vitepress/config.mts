@@ -228,6 +228,10 @@ export default defineConfig({
                     text: 'Provisioning Mode',
                     link: '/controller/support/provisioning_mode'
                   },
+                  {
+                    text: 'Controller Provisioning',
+                    link: '/controller/support/controller_provisioning'
+                  },
                   { 
                     text: 'Troubleshooting'
                   },
