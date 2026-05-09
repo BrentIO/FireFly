@@ -1,0 +1,63 @@
+# Build from the repo root:
+#
+# Apple Silicon:
+#   docker build --no-cache --platform=linux/arm64 -t act-docs-ubuntu-24-04:latest -f .act/dockerfile .
+#
+# Intel:
+#   docker build --no-cache --platform=linux/amd64 -t act-docs-ubuntu-24-04:latest -f .act/dockerfile .
+
+FROM ghcr.io/catthehacker/ubuntu:act-24.04
+LABEL act="act-docs-ubuntu-24-04"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/github/home
+
+RUN mkdir -p /github/home
+
+# ---------------------------------------------------------
+# Base system packages
+# ---------------------------------------------------------
+RUN apt-get update && apt-get install -y \
+    bash \
+    curl \
+    git \
+    jq \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------
+# PlantUML dependencies
+# ---------------------------------------------------------
+RUN apt-get update && apt-get install -y \
+    default-jre-headless \
+    graphviz \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://github.com/plantuml/plantuml/releases/download/v1.2026.2/plantuml-1.2026.2.jar \
+      -o /opt/plantuml.jar && \
+    echo '#!/bin/sh' > /usr/local/bin/plantuml && \
+    echo 'exec java -jar /opt/plantuml.jar "$@"' >> /usr/local/bin/plantuml && \
+    chmod +x /usr/local/bin/plantuml
+
+# ---------------------------------------------------------
+# Node.js 24
+# ---------------------------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------------------
+# GitHub CLI (gh)
+# ---------------------------------------------------------
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+       | tee /etc/apt/sources.list.d/github-cli.list >/dev/null \
+    && apt-get update \
+    && apt-get install -y gh \
+    && rm -rf /var/lib/apt/lists/*

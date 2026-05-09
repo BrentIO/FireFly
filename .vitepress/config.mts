@@ -599,7 +599,17 @@ export default defineConfig({
               },
             ]
           },
-          { 
+          {
+            text: 'Documentation',
+            collapsed: true,
+            items: [
+              {
+                text: 'Development Environment',
+                link: '/docs/development_environment'
+              },
+            ]
+          },
+          {
             text: 'Best Practices',
             link: '/best_practices'
           }
