@@ -2,13 +2,6 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  vue: {
-    template: {
-      compilerOptions: {
-        isCustomElement: (tag) => tag === 'asyncapi-component'
-      }
-    }
-  },
   title: "Project FireFly",
   description: "Software-defined lighting",
   base: '/',

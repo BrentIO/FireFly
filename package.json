@@ -8,7 +8,6 @@
     "vitepress": "^1.6.4"
   },
   "dependencies": {
-    "@asyncapi/web-component": "^3.1.3",
     "swagger-ui-dist": "^5.32.0"
   }
 }
