@@ -10,7 +10,7 @@ onMounted(() => {
   <div class="asyncapi">
     <asyncapi-component
       schemaUrl="/asyncapi/controller.yaml"
-      cssImportType="link"
+      cssImportType="style"
     />
   </div>
 </template>
