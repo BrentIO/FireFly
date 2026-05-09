@@ -18,7 +18,7 @@ docker build --no-cache --platform=linux/arm64 -t act-docs-ubuntu-24-04:latest -
 
 ## Local Preview
 
-To build and locally preview the docs site, run the following from the **repo root**. The container will build the site, then serve it on [http://localhost:4173](http://localhost:4173). Kill the container to stop; restart it to do a clean rebuild.
+To build and locally preview the docs site, run the following from the **repo root**. The container will build the site, then serve it on `http://localhost:4173`. Kill the container to stop; restart it to do a clean rebuild.
 
 Usage for Intel CPU:
 ```bash
