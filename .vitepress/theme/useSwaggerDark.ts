@@ -108,12 +108,17 @@ const darkCSS = `
   .swagger-ui .highlight-code > .microlight { background: #0e0e11 !important; color: rgba(255,255,245,.86) !important; }
 
   /* SVG icons: expand/collapse carets and lock icons */
-  .swagger-ui .opblock-summary-control svg,
+  .swagger-ui .expand-operation svg,
+  .swagger-ui .opblock-control-arrow svg,
   .swagger-ui .opblock-tag svg,
   .swagger-ui .authorization__btn svg,
-  .swagger-ui .expand-methods svg,
-  .swagger-ui .model-toggle::after { fill: rgba(255,255,245,.86); }
-  .swagger-ui .model-toggle::after { border-top-color: rgba(255,255,245,.86); }
+  .swagger-ui .expand-methods svg { fill: rgba(255,255,245,.86); opacity: 1; }
+
+  /* Schema expand/collapse caret (background data-URL SVG, not inline) */
+  .swagger-ui .model-toggle:after {
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='%23e4e6e6' d='M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/></svg>") 50% no-repeat;
+    background-size: 100%;
+  }
 `;
 
 export function useSwaggerDark() {
