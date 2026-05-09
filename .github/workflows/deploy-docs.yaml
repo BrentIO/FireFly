@@ -93,6 +93,8 @@ jobs:
           done
 
       - name: Build with VitePress
+        env:
+          CONFIGURATOR_URL: https://${{ vars.CONFIGURATOR_DOMAIN_NAME }}
         run: npm run docs:build
 
       - name: Sync to S3
