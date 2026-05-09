@@ -1,0 +1,87 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title Controller-to-Controller Provisioning — SoftAP Flow
+
+actor User
+
+box "Target Controller (ESP32)"
+    participant "Target\nFirmware" as Target
+end box
+
+box "Source Controller (ESP32)"
+    participant "SoftAP\n(SSID: FireFly-Provisioning)" as AP
+    participant "HTTP API" as API
+end box
+
+User -> API++ : **Enable Provisioning Mode**\nPUT /api/provisioning\n""{visual-token}""
+
+break visual-token Invalid
+    API --> User : HTTP 401
+end
+
+API --> User : HTTP 202
+API -> AP-- : **Start SoftAP**\nWPA2 password = ""nibble-interleave(BSSID)""\nTX power = ""2 dBm""\nmax clients = ""1""
+
+
+Target -> Target : **Boot — check for own config file**\nLittleFS: ""/controllers/{uuid}""
+Target -> Target : **Config missing — scan for SSID**\n"""FireFly-Provisioning""" (exact)
+Target -> Target : **Read BSSID from scan result**\ncompute password = ""nibble-interleave(BSSID)""
+Target -> AP++ : **Connect using WPA2**\nwith computed password (10 s timeout)
+
+break MAC not in allowlist
+    AP -> API : **Rogue client event**
+    API -> API : **Shut down SoftAP**
+    AP --> Target-- : Disconnect
+    Target -> Target : **Continue unprovisioned**
+end
+
+AP --> Target-- : Connected (DHCP 192.168.4.x)
+
+Target -> API++ : **Get nonce**\nGET /api/provisioning/nonce
+
+break Request is not from SoftAP
+    API --> Target: HTTP 403
+end
+
+break Provisioning mode inactive
+    API --> Target: HTTP 409
+end
+
+API --> Target-- : HTTP 200\n""{ "nonce": 3819273645 }""
+
+Target -> API++ : **Get provisioning bundle**\nGET /api/provisioning/controller\n""mac-address: aa:bb:cc:dd:ee:ff"" (own WiFi MAC)\n""x-nonce: 3819273645""
+
+break Request is not from SoftAP
+    API --> Target: HTTP 403
+end
+
+break Provisioning mode inactive
+    API --> Target: HTTP 409
+end
+
+API -> API : **Validate nonce**\nunused, matches session
+
+break Nonce used or invalid
+    API --> Target: HTTP 401
+end
+
+API -> API : **Find controller record by ""mac-address""**
+
+break No controller with ""mac-address""
+    API --> Target: HTTP 404
+    Target -> Target : **Continue unprovisioned**
+end
+
+API -> API : **Invalidate nonce**
+API --> Target-- : HTTP 200\n""{ "controllers": [...], "clients": [...] }""
+
+Target -> Target : **Write each controller record**\nencrypted to LittleFS: ""/controllers/{uuid}""
+Target -> Target : **Write each client record**\nencrypted to LittleFS: ""/clients/{uuid}""
+Target -> Target : **Reboot into normal mode**
+
+User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""
+API --> User : HTTP 202
+API -> AP-- : **Shut down SoftAP**
+
+@enduml
