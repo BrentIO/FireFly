@@ -1,0 +1,63 @@
+# func-api-devices-backup-post
+
+## Description
+
+Stores an encrypted configuration backup for a device. The caller (the FireFly Controller firmware) supplies the raw FFCE-format ciphertext blob produced on-device by AES-256-GCM with `key_backup` (HKDF-derived from the eFuse master key with label `firefly-backup-v1`). The Lambda validates the device-identity headers, then stores the blob in S3 under `{uuid}/backup.ffce` and records `last_backup_date` in DynamoDB.
+
+This endpoint has **no** Cognito JWT authorizer — it is authenticated solely by the device's cryptographic signature.
+
+## Invocation
+
+Invoked by **API Gateway** on an HTTP `POST /devices/{uuid}/backup` request (no JWT authorizer).
+
+## Sequence Diagram
+
+[![Sequence Diagram](./images/func-api-devices-backup-post.svg)](./images/func-api-devices-backup-post.svg)
+
+## API Endpoints
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/devices/{uuid}/backup` | Device signature (headers) | Store encrypted configuration backup |
+
+## Request Headers
+
+| Header | Required | Description |
+|---|---|---|
+| `X-Device-UUID` | Yes | Must match the `{uuid}` path parameter |
+| `X-Device-Nonce` | Yes | Base64-encoded 32-byte random nonce |
+| `X-Device-Timestamp` | Yes | ISO 8601 UTC timestamp (e.g. `2025-05-09T12:00:00Z`) |
+| `X-Device-Signature` | Yes | Base64-encoded DER ECDSA P-256 signature over SHA-256(nonce \|\| timestamp) |
+| `Content-Type` | Yes | Must be `application/octet-stream` |
+| `If-None-Match` | No | ETag of existing backup; returns 304 if content unchanged |
+
+## Request Body
+
+Raw FFCE-format encrypted binary blob (max 512 KB). The blob starts with the 4-byte magic `FFCE` and contains the AES-256-GCM encrypted configuration.
+
+## Response Body
+
+```json
+{
+  "message": "Backup stored",
+  "last_backup_date": "2025-05-09T12:00:00Z"
+}
+```
+
+## Response Codes
+
+| Code | Reason |
+|---|---|
+| `200 OK` | Backup stored successfully |
+| `304 Not Modified` | Backup content identical to existing (ETag match) |
+| `400 Bad Request` | Missing/invalid headers, invalid Base64, or body not valid FFCE format |
+| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside ±500 ms window |
+| `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |
+| `413 Payload Too Large` | Body exceeds 512 KB limit |
+| `500 Internal Server Error` | Unhandled exception |
+
+See the [API Reference](/cloud/api_reference) for full schema documentation.
+
+## Deployment
+
+See the [deployment workflow documentation](../github_actions/func-api-devices-backup-post.md) for workflow steps, infrastructure dependencies, and failure scenarios.
