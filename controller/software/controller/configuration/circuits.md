@@ -9,13 +9,13 @@ An ID can be set for the circuit, as well as a short description, [area](./areas
 
 ## Variable Outputs and Start Brightness
 
-Circuits assigned a proportional (VARIABLE) relay model support dimming from 0–100%.  When a button configured with a [TOGGLE action](./controllers.md) turns a VARIABLE output on from an off state, it uses the circuit's **Start Brightness** value rather than the default of 10%.
+Circuits assigned a proportional (VARIABLE) relay model support dimming from 0–100%.  When a button configured with an [INCREASE action](./controllers.md) activates a VARIABLE output that is currently off, it uses the circuit's **Start Brightness** value rather than the default of 10%.
 
 | Property | Value |
 | -------- | ----- |
 | Default | 10% |
 | Valid range | 5–100% |
-| Applies to | TOGGLE button actions only |
+| Applies to | INCREASE button actions when the circuit is currently off |
 
 The Start Brightness field is only shown in the circuit editor when a VARIABLE relay model is selected.  For BINARY relay models the field is hidden and has no effect.
 
