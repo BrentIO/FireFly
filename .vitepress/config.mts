@@ -154,7 +154,7 @@ export default defineConfig({
                           },
                           {
                             text: 'Online Configurator',
-                            link: 'https://configurator.fireflylx.com'
+                            link: process.env.CONFIGURATOR_URL ?? 'https://configurator.fireflylx.com'
                           }
 
                         ]
