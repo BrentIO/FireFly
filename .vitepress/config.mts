@@ -348,6 +348,18 @@ export default defineConfig({
                         link: '/cloud/lambdas/func-api-appconfig-patch'
                       },
                       {
+                        text: 'func-api-devices-backup-delete',
+                        link: '/cloud/lambdas/func-api-devices-backup-delete'
+                      },
+                      {
+                        text: 'func-api-devices-backup-get',
+                        link: '/cloud/lambdas/func-api-devices-backup-get'
+                      },
+                      {
+                        text: 'func-api-devices-backup-post',
+                        link: '/cloud/lambdas/func-api-devices-backup-post'
+                      },
+                      {
                         text: 'func-api-devices-get',
                         link: '/cloud/lambdas/func-api-devices-get'
                       },
@@ -482,6 +494,18 @@ export default defineConfig({
                         link: '/cloud/github_actions/func-api-appconfig-patch'
                       },
                       {
+                        text: 'func-api-devices-backup-delete',
+                        link: '/cloud/github_actions/func-api-devices-backup-delete'
+                      },
+                      {
+                        text: 'func-api-devices-backup-get',
+                        link: '/cloud/github_actions/func-api-devices-backup-get'
+                      },
+                      {
+                        text: 'func-api-devices-backup-post',
+                        link: '/cloud/github_actions/func-api-devices-backup-post'
+                      },
+                      {
                         text: 'func-api-devices-get',
                         link: '/cloud/github_actions/func-api-devices-get'
                       },
@@ -560,6 +584,10 @@ export default defineConfig({
                       {
                         text: 's3-configurator',
                         link: '/cloud/github_actions/s3-configurator'
+                      },
+                      {
+                        text: 's3-device-backups',
+                        link: '/cloud/github_actions/s3-device-backups'
                       },
                       {
                         text: 's3-firmware',

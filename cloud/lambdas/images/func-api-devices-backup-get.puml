@@ -1,0 +1,70 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title GET /devices/{uuid}/backup
+
+actor "Controller\nFirmware" as Client
+
+box "AWS" $AWS
+    participant "API Gateway" as APIGW
+    participant "func-api-devices-backup-get" as Lambda
+    participant "devices\ntable" as DevicesTable
+    participant "device-backups\nS3 bucket" as S3
+end box
+
+Client -> APIGW++ : GET /devices/{uuid}/backup\nX-Device-UUID: <uuid>\nX-Device-Nonce: <base64 32-byte nonce>\nX-Device-Timestamp: <ISO 8601 UTC>\nX-Device-Signature: <base64 DER ECDSA sig>
+
+APIGW -> Lambda++ : invoke
+
+Lambda -> Lambda : validate X-Device-UUID, X-Device-Nonce,\nX-Device-Timestamp, X-Device-Signature headers present
+
+alt any required header missing
+    Lambda --> APIGW : 400 Bad Request
+    APIGW --> Client : 400 Bad Request
+end
+
+Lambda -> Lambda : verify X-Device-UUID matches {uuid} path param
+
+alt UUID header mismatch
+    Lambda --> APIGW : 403 Forbidden
+    APIGW --> Client : 403 Forbidden
+end
+
+Lambda -> DevicesTable++ : GetItem(uuid)
+DevicesTable --> Lambda-- : device item (or absent)
+
+alt device not found
+    Lambda --> APIGW : 401 Device not registered
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> Lambda : parse and validate X-Device-Timestamp\n(must be within ±500 ms of server time)
+
+alt timestamp out of window
+    Lambda --> APIGW : 401 Timestamp outside acceptance window
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> Lambda : Base64-decode nonce and signature
+Lambda -> Lambda : reconstruct EllipticCurvePublicKey\nfrom stored 65-byte uncompressed point
+Lambda -> Lambda : verify ECDSA P-256 signature over\nSHA-256(nonce_bytes || timestamp_bytes)
+
+alt signature invalid
+    Lambda --> APIGW : 401 Signature verification failed
+    APIGW --> Client : 401 Unauthorized
+end
+
+Lambda -> S3++ : GetObject({uuid}/backup.ffce)
+
+alt object not found
+    S3 --> Lambda-- : 404 NoSuchKey
+    Lambda --> APIGW : 404 Not Found
+    APIGW --> Client : 404 Not Found
+end
+
+S3 --> Lambda-- : FFCE blob bytes + ETag
+
+Lambda --> APIGW-- : 200 OK\nContent-Type: application/octet-stream\nContent-Length: <size>\nETag: "<etag>"\nBody: base64(FFCE blob)
+APIGW --> Client-- : 200 OK\nBody: FFCE blob (binary)
+
+@enduml
