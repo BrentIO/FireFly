@@ -2,7 +2,7 @@
 
 ## Description
 
-Stores an encrypted configuration backup for a device. The caller (the FireFly Controller firmware) supplies the raw FFCE-format ciphertext blob produced on-device by AES-256-GCM with `key_backup` (HKDF-derived from the eFuse master key with label `firefly-backup-v1`). The Lambda validates the device-identity headers, then stores the blob in S3 under `{uuid}/backup.ffce` and records `last_backup_date` in DynamoDB.
+Stores an encrypted configuration backup for a device. The caller (the FireFly Controller firmware) supplies the raw FFCE-format ciphertext blob produced on-device by AES-256-GCM with `key_backup` (HKDF-derived from the eFuse master key with label `firefly-backup-v1`). The Lambda validates the device-identity headers, then stores the blob in S3 keyed by the device UUID and records `last_backup_date` in DynamoDB.
 
 This endpoint has **no** Cognito JWT authorizer — it is authenticated solely by the device's cryptographic signature.
 

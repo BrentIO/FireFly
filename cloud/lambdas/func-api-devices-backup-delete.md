@@ -2,7 +2,7 @@
 
 ## Description
 
-Deletes the stored encrypted configuration backup for a device. Removes the object `{uuid}/backup.ffce` from S3 (idempotent — succeeds even if no backup exists) and clears `last_backup_date` from the device's DynamoDB record.
+Deletes the stored encrypted configuration backup for a device. Removes the S3 object keyed by the device UUID (idempotent — succeeds even if no backup exists) and clears `last_backup_date` from the device's DynamoDB record.
 
 This endpoint has **no** Cognito JWT authorizer — it is authenticated solely by the device's cryptographic signature.
 
