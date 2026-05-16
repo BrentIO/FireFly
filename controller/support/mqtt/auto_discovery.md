@@ -308,6 +308,76 @@ Example state payload:
 ```
 
 
+
+
+### HTTP Server
+
+The HTTP Server switch allows you to enable or disable the built-in HTTP server on the controller.
+
+::: info Auto-disable on inactivity
+The HTTP server automatically stops after **300 seconds (5 minutes)** of inactivity. The inactivity timer resets each time the HTTP server responds to a request. Sending `OFF` to the command topic also stops the server immediately.
+:::
+
+Example auto discovery topic:
+```text
+homeassistant/switch/FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-http-server/config
+```
+
+Example auto discovery payload:
+```json
+{
+    "name": "HTTP Server",
+    "unique_id": "FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-http-server",
+    "default_entity_id": "switch.FireFly-673be2c4-87cc-41e1-bb4e-96367161b02f-http_server",
+    "icon": "mdi:web",
+    "device": {
+        "identifiers": [
+            "673be2c4-87cc-41e1-bb4e-96367161b02f"
+        ],
+        "name": "Upstairs",
+        "manufacturer": "P5 Software LLC",
+        "model": "FireFly Controller",
+        "model_id": "FFC0806-2305",
+        "serial_number": "673be2c4-87cc-41e1-bb4e-96367161b02f",
+        "sw_version": "2025.4.1",
+        "suggested_area": "Tech Room"
+    },
+    "state_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/http-server/state",
+    "command_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/http-server/set",
+    "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability",
+    "payload_on": "ON",
+    "payload_off": "OFF",
+    "state_on": "ON",
+    "state_off": "OFF"
+}
+```
+
+Example state topic:
+```text
+FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/http-server/state
+```
+
+Example state payloads:
+```text
+ON
+```
+```text
+OFF
+```
+
+Example command topic:
+```text
+FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/http-server/set
+```
+
+Example command payloads:
+```text
+ON
+```
+```text
+OFF
+```
+
 ### Temperature
 The current temperature reading from one of the sensors on the controller.  Each sensor is added as its own entry, if the controller features one or more temperature sensors.
 
