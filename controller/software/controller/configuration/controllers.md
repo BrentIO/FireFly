@@ -35,7 +35,7 @@ Existing certificates on the Controller will be deleted when certificates are pu
 
 ### Force Updates
 
-Updates can be forced to the Controller for either the Application or SPIFFs.  Although this should be a safe operation to perform, you should pull a backup from the Controller prior to forcing an update.
+Updates can be forced to the Controller for either the Application or LittleFS (referred to as `spiffs` in the API, following the Arduino toolchain convention).  Although this should be a safe operation to perform, you should pull a backup from the Controller prior to forcing an update.
 
 Application updates will always require a reboot after being deployed.  Keep this in mind as there will be an interruption to lighting when the update is being deployed and all outputs will be set to "off" during the reboot.
 

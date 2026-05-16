@@ -115,6 +115,6 @@ The current auth token displayed with the countdown timer bar.
 
 
 ## OTA Update
-When an [Over-the-Air (OTA) update](/controller/support/ota_updates) is in progress, the display will indicate the progress of the firmware or SPIFF update as a percentage in the progress bar.  When the update is complete or fails, the Event Log will be displayed.
+When an [Over-the-Air (OTA) update](/controller/support/ota_updates) is in progress, the display will indicate the progress of the firmware or LittleFS (referred to as `spiffs` in the API, following the Arduino toolchain convention) update as a percentage in the progress bar.  When the update is complete or fails, the Event Log will be displayed.
 
 ![Auth Token](./images/ota_progress.svg)
