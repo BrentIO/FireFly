@@ -209,9 +209,13 @@ export default defineConfig({
                     text: 'Certificate Management',
                     link: '/controller/support/certificate_management'
                   },
-                  { 
+                  {
                     text: 'OTA Updates',
                     link: '/controller/support/ota_updates'
+                  },
+                  {
+                    text: 'Cloud Backup',
+                    link: '/controller/support/cloud_backup'
                   },
                   { 
                     text: 'Home Assistant Auto Discovery and MQTT',
