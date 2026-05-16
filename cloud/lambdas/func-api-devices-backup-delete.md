@@ -43,7 +43,7 @@ Invoked by **API Gateway** on an HTTP `DELETE /devices/{uuid}/backup` request (n
 |---|---|
 | `200 OK` | Backup deleted (or did not exist) |
 | `400 Bad Request` | Missing/invalid headers or invalid Base64 |
-| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside ±500 ms window |
+| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside the acceptance window |
 | `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |
 | `500 Internal Server Error` | Unhandled exception |
 

@@ -95,5 +95,5 @@ Calls `sam delete` to remove the Lambda function, its IAM role, and the API Gate
 | `firefly-shared-layer` stack not found | Layer ARN lookup fails; SAM deploy is not attempted. Deploy `shared-layer` first. |
 | `firefly-s3-device-backups` stack not deployed | Function deploys but S3 operations fail at runtime. Deploy `s3-device-backups` first. |
 | Device UUID not found | Lambda returns `401 Unauthorized`. |
-| Timestamp outside ±500 ms window | Lambda returns `401 Unauthorized`. |
+| Timestamp outside the acceptance window | Lambda returns `401 Unauthorized`. |
 | Invalid or mismatched signature | Lambda returns `401 Unauthorized`. |

@@ -51,7 +51,7 @@ Raw FFCE-format encrypted binary blob (max 512 KB). The blob starts with the 4-b
 | `200 OK` | Backup stored successfully |
 | `304 Not Modified` | Backup content identical to existing (ETag match) |
 | `400 Bad Request` | Missing/invalid headers, invalid Base64, or body not valid FFCE format |
-| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside ±500 ms window |
+| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside the acceptance window |
 | `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |
 | `413 Payload Too Large` | Body exceeds 512 KB limit |
 | `500 Internal Server Error` | Unhandled exception |

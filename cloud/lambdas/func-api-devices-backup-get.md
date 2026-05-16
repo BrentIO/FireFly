@@ -39,7 +39,7 @@ Raw FFCE-format encrypted binary blob (base64-encoded in the Lambda response bod
 |---|---|
 | `200 OK` | Backup retrieved successfully |
 | `400 Bad Request` | Missing/invalid headers or invalid Base64 |
-| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside ±500 ms window |
+| `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside the acceptance window |
 | `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |
 | `404 Not Found` | No backup exists for this device |
 | `500 Internal Server Error` | Unhandled exception |

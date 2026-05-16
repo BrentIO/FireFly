@@ -38,7 +38,7 @@ alt device not found
     APIGW --> Client : 401 Unauthorized
 end
 
-Lambda -> Lambda : parse and validate X-Device-Timestamp\n(must be within ±500 ms of server time)
+Lambda -> Lambda : parse and validate X-Device-Timestamp
 
 alt timestamp out of window
     Lambda --> APIGW : 401 Timestamp outside acceptance window
