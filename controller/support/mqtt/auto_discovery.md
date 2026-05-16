@@ -377,7 +377,7 @@ Circuit 999 is a binary light in the kitchen.  The controller's configuration JS
 
 Example auto discovery topic:
 ```
-homeassistant/light/C999/config
+homeassistant/light/FireFly-circuits-C999/config
 ```
 
 Example auto discovery payload:
@@ -396,15 +396,15 @@ Example auto discovery payload:
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "suggested_area": "Kitchen"
     },
-    "command_topic": "FireFly/C999/set",
-    "state_topic": "FireFly/C999/state",
+    "command_topic": "FireFly/circuits/C999/set",
+    "state_topic": "FireFly/circuits/C999/state",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
 
 Example state topic:
 ```text
-FireFly/C999/state
+FireFly/circuits/C999/state
 ```
 
 Example state payload:
@@ -419,7 +419,7 @@ OFF
 
 Example command topic:
 ```text
-FireFly/C999/set
+FireFly/circuits/C999/set
 ```
 
 Example command payload:
@@ -451,7 +451,7 @@ Circuit 888 is a variable brightness light in the bedroom.  The controller's con
 
 Example auto discovery topic:
 ```
-homeassistant/light/C888/config
+homeassistant/light/FireFly-circuits-C888/config
 ```
 
 Example auto discovery payload:
@@ -463,8 +463,8 @@ Example auto discovery payload:
     "icon": "mdi:wall-sconce",
     "on_command_type": "brightness",
     "brightness_scale": 100,
-    "brightness_command_topic": "FireFly/C888/set",
-    "brightness_state_topic": "FireFly/C888/state",
+    "brightness_command_topic": "FireFly/circuits/C888/set",
+    "brightness_state_topic": "FireFly/circuits/C888/state",
     "state_value_template": "{% if value|int > 0 %}ON{% else %}OFF{% endif %}",
     "device": {
         "identifiers": [
@@ -474,15 +474,15 @@ Example auto discovery payload:
         "via_device": "673be2c4-87cc-41e1-bb4e-96367161b02f",
         "suggested_area": "Bedroom"
     },
-    "state_topic": "FireFly/C888/state",
-    "command_topic": "FireFly/C888/set",
+    "state_topic": "FireFly/circuits/C888/state",
+    "command_topic": "FireFly/circuits/C888/set",
     "availability_topic": "FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/availability"
 }
 ```
 
 Example state topic:
 ```text
-FireFly/C888/state
+FireFly/circuits/C888/state
 ```
 
 Example state payload:
@@ -497,7 +497,7 @@ Example state payload:
 
 Example command topic:
 ```text
-FireFly/C888/set
+FireFly/circuits/C888/set
 ```
 
 Example command payload:
