@@ -26,7 +26,7 @@ Invoked by **API Gateway** on an HTTP `GET /devices/{uuid}/registration` request
 |---|---|---|
 | `X-Device-UUID` | Yes | Must match the `{uuid}` path parameter |
 | `X-Device-Nonce` | Yes | Base64-encoded 32-byte random nonce |
-| `X-Device-Timestamp` | Yes | ISO 8601 UTC timestamp (e.g. `2025-05-09T12:00:00Z`). Must be within ±5 minutes of server time. |
+| `X-Device-Timestamp` | Yes | ISO 8601 UTC timestamp (e.g. `2025-05-09T12:00:00Z`). Must be within ±500 ms of server time. |
 | `X-Device-Signature` | Yes | Base64-encoded DER-format ECDSA P-256 signature over SHA-256(nonce_bytes \|\| timestamp_ascii_bytes) |
 
 ## Response Body
@@ -49,7 +49,7 @@ Invoked by **API Gateway** on an HTTP `GET /devices/{uuid}/registration` request
 |---|---|
 | `200 OK` | Device is registered and signature is valid |
 | `400 Bad Request` | Missing required headers, invalid Base64, nonce not 32 bytes, or malformed timestamp |
-| `401 Unauthorized` | Device UUID not found, signature verification failed, or timestamp outside ±5 minute window |
+| `401 Unauthorized` | Device UUID not found, signature verification failed, or timestamp outside ±500 ms window |
 | `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |
 | `500 Internal Server Error` | Unhandled exception |
 
