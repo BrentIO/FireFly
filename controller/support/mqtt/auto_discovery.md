@@ -2,8 +2,13 @@
 
 The integration to Home Assistant is done via MQTT auto discovery.  The benefit of auto discovery is that no additional software needs to be configured in Home Assistant for it to work.
 
-::: info Why aren't inputs included in auto discovery?
-Home Assistant auto discovery is only provided with the output information, not input message events, like a button press.  You can [read more about automating with inputs using MQTT](./inputs).
+::: info What input information is included in auto discovery?
+Auto discovery registers two types of input sensors in Home Assistant:
+
+- **Input channel sensors** — one sensor per configured input channel, with state values of `NORMAL`, `SHORT`, `LONG`, or `EXCESSIVE`.
+- **Input controller sensors** — one sensor per IO extender chip, reflecting chip availability (`Online` or `Offline`).
+
+Raw input event topics (e.g. button-press events) are not retained and are not registered via auto discovery.  You can [read more about automating with inputs using MQTT](./inputs).
 :::
 
 
