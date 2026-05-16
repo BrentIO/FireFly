@@ -268,10 +268,6 @@ export default defineConfig({
                   },
                 ]
               },
-              {
-                text: 'Development Environment',
-                link: '/controller/development_environment/'
-              },
             ]
           },
           { 
@@ -305,9 +301,6 @@ export default defineConfig({
                     text: 'Troubleshooting'
                   },
                 ]
-              },
-              {
-                text: 'Development Environment'
               },
             ]
           },
@@ -625,18 +618,25 @@ export default defineConfig({
                 text: 'AWS Account Setup',
                 link: '/cloud/aws-account-setup'
               },
-              {
-                text: 'Development Environment',
-                link: '/cloud/development_environment'
-              },
             ]
           },
           {
-            text: 'Documentation',
+            text: 'Development Environments',
             collapsed: true,
             items: [
               {
-                text: 'Development Environment',
+                text: 'Controller',
+                link: '/controller/development_environment/'
+              },
+              {
+                text: 'Client',
+              },
+              {
+                text: 'Cloud',
+                link: '/cloud/development_environment'
+              },
+              {
+                text: 'Docs',
                 link: '/docs/development_environment'
               },
             ]
