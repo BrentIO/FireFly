@@ -74,84 +74,99 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   {
+                    text: 'Hardware Registration and Configuration Application',
+                    collapsed: true,
+                    link: '/controller/software/hardware_registration_and_configuration/',
+                    items:[
+                      {
+                        text: 'Cloud Registration',
+                        link: '/controller/software/hardware_registration_and_configuration/cloud-registration'
+                      },
+                      {
+                        text: 'API Reference',
+                        link: '/controller/software/hardware_registration_and_configuration/api_reference'
+                      },
+                    ]
+                  },
+                  {
                     text: 'Controller Application',
                     collapsed: true,
                     link: '/controller/software/controller/',
-                    items:[                  
-                      { 
+                    items:[
+                      {
                         text: 'Configuration',
                         link: '/controller/software/controller/configuration/',
                         collapsed: true,
                         items: [
-                          { 
+                          {
                             text: 'Controllers',
                             link: '/controller/software/controller/configuration/controllers'
                           },
-                          { 
+                          {
                             text: 'Clients',
                             link: '/controller/software/controller/configuration/clients'
                           },
-                          { 
+                          {
                             text: 'Inputs',
                             link: '/controller/software/controller/configuration/inputs'
                           },
-                          { 
+                          {
                             text: 'Outputs',
                             link: '/controller/software/controller/configuration/outputs'
                           },
-                          { 
+                          {
                             text: 'Circuits',
                             link: '/controller/software/controller/configuration/circuits'
                           },
-                          { 
+                          {
                             text: 'Breakers',
                             link: '/controller/software/controller/configuration/breakers'
                           },
-                          { 
+                          {
                             text: 'Configuration: Areas',
                             link: '/controller/software/controller/configuration/areas'
                           },
-                          { 
+                          {
                             text: 'Configuration: Certificates',
                             link: '/controller/software/controller/configuration/certificates'
                           },
-                          { 
+                          {
                             text: 'Configuration: Colors',
                             link: '/controller/software/controller/configuration/colors'
                           },
-                          { 
+                          {
                             text: 'Configuration: Icons',
                             link: '/controller/software/controller/configuration/icons'
                           },
-                          { 
+                          {
                             text: 'Configuration: MQTT',
                             link: '/controller/software/controller/configuration/mqtt'
                           },
-                          { 
+                          {
                             text: 'Configuration: OTA Updates',
                             link: '/controller/software/controller/configuration/ota'
                           },
-                          { 
+                          {
                             text: 'Configuration: Tags',
                             link: '/controller/software/controller/configuration/tags'
                           },
-                          { 
+                          {
                             text: 'Configuration: WiFi',
                             link: '/controller/software/controller/configuration/wifi'
                           },
-                          { 
+                          {
                             text: 'Configuration: Import',
                             link: '/controller/software/controller/configuration/import'
                           },
-                          { 
+                          {
                             text: 'Configuration: Export',
                             link: '/controller/software/controller/configuration/export'
                           },
-                          { 
+                          {
                             text: 'Configuration: Reset',
                             link: '/controller/software/controller/configuration/reset'
                           },
-                          { 
+                          {
                             text: 'Reports: Bill of Materials',
                             link: '/controller/software/controller/configuration/bom'
                           },
@@ -173,21 +188,6 @@ export default defineConfig({
                       {
                         text: 'MQTT Reference',
                         link: '/controller/software/controller/mqtt_reference'
-                      },
-                    ]
-                  },
-                  {
-                    text: 'Hardware Registration and Configuration Application',
-                    collapsed: true,
-                    link: '/controller/software/hardware_registration_and_configuration/',
-                    items:[
-                      {
-                        text: 'Cloud Registration',
-                        link: '/controller/software/hardware_registration_and_configuration/cloud-registration'
-                      },
-                      {
-                        text: 'API Reference',
-                        link: '/controller/software/hardware_registration_and_configuration/api_reference'
                       },
                     ]
                   },
