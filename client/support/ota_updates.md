@@ -5,7 +5,7 @@ Client firmware is updated over-the-air without physical access. The OTA URL is 
 The `config` partition (WiFi credentials, MQTT settings, CA certificate) is never touched by OTA. Configuration survives all firmware updates.
 
 ::: info No filesystem OTA on ESP8266
-The OTA manifest may include a `littlefs` field, but ESP8266 Client firmware intentionally ignores it. Only the application (sketch) slot is updated via OTA. Filesystem updates are not supported over the air on ESP8266 — this is by design.
+The OTA manifest may include a `littlefs` field, but ESP8266 Client firmware intentionally ignores it. Only the application (sketch) slot is updated via OTA. Filesystem updates are not supported over the air on ESP8266 — this is by design. Future ESP32-based client variants may handle filesystem OTA differently.
 :::
 
 ## Update Schedule

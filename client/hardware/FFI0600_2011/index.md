@@ -20,6 +20,38 @@ AI-Thinker ESP-12F (ESP8266) with 4MB flash and integrated 2.4GHz WiFi
 
 6 switch connectors (SW1–SW6), each a 4-pin JST XH header.
 
+## RJ-45 Pinout
+
+Each unit supports up to 6 buttons/switches via two RJ-45 jacks (4 channels on the primary, 2 on the secondary). Devices are powered over the Cat6 cable from the Controller.
+
+::: warning Not Ethernet
+The RJ-45 jacks carry DC power and direct channel signals, not Ethernet. WiFi is used only during initial provisioning and for OTA firmware updates.
+:::
+
+### Primary Jack
+
+| Pin | Wire Color | Usage |
+|-----|------------|-------|
+| 1 | White/Orange | Channel 1 |
+| 2 | Orange | Channel 2 |
+| 3 | White/Green | Channel 3 |
+| 4 | Blue | +12VDC |
+| 5 | White/Blue | +12VDC |
+| 6 | Green | Channel 4 |
+| 7 | White/Brown | Ground |
+| 8 | Brown | Ground |
+
+### Secondary Jack
+
+The secondary jack uses only pins 1, 2, 7, and 8 (channels 5–6, power, and ground).
+
+| Pin | Wire Color | Usage |
+|-----|------------|-------|
+| 1 | White/Orange | Channel 5 |
+| 2 | Orange | Channel 6 |
+| 7 | White/Brown | Ground |
+| 8 | Brown | Ground |
+
 ## WiFi
 
 Connectivity is provided by the ESP-12F module's integrated 2.4GHz WiFi antenna.
