@@ -277,11 +277,17 @@ export default defineConfig({
               {
                 text: 'Hardware',
                 collapsed: true,
+                link: '/client/hardware/',
                 items: [
-                  { 
+                  {
                     text: 'Versions',
                     collapsed: true,
-                    items:[]
+                    items:[
+                      {
+                        text: 'FFI0600-2011',
+                        link: '/client/hardware/FFI0600_2011/'
+                      }
+                    ]
                   }
                 ]
               },
