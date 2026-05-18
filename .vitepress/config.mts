@@ -313,6 +313,10 @@ export default defineConfig({
                     link: '/client/support/ota_updates'
                   },
                   {
+                    text: 'Migrating from v1.14',
+                    link: '/client/support/migration_v114'
+                  },
+                  {
                     text: 'Troubleshooting'
                   },
                 ]
