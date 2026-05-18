@@ -1,6 +1,6 @@
 # Over-the-Air (OTA) Updates
 
-Client firmware is updated over-the-air without physical access. The OTA URL is provisioned to the device by the Controller during [provisioning](/client/provisioning/) and is not configured directly on the client.
+Client firmware is updated over-the-air without physical access. The OTA URL is provisioned to the device by the Controller during provisioning and is not configured directly on the client.
 
 The `config` partition (WiFi credentials, MQTT settings, CA certificate) is never touched by OTA. Configuration survives all firmware updates.
 
@@ -43,7 +43,7 @@ When a newer version is found:
 
 ## Triggering an Immediate Check
 
-An OTA check can be triggered on demand by publishing `do-update` to the device's MQTT update command topic. See [MQTT Topics](/client/mqtt/) for topic paths.
+An OTA check can be triggered on demand by publishing `do-update` to the device's MQTT update command topic.
 
 ## Home Assistant Integration
 
