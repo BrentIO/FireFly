@@ -305,10 +305,14 @@ export default defineConfig({
                 text: 'Documentation and Support',
                 collapsed: true,
                 items: [
-                  { 
+                  {
                     text: 'Home Assistant'
                   },
-                  { 
+                  {
+                    text: 'OTA Updates',
+                    link: '/client/support/ota_updates'
+                  },
+                  {
                     text: 'Troubleshooting'
                   },
                 ]

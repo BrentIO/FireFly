@@ -1,6 +1,6 @@
 # Configuration: OTA Updates
 
-Controllers and <Badge type="warning" text="TODO" /> Clients can have their firmware and UI updated over-the-air.  By default the device will check once per day, approximately at the time the device was booted, for new firmware.
+Controllers and [Clients](/client/support/ota_updates) can have their firmware updated over-the-air.  By default the device will check once per day, approximately at the time the device was booted, for new firmware.
 
 If `OTA Disabled` is checked, no OTA configuration is sent for that device type.
 
