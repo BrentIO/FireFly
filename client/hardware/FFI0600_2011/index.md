@@ -55,7 +55,16 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 [![PCB Bottom](/hardware/FFI0600_2011/pcb-bottom.png)](/hardware/FFI0600_2011/pcb-bottom.png)
 
 ## 3D Printed Parts
-None/Unreleased
+
+| Type | Buttons | Download |
+| ---- | ------- | -------- |
+| Faceplate | 1 | [Download](/hardware/FFI0600_2011/faceplate-1-button.stl) |
+| Faceplate | 2 | [Download](/hardware/FFI0600_2011/faceplate-2-button.stl) |
+| Faceplate | 3 | [Download](/hardware/FFI0600_2011/faceplate-3-button.stl) |
+| Faceplate | 4 | [Download](/hardware/FFI0600_2011/faceplate-4-button.stl) |
+| Faceplate | 6 | [Download](/hardware/FFI0600_2011/faceplate-6-button.stl) |
+| Adapter Plate | Standard | [Download](/hardware/FFI0600_2011/adapter-standard.stl) |
+| Adapter Plate | 4 Button | [Download](/hardware/FFI0600_2011/adapter-4-button.stl) |
 
 ## ⚠️ Known Issues and Defects
 None
