@@ -250,9 +250,6 @@ export default defineConfig({
                     text: 'Controller Provisioning',
                     link: '/controller/support/controller_provisioning'
                   },
-                  { 
-                    text: 'Troubleshooting'
-                  },
                   {
                     text: 'OLED Screens',
                     link: '/controller/support/OLED_screens/'
@@ -318,7 +315,8 @@ export default defineConfig({
                     link: '/client/support/migration_v114'
                   },
                   {
-                    text: 'Troubleshooting'
+                    text: 'LED Flash Patterns',
+                    link: '/client/support/failure_led_patterns'
                   },
                 ]
               },
