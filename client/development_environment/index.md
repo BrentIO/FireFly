@@ -82,10 +82,14 @@ The following partition layout applies to FFI0600-2011:
 | eboot | 0x000000 | 0x001000 |
 | app0 | 0x001000 | 0x100000 |
 | app1 | 0x101000 | 0x100000 |
-| littlefs | 0x200000 | 0x1FB000 |
+| config | 0x200000 | 0x1FB000 |
 | rf_cal | 0x3FB000 | 0x001000 |
 | phy_init | 0x3FC000 | 0x001000 |
 | sdk_config | 0x3FE000 | 0x002000 |
+
+::: info
+On ESP8266, `LittleFS.begin()` locates the filesystem by the address baked into the core at compile time via the `eesz` board option — not by the partition label. The label is documentary only.
+:::
 
 ## Adding a new hardware version
 
