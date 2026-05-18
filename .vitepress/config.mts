@@ -295,6 +295,7 @@ export default defineConfig({
                 text: 'Software',
                 collapsed: true,
                 items: [
+                  { text: 'Hardware Registration and Configuration', link: '/client/esp8266_special_handling/' },
                   { text: 'Provisioning', link: '/client/provisioning/' },
                   { text: 'Development Environment', link: '/client/development_environment/' }
                 ]
