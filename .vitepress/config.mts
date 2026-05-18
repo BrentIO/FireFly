@@ -288,7 +288,9 @@ export default defineConfig({
               {
                 text: 'Software',
                 collapsed: true,
-                items: []
+                items: [
+                  { text: 'Development Environment', link: '/client/development_environment/' }
+                ]
               },
               {
                 text: 'Documentation and Support',
@@ -630,6 +632,7 @@ export default defineConfig({
               },
               {
                 text: 'Client',
+                link: '/client/development_environment/'
               },
               {
                 text: 'Cloud',
