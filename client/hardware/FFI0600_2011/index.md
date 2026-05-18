@@ -58,13 +58,13 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
 | Type | Buttons | Download |
 | ---- | ------- | -------- |
-| Faceplate | 1 | [Download](/hardware/FFI0600_2011/faceplate-1-button.stl) |
-| Faceplate | 2 | [Download](/hardware/FFI0600_2011/faceplate-2-button.stl) |
-| Faceplate | 3 | [Download](/hardware/FFI0600_2011/faceplate-3-button.stl) |
-| Faceplate | 4 | [Download](/hardware/FFI0600_2011/faceplate-4-button.stl) |
-| Faceplate | 6 | [Download](/hardware/FFI0600_2011/faceplate-6-button.stl) |
-| Adapter Plate | Standard | [Download](/hardware/FFI0600_2011/adapter-standard.stl) |
-| Adapter Plate | 4 Button | [Download](/hardware/FFI0600_2011/adapter-4-button.stl) |
+| Faceplate | 1 | <a href="/hardware/FFI0600_2011/faceplate-1-button.stl" download>Download</a> |
+| Faceplate | 2 | <a href="/hardware/FFI0600_2011/faceplate-2-button.stl" download>Download</a> |
+| Faceplate | 3 | <a href="/hardware/FFI0600_2011/faceplate-3-button.stl" download>Download</a> |
+| Faceplate | 4 | <a href="/hardware/FFI0600_2011/faceplate-4-button.stl" download>Download</a> |
+| Faceplate | 6 | <a href="/hardware/FFI0600_2011/faceplate-6-button.stl" download>Download</a> |
+| Adapter Plate | Standard | <a href="/hardware/FFI0600_2011/adapter-standard.stl" download>Download</a> |
+| Adapter Plate | 4 Button | <a href="/hardware/FFI0600_2011/adapter-4-button.stl" download>Download</a> |
 
 ## ⚠️ Known Issues and Defects
 
