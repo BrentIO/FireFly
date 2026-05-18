@@ -298,6 +298,7 @@ export default defineConfig({
                 text: 'Software',
                 collapsed: true,
                 items: [
+                  { text: 'Provisioning', link: '/client/provisioning/' },
                   { text: 'Development Environment', link: '/client/development_environment/' }
                 ]
               },
