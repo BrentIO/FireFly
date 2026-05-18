@@ -295,7 +295,7 @@ export default defineConfig({
                 text: 'Software',
                 collapsed: true,
                 items: [
-                  { text: 'Hardware Registration and Configuration', link: '/client/esp8266_special_handling/' },
+                  { text: 'Hardware Registration and Configuration', link: '/client/hardware_registration/' },
                   { text: 'Provisioning', link: '/client/provisioning/' },
                   { text: 'Development Environment', link: '/client/development_environment/' }
                 ]
@@ -318,6 +318,10 @@ export default defineConfig({
                   {
                     text: 'LED Flash Patterns',
                     link: '/client/support/failure_led_patterns'
+                  },
+                  {
+                    text: 'ESP8266 Special Handling',
+                    link: '/client/esp8266_special_handling/'
                   },
                 ]
               },
