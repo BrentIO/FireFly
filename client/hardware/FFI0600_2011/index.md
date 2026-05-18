@@ -50,9 +50,9 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 
 [Pick and Place](/hardware/FFI0600_2011/PickAndPlace.csv)
 
-[![PCB Top](/hardware/FFI0600_2011/pcb-top.png)](/hardware/FFI0600_2011/pcb-top.png)
+[![PCB Top](/hardware/FFI0600_2011/pcb-top.svg)](/hardware/FFI0600_2011/pcb-top.svg)
 
-[![PCB Bottom](/hardware/FFI0600_2011/pcb-bottom.png)](/hardware/FFI0600_2011/pcb-bottom.png)
+[![PCB Bottom](/hardware/FFI0600_2011/pcb-bottom.svg)](/hardware/FFI0600_2011/pcb-bottom.svg)
 
 ## 3D Printed Parts
 
@@ -67,4 +67,9 @@ Prices are each, USD, exclusive of tax/tariff, or assembly prices.
 | Adapter Plate | 4 Button | [Download](/hardware/FFI0600_2011/adapter-4-button.stl) |
 
 ## ⚠️ Known Issues and Defects
-None
+
+The following are known issues (and in some cases their improvements) with this hardware.
+- No antenna cutout on PCB.
+- PCB lacks flash headers.
+- PCB lacks flash button.
+- PCB traces are small.
