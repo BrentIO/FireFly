@@ -15,45 +15,14 @@ The OTA Update Service allows you to configure a webserver that will provide OTA
 
 The OTA Update Service configuration is stored in the device's configuration as an entry in the JSON.  It can be configured using the [Controller's UI](/controller/software/controller/configuration/ota).
 
-When the web server payload specifies both an application and LittleFS update, the LittleFS partition is updated first, then the application.  The web server should respond to the GET request with a formatted JSON object ([see examples below](#example-web-server-response-payloads)).  The controller will send custom headers to identify the device in the GET request to the web server:
+When the web server payload specifies both an application and LittleFS update, the LittleFS partition is updated first, then the application.  The controller will send custom headers to identify the device in the GET request to the web server:
+
 | Header Name | Example Value | Description |
 | ----------- | ------------- | ----------- |
 | product_id | FFC0806-2305 | Hardware Product ID |
 | uuid | 7a060b6b-dc2f-4d10-ba9e-6109f788cd95 | Device UUID |
 
-## Response Payloads
-
-The fields included in the response are:
-
-| Field | Required | Usage |
-| ----- | -------- | ----- |
-| `type` | Yes | Matches the `APPLICATION_NAME` definition at compile time, typically `FireFly Controller` |
-| `version` | Yes | Version number in `YYYY.MM.bb` format (e.g. `2026.03.01`) |
-| `url` | Yes | CloudFront URL of the main application binary |
-| `littlefs` | No | CloudFront URL of the LittleFS partition image; omitted if not present in the release |
-
-See the [FireFly Cloud OTA Update Flow](/cloud/ota_update_flow) for server-side behavior, response codes, and version sequencing details.
-
-### Example Web Server Response Payloads
-
-Application firmware update (no LittleFS)
-```json
-{
-    "type": "FireFly Controller",
-    "version": "2026.03.01",
-    "url": "https://firmware.somewhere.com/FFC3232-2603/Controller/2026.03.01/Controller.ino.bin"
-}
-```
-
-Combined application and LittleFS update
-```json
-{
-    "type": "FireFly Controller",
-    "version": "2026.03.01",
-    "url": "https://firmware.somewhere.com/FFC3232-2603/Controller/2026.03.01/Controller.ino.bin",
-    "littlefs": "https://firmware.somewhere.com/FFC3232-2603/Controller/2026.03.01/www.bin"
-}
-```
+See the [func-api-ota-get](/cloud/lambdas/func-api-ota-get) Lambda documentation for the response payload format and the [FireFly Cloud OTA Update Flow](/cloud/ota_update_flow) for server-side behavior, response codes, and version sequencing details.
 
 ## Forced OTA Updates
 OTA updates can also be forced, which is helpful for ensuring a specific version of the firmware or LittleFS are downloaded.
