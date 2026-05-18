@@ -13,7 +13,7 @@ export default defineConfig({
   description: "Software-defined lighting",
   base: '/',
   cleanUrls: true,
-  ignoreDeadLinks: [/\.drawio$/],
+  ignoreDeadLinks: [/\.drawio$/, /\.stl$/],
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
