@@ -51,9 +51,12 @@ The `wipe()` method is available exclusively to the HW-Reg application to reset 
 
 ## CA Certificate
 
-On the Controller (ESP32), CA certificates are managed at runtime through the configuration system and can be updated without reflashing. On the Client (ESP8266), the CA certificate is compiled directly into firmware. It cannot be stored to or loaded from the `config` partition at runtime — updating the CA requires a firmware update.
+CA certificate handling differs between the two Client applications:
 
-This design reflects the absence of a hardware-protected key store on the ESP8266. Storing a CA certificate in unprotected flash would offer no meaningful security benefit over embedding it in firmware.
+- **HW-Reg application** — The CA certificate is compiled directly into firmware and cannot be changed without reflashing.
+- **Client application** — Uses BearSSL, which supports a single CA. The CA can be updated via MQTT without reflashing.
+
+This contrasts with the Controller (ESP32), where CA certificates are managed at runtime through the configuration system.
 
 ## Partition Scheme
 
