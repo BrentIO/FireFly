@@ -73,7 +73,7 @@ Headers:
   mac-address: <device MAC>
 ```
 
-If the response is `200 OK`, the returned JSON contains `fingerprint` and `pem` fields. The PEM is saved to `/ca.pem` and the fingerprint to `/ca_fp.txt` on the `config` partition. If the endpoint returns any other status, the step is skipped and the device proceeds without a CA certificate.
+If the response is `200 OK`, the returned JSON contains `fingerprint` and `pem` fields. The CA certificate is kept only in firmware and is not stored to the `config` partition. If the endpoint returns any other status, the step is skipped and the device proceeds without a CA certificate.
 
 ### 4. Reboot
 
