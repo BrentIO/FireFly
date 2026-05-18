@@ -113,6 +113,16 @@ jobs:
         if: ${{ !env.ACT }}
         run: aws s3 sync .vitepress/dist/ s3://${{ secrets.S3_DOCS_BUCKET_NAME }} --delete
 
+      - name: Set Content-Type for STL files
+        if: ${{ !env.ACT }}
+        run: |
+          aws s3 cp s3://${{ secrets.S3_DOCS_BUCKET_NAME }}/ s3://${{ secrets.S3_DOCS_BUCKET_NAME }}/ \
+            --recursive \
+            --exclude "*" \
+            --include "*.stl" \
+            --content-type "model/stl" \
+            --metadata-directive REPLACE
+
       - name: Look up CloudFront distribution ID
         if: ${{ !env.ACT }}
         id: lookup-dist
