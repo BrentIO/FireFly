@@ -82,3 +82,22 @@ Run the `deploy-all` workflow and confirm all jobs succeed before proceeding.
 ## Step 6 — Remove the `AWS_REGION` Secret
 
 `AWS_REGION` can be replaced with a repository variable (not a secret) since it is not sensitive. Alternatively, hardcode the region directly in the workflows.
+
+---
+
+## Adding a new repository
+
+When a new GitHub repository needs to assume the `firefly-github-actions-role`, extend the existing trust policy rather than creating a new role.
+
+1. Open the [AWS IAM console](https://console.aws.amazon.com/iam) → **Roles** → `firefly-github-actions-role` → **Trust relationships** → **Edit trust policy**
+2. Add the new repository to the `StringLike` condition array:
+   ```json
+   "repo:BrentIO/<NewRepo>:*"
+   ```
+3. Update [`policies/firefly-github-actions-role_trust-relationships.json`](https://github.com/BrentIO/FireFly-Cloud/blob/main/policies/firefly-github-actions-role_trust-relationships.json) in FireFly-Cloud to match the live policy (see FireFly-Cloud issue #231).
+
+The `sub` condition array currently covers:
+- `repo:BrentIO/FireFly-Cloud:*`
+- `repo:BrentIO/FireFly-Controller:*`
+- `repo:BrentIO/FireFly-Docs:*`
+- `repo:BrentIO/FireFly-Client:*`
