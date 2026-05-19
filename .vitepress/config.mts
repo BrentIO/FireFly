@@ -363,6 +363,10 @@ export default defineConfig({
             link: '/cloud/index',
             items: [
               {
+                text: 'AWS Account Setup',
+                link: '/cloud/aws-account-setup'
+              },
+              {
                 text: 'FireFly Management Console',
                 link: '/cloud/fmc',
                 collapsed: true,
@@ -666,10 +670,6 @@ export default defineConfig({
               {
                 text: 'API Reference',
                 link: '/cloud/api_reference'
-              },
-              {
-                text: 'AWS Account Setup',
-                link: '/cloud/aws-account-setup'
               },
             ]
           },
