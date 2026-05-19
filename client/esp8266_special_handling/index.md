@@ -34,6 +34,42 @@ CA certificate handling differs between the two Client applications:
 
 This contrasts with the Controller (ESP32), where CA certificates are managed at runtime through the configuration system.
 
+### Rotating the CA Certificate
+
+Cert rotation is needed when the CA certificate is approaching expiry or has been compromised. Because the ESP8266 cannot manage certificates through the Controller's runtime configuration system, a dedicated one-shot Docker tool is used to broadcast the updated certificate to all provisioned clients.
+
+**How clients receive the update:** The tool fetches the current TLS certificate chain from the FireFly Cloud API, selects the most stable CA cert, computes its SHA-256 fingerprint, and publishes a retained JSON message to `FireFly/clients/cert/state`. Clients that are online receive it immediately; offline clients pick it up automatically on their next reconnect and write the new PEM to LittleFS.
+
+Clone the FireFly-Client repository and build the Docker image:
+
+```bash
+git clone https://github.com/BrentIO/FireFly-Client.git
+cd FireFly-Client
+docker build -t firefly-cert-rotation tools/cert-rotation/
+```
+
+Run the container to publish the updated certificate to all clients:
+
+```bash
+docker run --rm \
+  -e FIREFLY_CLOUD_API_ROOT=https://api.fireflylx.com \
+  -e MQTT_HOST=<broker-ip> \
+  -e MQTT_USERNAME=<username> \
+  -e MQTT_PASSWORD=<password> \
+  firefly-cert-rotation
+```
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `FIREFLY_CLOUD_API_ROOT` | Yes | — | HTTPS URL to fetch the TLS certificate chain from |
+| `MQTT_HOST` | Yes | — | MQTT broker hostname or IP address |
+| `MQTT_PORT` | No | `1883` | MQTT broker port |
+| `MQTT_USERNAME` | No | — | MQTT credentials |
+| `MQTT_PASSWORD` | No | — | MQTT credentials |
+| `MQTT_TOPIC` | No | `FireFly/clients/cert/state` | Retained topic the cert is published to |
+
+**Verifying the update:** After running the tool, each client logs the cert update and publishes its new fingerprint as a retained message to `FireFly/{UUID}/cert/state`. Confirm the fingerprint on that topic matches the CA cert you expected to rotate in.
+
 ## Partition Scheme
 
 The ESP8266 does not use a generated `partitions.csv`. The memory layout is baked into the FQBN board options and managed by the ESP8266 Arduino core. Board options are sourced from `devices.yaml`.
