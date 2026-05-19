@@ -1,0 +1,48 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title HW-Reg — Cloud Registration
+
+actor "Operator" as Op
+
+box "HW-Reg Device (ESP8266)" $OnPrem
+    participant "HW-Reg\nFirmware" as HWReg
+end box
+
+box "Internet" $Vendor
+    participant "NTP\npool.ntp.org" as NTP
+end box
+
+box "AWS" $AWS
+    participant "FireFly-Cloud" as Cloud
+end box
+
+== Connect to WiFi ==
+
+Op -> HWReg : **POST /api/network/wifi**\n""{ ssid, password }""
+note right of HWReg : SoftAP remains alive (WIFI_AP_STA)\nso the browser session is not dropped.\nCredentials are never persisted.
+HWReg -> HWReg : **Switch to WIFI_AP_STA**\n**Connect to WiFi STA**
+HWReg -> NTP : **configTime(0, 0, "pool.ntp.org")**
+NTP --> HWReg : **Time synced**
+HWReg --> Op : **HTTP 200**\n""{ "ip": "<ip>" }""
+
+== Cloud Registration ==
+
+Op -> HWReg : **POST /api/registration**\n""X-Registration-Key: ABC123""
+HWReg -> HWReg : **HKDF-SHA-256(master_key,**\n**info="firefly-auth-v1") → key_auth**
+HWReg -> HWReg : **Compute P-256 public key**\n**from key_auth scalar**
+HWReg -> HWReg : **Zero key_auth from RAM**
+HWReg -> Cloud : **POST /devices/register**\n""X-Registration-Key: ABC123""\n""{ uuid, product_id, product_hex,""\n""  device_class, public_key, mcu{...} }""
+
+alt HTTP 204 No Content
+    Cloud --> HWReg : **HTTP 204 No Content**
+    HWReg --> Op : **HTTP 204 No Content**
+else HTTP 401 or 403 — invalid or expired key
+    Cloud --> HWReg : **HTTP 401 / 403**
+    HWReg --> Op : **HTTP 403**\n""{ "error": "invalid or expired registration key" }""
+else Other error
+    Cloud --> HWReg : **HTTP <status>**
+    HWReg --> Op : **HTTP 502**\n""{ "error": "cloud registration failed" }""
+end
+
+@enduml
