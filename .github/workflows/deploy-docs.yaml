@@ -78,7 +78,7 @@ jobs:
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/openapi.yaml" \
             -o public/openapi/controller.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/openapi.yaml" \
-            -o public/openapi/hardware-registration.yaml
+            -o public/openapi/controller-hardware-registration.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Cloud/main/docs/openapi.yaml" \
             -o public/openapi/cloud.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Client/main/Hardware-Registration-and-Configuration/openapi.yaml" \
