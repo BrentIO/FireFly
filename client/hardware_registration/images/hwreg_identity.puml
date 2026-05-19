@@ -1,0 +1,27 @@
+@startuml
+!include ../../../images/common-sequence.iuml
+
+title HW-Reg — Identity Provisioning
+
+actor "Operator" as Op
+
+box "HW-Reg Device (ESP8266)" $OnPrem
+    participant "HW-Reg\nFirmware" as HWReg
+    database "EEPROM" as EEPROM
+end box
+
+Op -> HWReg : **Connect to WiFi**\n""FireFly-{MAC}""
+
+Op -> HWReg : **GET /api/identity**
+HWReg --> Op : **HTTP 404**\n""{ "error": "not provisioned" }""
+
+Op -> HWReg : **POST /api/identity**\n""{ uuid, product_id, product_hex }""
+HWReg -> HWReg : **Generate 32-byte master key**\n""os_get_random()""
+HWReg -> EEPROM : **Write 87-byte identity block**
+EEPROM --> HWReg : OK
+HWReg --> Op : **HTTP 201 Created**\n""{ "status": "ok" }""
+
+Op -> HWReg : **GET /api/identity**
+HWReg --> Op : **HTTP 200**\n""{ uuid, product_id, product_hex }""
+
+@enduml
