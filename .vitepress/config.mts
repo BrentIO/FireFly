@@ -296,8 +296,6 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: 'Hardware Registration and Configuration', link: '/client/hardware_registration/' },
-                  { text: 'Provisioning', link: '/client/provisioning/' },
-                  { text: 'Development Environment', link: '/client/development_environment/' }
                 ]
               },
               {
@@ -329,6 +327,10 @@ export default defineConfig({
                   {
                     text: 'ESP8266 Special Handling',
                     link: '/client/esp8266_special_handling/'
+                  },
+                  {
+                    text: 'Provisioning Mode',
+                    link: '/client/provisioning/'
                   },
                 ]
               },
