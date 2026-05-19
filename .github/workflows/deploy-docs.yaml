@@ -89,6 +89,8 @@ jobs:
           mkdir -p public/asyncapi
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/asyncapi.yaml" \
             -o public/asyncapi/controller-asyncapi.yaml
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Client/main/Client/asyncapi.yaml" \
+            -o public/asyncapi/client-asyncapi.yaml
 
       - name: Copy AsyncAPI web component bundle
         run: |
