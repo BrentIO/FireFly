@@ -1,0 +1,44 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Firmware Update
+
+box "On-Premises" $OnPrem
+    participant "Client" as client
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+box "AWS" $AWS
+    participant "FireFly-Cloud" as cloud
+end box
+
+== Auto Discovery ==
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/update/FireFly-{UUID}-update/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/update/FireFly-{UUID}-update/config
+ha -> ha : **Create firmware update entity**\n(initially Unavailable)
+client -> mqtt : **Subscribe**\nFireFly/{UUID}/update/set
+
+== OTA Check ==
+
+client -> client : **OTA check interval elapsed**
+client -> cloud : **Check for new OTA firmware**\nGET /ota/client/{product_hex}?current_version=...
+
+alt 200 OK — update available
+    cloud --> client : **200 OK**\n""JSON payload""
+    client -> mqtt : **Publish firmware update state** retained\nFireFly/{UUID}/update/state\n""JSON payload""
+    mqtt -> ha : **Publish firmware update state**\nFireFly/{UUID}/update/state
+    ha -> ha : **Set Firmware Update Entity**\n""Update Available""
+else No update or unavailable
+    cloud --x client : Unavailable or non-200 Response
+end
+
+== Install ==
+
+ha -> mqtt : **Publish install command**\nFireFly/{UUID}/update/set\n""do-update""
+mqtt -> client : **Publish install command**\nFireFly/{UUID}/update/set\n""do-update""
+client -> cloud : **Download firmware**
+client -> client : **Apply OTA update and restart**
+
+@enduml

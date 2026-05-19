@@ -305,7 +305,14 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   {
-                    text: 'Home Assistant'
+                    text: 'Home Assistant Auto Discovery and MQTT',
+                    collapsed: true,
+                    items: [
+                      {
+                        text: 'Home Assistant Auto Discovery',
+                        link: '/client/support/mqtt/auto_discovery'
+                      }
+                    ]
                   },
                   {
                     text: 'OTA Updates',
