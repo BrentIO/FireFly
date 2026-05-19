@@ -295,7 +295,17 @@ export default defineConfig({
                 text: 'Software',
                 collapsed: true,
                 items: [
-                  { text: 'Hardware Registration and Configuration', link: '/client/hardware_registration/' },
+                  {
+                    text: 'Hardware Registration and Configuration',
+                    collapsed: true,
+                    link: '/client/hardware_registration/',
+                    items: [
+                      {
+                        text: 'API Reference',
+                        link: '/client/hardware_registration/api_reference'
+                      }
+                    ]
+                  },
                   {
                     text: 'Client Application',
                     collapsed: true,

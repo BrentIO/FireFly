@@ -81,6 +81,8 @@ jobs:
             -o public/openapi/hardware-registration.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Cloud/main/docs/openapi.yaml" \
             -o public/openapi/cloud.yaml
+          curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Client/main/Hardware-Registration-and-Configuration/openapi.yaml" \
+            -o public/openapi/client-hardware-registration.yaml
 
       - name: Download AsyncAPI specs
         run: |
