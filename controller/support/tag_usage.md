@@ -15,3 +15,5 @@ Tags are designed to help during the configuration process to logically group an
 | Application | Usage |
 | ----------- | ----- |
 | Channel | Client subscribes to the tag and applies the LED brightness based on tag.  For example, when the "SECURITY" tag is broadcast across MQTT, the LED will illuminate, extinguish, or animate |
+
+For MQTT topic structure, payload format, and animation states, see [Configuration: Tags — MQTT Tag Commands](/controller/software/controller/configuration/tags#mqtt-tag-commands).
