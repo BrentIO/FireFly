@@ -38,11 +38,7 @@ In the event the client loses connectivity, the MQTT Last Will & Testament will 
 
 ## Client
 
-Each client is registered as a single device in Home Assistant.  Because clients do not have a user-configured friendly name, the device `name` is set to the client's UUID.  Examples below use UUID `3fa85f64-5717-4562-b3fc-2c963f66afa6`.
-
-::: info Device identifier prefix
-The client device identifier is prefixed with `FireFly-` (e.g. `FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6`).  This differs from the Controller, which uses the bare UUID as its identifier.
-:::
+Each client is registered as a single device in Home Assistant.  The device `name` is set to the client's configured name.  Examples below use UUID `3fa85f64-5717-4562-b3fc-2c963f66afa6` and client name `S31`.
 
 ### IP Address
 
@@ -63,13 +59,14 @@ Example auto discovery payload:
     "icon": "mdi:ip",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -105,13 +102,14 @@ Example auto discovery payload:
     "icon": "mdi:ethernet",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -147,13 +145,14 @@ Example auto discovery payload:
     "icon": "mdi:clock-start",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -189,13 +188,14 @@ Example auto discovery payload:
     "icon": "mdi:alert-circle",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -231,13 +231,14 @@ Example auto discovery payload:
     "icon": "mdi:certificate",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -276,13 +277,14 @@ Example auto discovery payload:
     "availability_topic": "FireFly/3fa85f64-5717-4562-b3fc-2c963f66afa6/availability",
     "device": {
         "identifiers": [
-            "FireFly-3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         ],
-        "name": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "S31",
         "manufacturer": "P5 Software LLC",
         "model": "FireFly Client",
         "model_id": "FFI0600-2011",
         "serial_number": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "suggested_area": "Living Room",
         "sw_version": "2025.5.1"
     }
 }
@@ -298,23 +300,36 @@ Example state payload for `Update available`:
 {
     "installed_version": "2025.4.1",
     "latest_version": "2025.5.1",
-    "in_progress": false
+    "in_progress": false,
+    "update_percentage": 0,
+    "title": "May 2025 Release",
+    "release_url": "https://github.com/BrentIO/FireFly-Client/releases/tag/2025.5.1"
 }
 ```
+
+::: info Optional fields
+`title` and `release_url` are only present in the state payload when the cloud returns them.
+:::
 
 Example state payload for `Up-to-date`:
 ```json
 {
     "installed_version": "2025.5.1",
     "latest_version": "2025.5.1",
-    "in_progress": false
+    "in_progress": false,
+    "update_percentage": 0
 }
 ```
 
 Example state payload while updating:
 ```json
 {
-    "in_progress": true
+    "installed_version": "2025.4.1",
+    "latest_version": "2025.5.1",
+    "in_progress": true,
+    "update_percentage": 45,
+    "title": "May 2025 Release",
+    "release_url": "https://github.com/BrentIO/FireFly-Client/releases/tag/2025.5.1"
 }
 ```
 
@@ -339,10 +354,11 @@ do-update
 | `payload_install` | Hard-coded `"do-update"` (update entity only) |
 | `availability_topic` | `FireFly/{UUID}/availability` |
 | `icon` | Hard-coded MDI icon reference per entity |
-| `device` → `identifiers` | Concatenation of hard-coded `"FireFly-"` + client UUID |
-| `device` → `name` | Client UUID |
+| `device` → `identifiers` | Client UUID |
+| `device` → `name` | Client name from provisioning configuration |
 | `device` → `manufacturer` | Hard-coded `"P5 Software LLC"` |
 | `device` → `model` | Hard-coded `"FireFly Client"` |
 | `device` → `model_id` | Hardware model ID (e.g. `"FFI0600-2011"`) |
 | `device` → `serial_number` | Client UUID |
+| `device` → `suggested_area` | Client area from provisioning configuration (omitted if not configured) |
 | `device` → `sw_version` | Firmware version string |
