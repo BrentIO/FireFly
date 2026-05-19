@@ -1,0 +1,64 @@
+@startuml
+!include ../../../../images/common-sequence.iuml
+
+title MQTT — Diagnostic Sensors & Certificate Fingerprint
+
+box "On-Premises" $OnPrem
+    participant "Client" as client
+    participant "MQTT Broker" as mqtt
+    participant "Home Assistant" as ha
+end box
+
+== Auto Discovery ==
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-ip-address/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-ip-address/config
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-mac-address/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-mac-address/config
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-time-start/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-time-start/config
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-count-errors/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-count-errors/config
+
+client -> mqtt : **Publish Auto Discovery** retained\nhomeassistant/sensor/FireFly-{UUID}-cert/config\n""JSON payload""
+mqtt -> ha : **Publish Auto Discovery**\nhomeassistant/sensor/FireFly-{UUID}-cert/config
+
+ha -> ha : **Create diagnostic sensors**\n(initially Unavailable)
+
+== Telemetry Publish ==
+
+client -> mqtt : **Publish IP address** retained\nFireFly/{UUID}/ip-address/state\n""<ip>""\nretained
+mqtt -> ha : **Publish IP address**\nFireFly/{UUID}/ip-address/state
+
+client -> mqtt : **Publish MAC address** retained\nFireFly/{UUID}/mac-address/state\n""<mac>""\nretained
+mqtt -> ha : **Publish MAC address**\nFireFly/{UUID}/mac-address/state
+
+client -> mqtt : **Publish error count** retained\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+mqtt -> ha : **Publish error count**\nFireFly/{UUID}/count-errors/state
+
+client -> mqtt : **Publish boot time** retained\nFireFly/{UUID}/time-start/state\n""<epoch>""\nretained
+mqtt -> ha : **Publish boot time**\nFireFly/{UUID}/time-start/state
+
+client -> mqtt : **Publish certificate fingerprint** retained\nFireFly/{UUID}/cert/state\n""<fingerprint>""\nretained
+mqtt -> ha : **Publish certificate fingerprint**\nFireFly/{UUID}/cert/state
+
+ha -> ha : **Set diagnostic sensors**\ncurrent values
+
+== Error Count Change ==
+
+client -> client : **Error log size changed**
+client -> mqtt : **Publish error count** retained\nFireFly/{UUID}/count-errors/state\n""<count>""\nretained
+mqtt -> ha : **Publish error count**\nFireFly/{UUID}/count-errors/state
+ha -> ha : **Set Error Count**\nnew value
+
+== Certificate Rotation ==
+
+note over client, ha : On cert rotation broadcast, client updates cert and re-publishes fingerprint
+client -> mqtt : **Publish certificate fingerprint** retained\nFireFly/{UUID}/cert/state\n""<new fingerprint>""\nretained
+mqtt -> ha : **Publish certificate fingerprint**\nFireFly/{UUID}/cert/state
+ha -> ha : **Set Certificate Fingerprint**\nnew value
+
+@enduml
