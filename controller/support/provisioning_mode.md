@@ -1,4 +1,4 @@
-# Provisioning Mode
+# Client Provisioning
 
 Provisioning Mode allows unprovisioned Clients to connect to a Controller via WiFi and retrieve their full configuration automatically.  Enabling Provisioning Mode may take several seconds to enable the Controller's on-board WiFi radio and to prepare the Controller with the list of approved Clients.  Likewise, disabling Provisioning Mode will take a second or two in order to disconnect clients and shut down the SoftAP.
 
