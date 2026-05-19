@@ -296,6 +296,11 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: 'Hardware Registration and Configuration', link: '/client/hardware_registration/' },
+                  {
+                    text: 'Client Application',
+                    collapsed: true,
+                    link: '/client/software/client/'
+                  },
                 ]
               },
               {
