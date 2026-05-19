@@ -76,19 +76,19 @@ jobs:
         run: |
           mkdir -p public/openapi
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/openapi.yaml" \
-            -o public/openapi/controller.yaml
+            -o public/openapi/controller-openapi.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Hardware-Registration-and-Configuration/openapi.yaml" \
-            -o public/openapi/controller-hardware-registration.yaml
+            -o public/openapi/controller-hardware-registration-and-configuration-openapi.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Cloud/main/docs/openapi.yaml" \
-            -o public/openapi/cloud.yaml
+            -o public/openapi/cloud-openapi.yaml
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Client/main/Hardware-Registration-and-Configuration/openapi.yaml" \
-            -o public/openapi/client-hardware-registration.yaml
+            -o public/openapi/client-hardware-registration-and-configuration-openapi.yaml
 
       - name: Download AsyncAPI specs
         run: |
           mkdir -p public/asyncapi
           curl -sSf "https://raw.githubusercontent.com/BrentIO/FireFly-Controller/main/Controller/asyncapi.yaml" \
-            -o public/asyncapi/controller.yaml
+            -o public/asyncapi/controller-asyncapi.yaml
 
       - name: Copy AsyncAPI web component bundle
         run: |

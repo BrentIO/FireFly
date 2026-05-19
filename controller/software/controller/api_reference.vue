@@ -9,7 +9,7 @@ useSwaggerDark();
 onMounted(() => {
   SwaggerUIBundle({
     dom_id: "#swaggerContainer",
-    url: "/openapi/controller.yaml"
+    url: "/openapi/controller-openapi.yaml"
   });
 });
 </script>

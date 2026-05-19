@@ -52,10 +52,10 @@ watch(isDark, (dark) => applyTheme(dark));
 <template>
   <div class="asyncapi-wrapper">
     <div class="spec-link">
-      <a href="/asyncapi/controller.yaml">/asyncapi/controller.yaml</a>
+      <a href="/asyncapi/controller-asyncapi.yaml">/asyncapi/controller-asyncapi.yaml</a>
     </div>
     <asyncapi-component
-      schemaUrl="/asyncapi/controller.yaml"
+      schemaUrl="/asyncapi/controller-asyncapi.yaml"
       cssImportPath="/asyncapi/default.min.css"
     />
   </div>
