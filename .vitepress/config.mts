@@ -262,10 +262,6 @@ export default defineConfig({
                     text: 'Failure Reason Codes',
                     link: '/controller/support/failure_reason_codes'
                   },
-                  {
-                    text: 'Tag Usage',
-                    link: '/controller/support/tag_usage'
-                  },
                 ]
               },
             ]
@@ -330,6 +326,10 @@ export default defineConfig({
                       {
                         text: 'Home Assistant Auto Discovery',
                         link: '/client/support/mqtt/auto_discovery'
+                      },
+                      {
+                        text: 'Automating with Tag Commands using MQTT',
+                        link: '/client/support/mqtt/tags'
                       }
                     ]
                   },
