@@ -220,8 +220,8 @@ export default defineConfig({
                     text: 'Cloud Backup',
                     link: '/controller/support/cloud_backup'
                   },
-                  { 
-                    text: 'Home Assistant Auto Discovery and MQTT',
+                  {
+                    text: 'Home Assistant and MQTT Automation',
                     collapsed: true,
                     items:[
                       {
@@ -320,7 +320,7 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   {
-                    text: 'Home Assistant Auto Discovery and MQTT',
+                    text: 'Home Assistant and MQTT Automation',
                     collapsed: true,
                     items: [
                       {
