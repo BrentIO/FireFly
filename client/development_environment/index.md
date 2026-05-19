@@ -69,6 +69,8 @@ The following flags must be passed to the compiler regardless of build method (C
 
 **`COMMIT_HASH`** The short (7-character) git SHA of the build commit. Omit for debug builds.
 
+**`FIREFLY_CLOUD_API_ROOT`** The FireFly Cloud API root URL (e.g. `-DFIREFLY_CLOUD_API_ROOT=https://api.fireflylx.com`). Used by the HW-Reg firmware to reach the cloud registration endpoint. In CI this is sourced from the `FIREFLY_CLOUD_API_ROOT` repository variable — see [Repository Variables](#repository-variables). Required — the cert fetch step will fail the build if unset.
+
 The repo root must also be added to the include path (e.g. `-I/path/to/FireFly-Client`) so that headers in `common/` can be resolved. Abbreviated paths using `~` will not work.
 
 ## Partitions
@@ -137,3 +139,20 @@ Some CI workflows require secrets to be configured across repositories. Each sec
 **Installed in:** `BrentIO/FireFly-Client` → Settings → Environments → **production** → Environment secrets
 
 **Purpose:** Name of the S3 bucket where compiled firmware ZIP archives are uploaded during production builds.
+
+## Repository Variables
+
+Repository variables are distinct from secrets — their values are visible in logs and workflow run summaries. Set them at **Settings → Secrets and variables → Actions → Variables**.
+
+### `FIREFLY_CLOUD_API_ROOT`
+
+**Installed in:** `BrentIO/FireFly-Client` → Settings → Secrets and variables → Actions → **Variables**
+
+**Purpose:** The FireFly Cloud API root URL. Used by both `compile-check.yaml` (PR builds) and `build-firmware.yaml` (release/dev builds) to:
+
+1. Fetch the live TLS certificate for the cloud endpoint at build time and bake it into the HW-Reg firmware.
+2. Pass the URL to the firmware as the compile-time flag `-DFIREFLY_CLOUD_API_ROOT=...`.
+
+**Required value:** The FireFly Cloud API root URL (e.g. `https://api.fireflylx.com`).
+
+**Effect if unset:** The cert fetch step will fail the build with an explicit error message.
