@@ -14,4 +14,4 @@ Tags are designed to help during the configuration process to logically group an
 ## Clients
 | Application | Usage |
 | ----------- | ----- |
-| Channel | Client subscribes to the tag and applies the LED brightness based on tag.  For example, when the "SECURITY" tag is broadcast across MQTT, the LED will illuminate, extinguish, or animate |
+| Channel | Client subscribes to `FireFly/tag/{tag_name}/set` for each tag assigned to that channel. When a command is received, the LED animates (`snore`, `blink`, `blink-rapid`) or returns to its default brightness (`normal`). See [Configuration: Tags](/controller/software/controller/configuration/tags#how-tags-work-at-runtime) for the full MQTT payload reference. |
