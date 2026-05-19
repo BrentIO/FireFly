@@ -1,0 +1,25 @@
+@startuml
+!include ../../../../../images/common-sequence.iuml
+
+title MQTT — Tag Command
+
+box "On-Premises" $OnPrem
+    participant "Client" as client
+    participant "MQTT Broker" as mqtt
+end box
+
+box "External" $Vendor
+    participant "Publisher\n(e.g. Home Assistant)" as publisher
+end box
+
+group On MQTT Connect (repeated on every reconnect)
+    client -> mqtt : **Subscribe** (once per unique tag)\nFireFly/tag/{tag_name}/set\nQoS 0
+end
+
+publisher -> mqtt : **Publish**\nFireFly/tag/{tag_name}/set\n""{"state":"blink","brightness":75}""
+
+mqtt -> client : **Publish**\nFireFly/tag/{tag_name}/set\n""{"state":"blink","brightness":75}""
+
+client -> client : **Apply animation**\nAll HID channels assigned to tag_name\nanimated at 75% brightness
+
+@enduml
