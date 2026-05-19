@@ -243,7 +243,7 @@ export default defineConfig({
                     link: '/controller/support/partitions'
                   },
                   {
-                    text: 'Provisioning Mode',
+                    text: 'Client Provisioning',
                     link: '/controller/support/provisioning_mode'
                   },
                   {
@@ -350,7 +350,7 @@ export default defineConfig({
                     link: '/client/esp8266_special_handling/'
                   },
                   {
-                    text: 'Provisioning Mode',
+                    text: 'Client Provisioning',
                     link: '/client/provisioning/'
                   },
                 ]
