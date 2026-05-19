@@ -126,55 +126,55 @@ export default defineConfig({
                             link: '/controller/software/controller/configuration/breakers'
                           },
                           {
-                            text: 'Configuration: Areas',
+                            text: 'Areas',
                             link: '/controller/software/controller/configuration/areas'
                           },
                           {
-                            text: 'Configuration: Certificates',
+                            text: 'Certificates',
                             link: '/controller/software/controller/configuration/certificates'
                           },
                           {
-                            text: 'Configuration: Colors',
+                            text: 'Colors',
                             link: '/controller/software/controller/configuration/colors'
                           },
                           {
-                            text: 'Configuration: Icons',
+                            text: 'Icons',
                             link: '/controller/software/controller/configuration/icons'
                           },
                           {
-                            text: 'Configuration: MQTT',
+                            text: 'MQTT',
                             link: '/controller/software/controller/configuration/mqtt'
                           },
                           {
-                            text: 'Configuration: OTA Updates',
+                            text: 'OTA Updates',
                             link: '/controller/software/controller/configuration/ota'
                           },
                           {
-                            text: 'Configuration: Tags',
+                            text: 'Tags',
                             link: '/controller/software/controller/configuration/tags'
                           },
                           {
-                            text: 'Configuration: WiFi',
+                            text: 'WiFi',
                             link: '/controller/software/controller/configuration/wifi'
                           },
                           {
-                            text: 'Configuration: Import',
+                            text: 'Import',
                             link: '/controller/software/controller/configuration/import'
                           },
                           {
-                            text: 'Configuration: Export',
+                            text: 'Export',
                             link: '/controller/software/controller/configuration/export'
                           },
                           {
-                            text: 'Configuration: Reset',
+                            text: 'Reset',
                             link: '/controller/software/controller/configuration/reset'
                           },
                           {
-                            text: 'Reports: Bill of Materials',
+                            text: 'Bill of Materials',
                             link: '/controller/software/controller/configuration/bom'
                           },
                           {
-                            text: 'Reports: Control Circuits',
+                            text: 'Control Circuits',
                             link: '/controller/software/controller/configuration/control_circuits'
                           },
                           {
