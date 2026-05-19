@@ -51,6 +51,9 @@ watch(isDark, (dark) => applyTheme(dark));
 
 <template>
   <div class="asyncapi-wrapper">
+    <div class="spec-link">
+      <a href="/asyncapi/controller.yaml">/asyncapi/controller.yaml</a>
+    </div>
     <asyncapi-component
       schemaUrl="/asyncapi/controller.yaml"
       cssImportPath="/asyncapi/default.min.css"
@@ -63,5 +66,19 @@ watch(isDark, (dark) => applyTheme(dark));
   background-color: var(--vp-c-bg);
   border-radius: 8px;
   padding: 8px;
+}
+
+.spec-link {
+  font-size: 0.85em;
+  padding: 4px 8px;
+}
+
+.spec-link a {
+  color: var(--vp-c-brand);
+  text-decoration: none;
+}
+
+.spec-link a:hover {
+  text-decoration: underline;
 }
 </style>
