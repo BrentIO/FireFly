@@ -309,7 +309,13 @@ export default defineConfig({
                   {
                     text: 'Client Application',
                     collapsed: true,
-                    link: '/client/software/client/'
+                    link: '/client/software/client/',
+                    items: [
+                      {
+                        text: 'MQTT Reference',
+                        link: '/client/software/client/mqtt_reference'
+                      }
+                    ]
                   },
                 ]
               },
