@@ -97,7 +97,7 @@ export default defineConfig({
                     link: '/controller/software/controller/',
                     items:[
                       {
-                        text: 'Configuration',
+                        text: 'Configurator',
                         link: '/controller/software/controller/configuration/',
                         collapsed: true,
                         items: [
