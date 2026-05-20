@@ -243,12 +243,8 @@ export default defineConfig({
                     link: '/controller/support/partitions'
                   },
                   {
-                    text: 'Client Provisioning',
+                    text: 'Provisioning Mode',
                     link: '/controller/support/provisioning_mode'
-                  },
-                  {
-                    text: 'Controller Provisioning',
-                    link: '/controller/support/controller_provisioning'
                   },
                   {
                     text: 'OLED Screens',
