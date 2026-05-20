@@ -247,10 +247,6 @@ export default defineConfig({
                     link: '/controller/support/provisioning_mode'
                   },
                   {
-                    text: 'Controller Provisioning',
-                    link: '/controller/support/controller_provisioning'
-                  },
-                  {
                     text: 'OLED Screens',
                     link: '/controller/support/OLED_screens/'
                   },
@@ -350,7 +346,7 @@ export default defineConfig({
                     link: '/client/esp8266_special_handling/'
                   },
                   {
-                    text: 'Provisioning Mode',
+                    text: 'Client Provisioning',
                     link: '/client/provisioning/'
                   },
                 ]

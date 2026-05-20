@@ -4,7 +4,7 @@ Cloud backup allows you to store an encrypted copy of your Controller's configur
 
 ## Prerequisites
 
-Cloud backup requires that the device has been provisioned — registered with and connected to FireFly Cloud.  See [Controller Provisioning](/controller/support/controller_provisioning) for details.  If the device is not provisioned, all cloud backup API calls return `409 Conflict`.
+Cloud backup requires that the device has been provisioned — registered with and connected to FireFly Cloud.  See [Controller Provisioning](/controller/support/provisioning_mode#controller-provisioning) for details.  If the device is not provisioned, all cloud backup API calls return `409 Conflict`.
 
 The device clock must also be synchronized.  If NTP has not completed, calls return `503 Service Unavailable`.
 
