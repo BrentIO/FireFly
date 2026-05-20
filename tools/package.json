@@ -1,0 +1,11 @@
+{
+  "name": "firefly-docs-tools",
+  "version": "1.0.0",
+  "description": "Tooling scripts for FireFly Docs maintenance",
+  "scripts": {
+    "capture-screenshots": "node capture-screenshots.js"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
