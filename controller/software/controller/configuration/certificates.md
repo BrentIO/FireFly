@@ -1,8 +1,8 @@
 # Configuration: Certificates
 
-By default, HTTPS OTA validation uses the ESP32 core's built-in Mozilla root CA bundle (~130 CAs, maintained by Espressif and updated with each firmware build).  If you upload one or more certificates here, those uploaded certificates are used exclusively for OTA validation instead of the built-in bundle.  If your OTA server requires a CA not in the Mozilla bundle, upload that root CA here.
+Use this page to upload root CA certificates for HTTPS OTA validation.  Uploading one or more certificates here causes those certificates to be used exclusively for OTA validation instead of the built-in bundle.
 
-See more information about [certificate management](/controller/support/certificate_management).
+See [Certificate Management](/controller/support/certificate_management) for a full explanation of how the certificate bundle works and instructions for obtaining a root CA.
 
 
 [![Certificates](./certificates.png)](./certificates.png)
