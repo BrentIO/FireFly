@@ -16,6 +16,7 @@ You can configure the URL to include wildcards, which will be substituted at exe
 | `$$mac_dashes$$` | `DE-AD-BE-EF-FE-ED` |
 | `$$mac_colons$$` | `DE:AD:BE:EF:FE:ED` |
 | `$$uuid$$` | `b113d8ff-51ef-4fd8-82c0-7dac74d73ef3` |
+| `$$application$$` | `controller` |
 | `$$class$$` | `controller` |
 | `$$product_hex$$` | `0x32322505` |
 | `$$current_version$$` | `2026.03.01` |
