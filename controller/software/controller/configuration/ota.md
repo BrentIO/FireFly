@@ -6,6 +6,8 @@ If `OTA Disabled` is checked, no OTA configuration is sent for that device type.
 
 Both `http` and `https` URLs are supported.  When `https` is used, the firmware validates the server certificate using the ESP32 core's built-in Mozilla root CA bundle by default.  If you have uploaded any certificates to the device, those are used instead of the built-in bundle.  No separate certificate selection is required.
 
+The default URL format is `https://api.fireflylx.com/ota/$$class$$/$$product_hex$$/$$application$$?current_version=$$current_version$$`.
+
 You can configure the URL to include wildcards, which will be substituted at execution time.  The underlying library will URL encode as necessary.
 
 | Wildcard | Example Value |
