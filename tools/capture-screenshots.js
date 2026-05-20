@@ -3,7 +3,7 @@
  * Captures screenshots of the FireFly configurator UI for use in the docs.
  *
  * Usage:
- *   cd tools && npm install && node capture-screenshots.js --db /path/to/backup.json
+ *   cd tools && npm install && node capture-screenshots.js --db /path/to/backup.json [--url <base-url>]
  *
  * The backup file must be a valid Dexie export from the configurator
  * (use Import / Export → Download Backup to create one).
@@ -19,7 +19,7 @@ const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 
-const BASE_URL = 'https://configurator.fireflylx.com';
+const DEFAULT_URL = 'https://configurator.fireflylx.com';
 const OUTPUT_DIR = path.resolve(__dirname, '..', 'controller', 'software', 'controller', 'configuration');
 const VIEWPORT = { width: 1280, height: 800 };
 
@@ -49,7 +49,7 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const dbIndex = args.indexOf('--db');
   if (dbIndex === -1 || !args[dbIndex + 1]) {
-    console.error('Usage: node capture-screenshots.js --db /path/to/backup.json');
+    console.error('Usage: node capture-screenshots.js --db /path/to/backup.json [--url <base-url>]');
     process.exit(1);
   }
   const dbPath = path.resolve(args[dbIndex + 1]);
@@ -57,12 +57,14 @@ function parseArgs() {
     console.error(`Database file not found: ${dbPath}`);
     process.exit(1);
   }
-  return dbPath;
+  const urlIndex = args.indexOf('--url');
+  const baseUrl = (urlIndex !== -1 && args[urlIndex + 1]) ? args[urlIndex + 1] : DEFAULT_URL;
+  return { dbPath, baseUrl };
 }
 
-async function importDatabase(page, dbPath) {
+async function importDatabase(page, dbPath, baseUrl) {
   console.log(`Importing database from ${path.basename(dbPath)}...`);
-  await page.goto(`${BASE_URL}/#/config/import`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/#/config/import`, { waitUntil: 'networkidle' });
   await page.setInputFiles('input[type="file"]', dbPath);
   // Open the confirm modal
   await page.locator('button:has-text("Import"):not([disabled])').click();
@@ -74,15 +76,15 @@ async function importDatabase(page, dbPath) {
   console.log('Database imported.');
 }
 
-async function capture(page, file, route) {
-  const url = `${BASE_URL}${route}`;
+async function capture(page, file, route, baseUrl) {
+  const url = `${baseUrl}${route}`;
   console.log(`  ${file} → ${url}`);
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.screenshot({ path: path.join(OUTPUT_DIR, file), fullPage: false });
 }
 
 async function run() {
-  const dbPath = parseArgs();
+  const { dbPath, baseUrl } = parseArgs();
 
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext({ viewport: VIEWPORT });
@@ -93,12 +95,12 @@ async function run() {
   const page = await context.newPage();
 
   // ── Import backup ─────────────────────────────────────────────────────────
-  await importDatabase(page, dbPath);
+  await importDatabase(page, dbPath, baseUrl);
 
   // ── Simple pages ──────────────────────────────────────────────────────────
   console.log('\nCapturing simple pages...');
   for (const { file, route } of PAGES) {
-    await capture(page, file, route);
+    await capture(page, file, route, baseUrl);
   }
 
   // ── Interactive pages ─────────────────────────────────────────────────────
