@@ -16,6 +16,7 @@ All three fields — host, username, and password — support wildcard substitut
 | `$$uuid$$` | `b113d8ff-51ef-4fd8-82c0-7dac74d73ef3` |
 | `$$class$$` | `controller` |
 | `$$product_hex$$` | `0x32322505` |
+| `$$application$$` | `controller` |
 | `$$current_version$$` | `2026.03.01` |
 
 
