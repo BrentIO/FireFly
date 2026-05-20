@@ -21,8 +21,6 @@ You can configure the URL to include wildcards, which will be substituted at exe
 | `$$product_hex$$` | `0x32322505` |
 | `$$current_version$$` | `2026.03.01` |
 
-The `current_version` query parameter is also appended automatically by the firmware if it is not already present in the URL.
-
 ::: info Device Identity Required
 Using `$$uuid$$` requires the device identity to be provisioned in eFuse.
 :::
