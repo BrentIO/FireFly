@@ -10,11 +10,18 @@ You can configure the URL to include wildcards, which will be substituted at exe
 
 | Wildcard | Example Value |
 | -------- | ------------- |
-| `$$pid$$` | `FFC3232-2305` |
-| `$$app$$` | `FireFly Controller` |
+| `$$mac$$` | `DEADBEEFFEED` |
+| `$$mac_dashes$$` | `DE-AD-BE-EF-FE-ED` |
+| `$$mac_colons$$` | `DE:AD:BE:EF:FE:ED` |
+| `$$uuid$$` | `b113d8ff-51ef-4fd8-82c0-7dac74d73ef3` |
+| `$$class$$` | `controller` |
+| `$$product_hex$$` | `0x32322505` |
+| `$$current_version$$` | `2026.03.01` |
+
+The `current_version` query parameter is also appended automatically by the firmware if it is not already present in the URL.
 
 ::: info Device Identity Required
-Using `$$pid$$` requires the device identity to be provisioned in eFuse.
+Using `$$uuid$$` requires the device identity to be provisioned in eFuse.
 :::
 
 Additional information about [OTA updates](/controller/support/ota_updates) can be found on the support page.

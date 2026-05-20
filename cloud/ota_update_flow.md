@@ -12,7 +12,7 @@ Sequential updates protect against skipping intermediate versions that may conta
 
 ## How Versioning Works
 
-Version strings use the format `YYYY.MM.bb` (e.g., `2026.03.01`), where `MM` is the two-digit month and `bb` is the two-digit build number within that month. DynamoDB stores version as the sort key on the `{class}#{product_hex}` partition, so RELEASED builds are ordered oldest-to-newest by lexicographic string sort — which matches chronological order given this format.
+Version strings use the format `YYYY.MM.bb` (e.g., `2026.03.01`), where `MM` is the two-digit month and `bb` is the two-digit build number within that month. DynamoDB stores version as the sort key on the `{class}#{product_hex}#{application}` partition, so RELEASED builds are ordered oldest-to-newest by lexicographic string sort — which matches chronological order given this format.
 
 The endpoint finds the oldest RELEASED version whose version string is **strictly greater** than `current_version`. If no such version exists, the device is at or beyond the latest released version — see response codes below for the exact outcome.
 
@@ -120,7 +120,7 @@ A device was online when `2026.01.01` was the latest, but did not install it. No
 
 ## Scenario 6: Product Isolation
 
-The `class` and `product_hex` path parameters together form the DynamoDB partition key (`{class}#{product_hex}`). OTA queries are strictly scoped to that combination — firmware for one product is never served to another.
+The `class` and `product_hex` path parameters together form the DynamoDB partition key (`{class}#{product_hex}#{application}`), where `application` matches `class` for OTA queries (the main application name equals the hardware class). OTA queries are strictly scoped to that combination — firmware for one product is never served to another.
 
 **Example:** Two product models share the same class.
 
