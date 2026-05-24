@@ -38,4 +38,5 @@ Abbreviations that can be found in the event log or error display are documented
 | Client decrypt fail | A client configuration file on ConfigFS could not be decrypted; this typically means the file is corrupted or the eFuse master key does not match. The affected client will be skipped during provisioning scans |
 | Cloud reg check | HW-Reg attempted to verify cloud registration status at boot |
 | Cloud registered | Device confirmed as registered with FireFly-Cloud |
-| Cloud reg fail | Cloud registration or verification request failed; cloud may be unreachable, key invalid, or signature rejected |
+| Cloud reg fail | Cloud registration or verification request failed; cloud may be unreachable, key invalid, or returned an unexpected error |
+| Cloud reg sig vf fail | Cloud registration signature verification failure — the cloud rejected the device's authentication signature during the periodic registration check |
