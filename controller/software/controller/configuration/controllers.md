@@ -65,7 +65,19 @@ Deploying a configuration to a Controller is usually the last step in the proces
 - MQTT, WiFi, and OTA settings
 - Backup of the current database to the device
 
-Depending on the number of devices in the estate, a deployment may take from several seconds to a couple of minutes.  Provisioning Mode does not need to be active to deploy a configuration. 
+Depending on the number of devices in the estate, a deployment may take from several seconds to a couple of minutes.  Provisioning Mode does not need to be active to deploy a configuration.
+
+### Deploy (Single Controller)
+
+The following sequence describes what happens when deploying to a single Controller.  A SHA-256 hash of the local Dexie database export is computed once on page load and reused throughout the deploy to avoid redundant computation.  After pushing all configuration and the backup, the Configurator issues a `HEAD /backup` to retrieve the Controller's stored ETag and compares it to the local hash.  A match sets the controller to **In Sync**; a mismatch or absent ETag sets the **Deployment Required** indicator.
+
+[![Deploy](./images/deploy.svg)](./images/deploy.svg)
+
+### Deploy All
+
+Deploy All iterates over every connected Controller and executes the same sequence for each.  If a Controller responds with HTTP 401 at any step, a named toast is shown, progress advances, and the loop continues to the next Controller.
+
+[![Deploy All](./images/deploy-all.svg)](./images/deploy-all.svg)
 
 ## Logout
 
