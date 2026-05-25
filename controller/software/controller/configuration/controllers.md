@@ -45,6 +45,12 @@ Application updates will always require a reboot after being deployed.  Keep thi
 Clicking the Activate Provisioning Mode button will toggle [Provisioning Mode](/controller/support/provisioning_mode.md).  This is an asynchronous request and will take several seconds for the radio to turn on and the client information to be loaded into memory.  Refer to the OLED display to know when Provisioning Mode has become activated.
 
 
+## Deployment Required Indicator
+
+After authenticating to a Controller, the UI issues a `HEAD /backup` request to retrieve the ETag of the backup stored on the device.  This ETag is compared to a SHA-256 hash of the current local Dexie database.  If they differ, a **Deployment Required** badge is shown next to the controller's name in the list, indicating the device's stored configuration is out of sync with the local database.
+
+The badge is cleared automatically after a successful deployment.  It also updates correctly after a [cloud backup restore](/controller/support/cloud_backup#retrieve-backup-from-cloud), since that operation writes the ETag sidecar on the device.
+
 ## Pull Backup
 
 Pulling a backup from the Controller retrieves the database backup that was previously written during the last deployment.  This is a non-destructive action, and the backup file will be downloaded to your device.  The backup contains all information, and should be identical on all controllers if they were previously deployed simultaneously.
