@@ -1,15 +1,25 @@
 @startuml
 !include ../../../../../images/common-sequence.iuml
 
-title Deploy — Single Controller
+title Deploy / Deploy All
 
 participant "Browser\n(Configurator)" as Browser
 
-box "Target Controller" $OnPrem
+box "Controller" $OnPrem
     participant "HTTP API" as API
 end box
 
 Browser -> Browser : **Compute SHA-256**\nof local Dexie export\n(cached from page load)
+
+opt Deploy All
+    loop for each connected controller
+
+        break HTTP 401 — authentication failure
+            Browser -> Browser : **Show toast** — ""{controller name}: Unauthorized""\nadvance progress indicator, continue loop
+        end
+
+    end
+end
 
 opt certificates defined
     loop for each certificate
