@@ -99,6 +99,8 @@ The following flags must be passed to the compiler regardless of build method (C
 
 **`DISABLE_ALL_LIBRARY_WARNINGS`** Suppresses diagnostic messages from the FOTA library.
 
+**`FIREFLY_CLOUD_API_ROOT`** The FireFly Cloud API root URL used for all cloud operations (OTA, device registration, backup). Required — the compiler will error if omitted. Set as a full URL including protocol with no trailing slash (e.g., `-DFIREFLY_CLOUD_API_ROOT="https://api.fireflylx.com"`). In CI this value is injected from the `FIREFLY_CLOUD_API_ROOT` [environment variable](#environment-variables).
+
 The repo root must also be added to the include path (e.g. `-I/path/to/FireFly-Controller`) so that headers in `common/` can be resolved. Abbreviated paths using `~` will not work.
 
 ## Partitions
@@ -116,6 +118,18 @@ Peripheral information and build metadata are defined in `devices.yaml` at the r
 ## Filter Large JSON documents
 
 The Controller [filters large JSON documents](./configuration_json_filtering.md) in order to conserve memory and protect future upgradeability.
+
+## Environment Variables
+
+Some CI workflows require environment variables to be configured on each GitHub Environment (`dev` and `production`). Each variable is set once per environment under repo Settings → Environments → *environment name* → Environment variables.
+
+### `FIREFLY_CLOUD_API_ROOT`
+
+**Installed in:** `BrentIO/FireFly-Controller` → Settings → Environments → **dev** and **production** → Environment variables
+
+**Purpose:** Specifies the FireFly Cloud API root URL used by both the Controller and Hardware Registration and Configuration firmware. The value is injected as a compile-time define (`-DFIREFLY_CLOUD_API_ROOT=...`). If this variable is not set, the build will fail with a compile-time error.
+
+**Format:** Full URL including protocol, no trailing slash (e.g., `https://api.fireflylx.com`).
 
 ## Repository Secrets
 
