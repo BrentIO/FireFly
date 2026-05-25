@@ -14,9 +14,19 @@ The backup source file is `/backup.json` on the device's `config` LittleFS parti
 
 The maximum supported backup file size is **512 KB**.
 
+### Local Storage and ETag
+
+The backup is stored as **plaintext** on the device's LittleFS partition at rest.  Alongside `/backup.json`, the device also stores a SHA-256 hash of the backup content in a sidecar file.  This hash is exposed as an `ETag` response header on `GET /backup` and `HEAD /backup` requests.
+
+The ETag follows [RFC 7232](https://datatracker.ietf.org/doc/html/rfc7232) format (a quoted hex string) and represents the SHA-256 digest of the plaintext backup content.  The Controller UI uses the ETag to determine whether the backup stored on a device matches the current local database — if they differ, a **Deployment Required** indicator is shown for that controller.
+
+::: info ETag absent on older firmware
+If a backup was written by firmware that predates ETag support, no sidecar file exists and the `ETag` header will be absent on `HEAD` and `GET` responses.  Deploying a new configuration will create the sidecar and populate the ETag.
+:::
+
 ## Encryption Model
 
-All encryption and decryption happen entirely on-device.  The backup is never transmitted or stored in plaintext outside the hardware.
+The local `/backup.json` file is stored as plaintext on the device.  Encryption applies only to cloud transit — the backup is encrypted on-device before being uploaded to FireFly Cloud, and decrypted on-device when retrieved.  The backup is never transmitted or stored in plaintext in the cloud.
 
 | Property | Value |
 | -------- | ----- |
@@ -43,13 +53,13 @@ If no `/backup.json` exists on the device, the request returns `404 Not Found`. 
 
 ### Retrieve Backup from Cloud
 
-Downloads the encrypted backup blob from FireFly Cloud, decrypts it on-device, writes the result back to `/backup.json` on the config partition, and returns the plaintext configuration JSON to the caller.
+Downloads the encrypted backup blob from FireFly Cloud, decrypts it on-device, writes the result back to `/backup.json` on the config partition, and returns the plaintext configuration JSON to the caller.  If the cloud response includes an ETag header, the ETag sidecar is also written so the **Deployment Required** indicator reflects the restored state.
 
 If no backup exists in the cloud, the request returns `404 Not Found`.
 
 ### Delete Backup
 
-Sends a delete request to FireFly Cloud to permanently remove the stored backup for the device.  If a local `/backup.json` also exists on the device, it is removed as well.
+Sends a delete request to FireFly Cloud to permanently remove the stored backup for the device.  If a local `/backup.json` also exists on the device, it and its ETag sidecar are removed as well.
 
 A successful delete returns `204 No Content`.  If no backup exists in the cloud, the request returns `404 Not Found`.
 
@@ -59,10 +69,21 @@ The device automatically attempts to push the cloud backup before checking for f
 
 ## API Reference
 
-The cloud backup endpoints are part of the Controller REST API.  All three methods operate on `/api/cloud-backup` and require a valid `visual-token` header.  See the [Controller API Reference](/controller/software/controller/api_reference) for full request and response schemas.
+The cloud backup endpoints are part of the Controller REST API and require a valid `visual-token` header.  See the [Controller API Reference](/controller/software/controller/api_reference) for full request and response schemas.
+
+**Cloud backup** (operate on `/api/cloud-backup`):
 
 | Method | Endpoint | Action |
 | ------ | -------- | ------ |
 | `POST` | `/api/cloud-backup` | Push local `/backup.json` to cloud |
 | `GET` | `/api/cloud-backup` | Retrieve and decrypt backup from cloud |
 | `DELETE` | `/api/cloud-backup` | Delete cloud backup (and local `/backup.json`) |
+
+**Local backup** (operate on `/backup`):
+
+| Method | Endpoint | Action |
+| ------ | -------- | ------ |
+| `HEAD` | `/backup` | Check whether a backup exists and retrieve its ETag without downloading the file |
+| `GET` | `/backup` | Download the local backup; includes `ETag` response header |
+| `PUT` | `/backup` | Write a new backup to the device; computes and stores the ETag sidecar |
+| `DELETE` | `/backup` | Remove the local backup and its ETag sidecar |
