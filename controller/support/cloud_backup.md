@@ -20,10 +20,6 @@ The backup is stored as **plaintext** on the device's LittleFS partition at rest
 
 The ETag follows [RFC 7232](https://datatracker.ietf.org/doc/html/rfc7232) format (a quoted hex string) and represents the SHA-256 digest of the plaintext backup content.  The Controller UI uses the ETag to determine whether the backup stored on a device matches the current local database — if they differ, a **Deployment Required** indicator is shown for that controller.
 
-::: info ETag absent on older firmware
-If a backup was written by firmware that predates ETag support, no sidecar file exists and the `ETag` header will be absent on `HEAD` and `GET` responses.  Deploying a new configuration will create the sidecar and populate the ETag.
-:::
-
 ## Encryption Model
 
 The local `/backup.json` file is stored as plaintext on the device.  Encryption applies only to cloud transit — the backup is encrypted on-device before being uploaded to FireFly Cloud, and decrypted on-device when retrieved.  The backup is never transmitted or stored in plaintext in the cloud.

@@ -51,10 +51,6 @@ After authenticating to a Controller, the UI issues a `HEAD /backup` request to 
 
 The badge is cleared automatically after a successful deployment.  It also updates correctly after a [cloud backup restore](/controller/support/cloud_backup#retrieve-backup-from-cloud), since that operation writes the ETag sidecar on the device.
 
-::: info Badge absent on older firmware
-If the controller was last deployed with firmware that predates ETag support, no sidecar file exists and the badge will not be shown even if the configuration has diverged.  Deploying a new configuration will create the sidecar and enable future sync detection.
-:::
-
 ## Pull Backup
 
 Pulling a backup from the Controller retrieves the database backup that was previously written during the last deployment.  This is a non-destructive action, and the backup file will be downloaded to your device.  The backup contains all information, and should be identical on all controllers if they were previously deployed simultaneously.
