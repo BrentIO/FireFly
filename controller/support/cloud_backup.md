@@ -59,9 +59,11 @@ Sends a delete request to FireFly Cloud to permanently remove the stored backup 
 
 A successful delete returns `204 No Content`.  If no backup exists in the cloud, the request returns `404 Not Found`.
 
-## Automatic Backup on Firmware Update
+## Automatic Backup
 
-The device automatically attempts to push the cloud backup before checking for firmware updates.  This ensures that an up-to-date backup is stored in the cloud before any firmware change is applied.
+The device automatically attempts to push the cloud backup to FireFly Cloud once every 86,400 seconds (daily), beginning 30 seconds after boot.  The frequency can be overridden with the `CLOUD_BACKUP_INTERVAL_SECONDS` compile-time parameter.
+
+An automatic upload only occurs if a `/backup.json` file exists on the device's config partition.  If no backup file is present, the upload is skipped silently until one is created.
 
 ## API Reference
 
