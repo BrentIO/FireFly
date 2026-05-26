@@ -11,7 +11,7 @@ While the device is performing any type of OTA update, the [OLED display](/contr
 By default, updates are checked once every 86,400 seconds (daily) at approximately the time the device was originally booted, although the frequency can be overridden with the `FIRMWARE_CHECK_SECONDS` parameter if you compile the code yourself.
 
 ## OTA Update Service
-The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device.  By default, the controller will check for OTA updates once per day and 30 seconds after a reboot.  Both http and https protocols are supported.  When https is used, the firmware validates the server certificate using the ESP32 core's built-in Mozilla root CA bundle by default.  If any certificates have been uploaded to the device, those are used exclusively instead of the built-in bundle.
+The OTA Update Service allows you to configure a webserver that will provide OTA updates to the device.  By default, the controller will check for OTA updates once per day and 60 seconds after a reboot.  Both http and https protocols are supported.  When https is used, the firmware validates the server certificate using the ESP32 core's built-in Mozilla root CA bundle by default.  If any certificates have been uploaded to the device, those are used exclusively instead of the built-in bundle.
 
 The OTA Update Service configuration is stored in the device's configuration as an entry in the JSON.  It can be configured using the [Controller's UI](/controller/software/controller/configuration/ota).
 
