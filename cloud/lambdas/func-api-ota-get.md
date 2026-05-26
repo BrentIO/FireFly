@@ -34,21 +34,21 @@ The response is a manifest compatible with the [BrentIO/esp32FOTA](https://githu
 |---|---|---|
 | `type` | Yes | Firmware type string expected by the device (e.g., `"FireFly Controller"`) — stored in DynamoDB from `manifest.json` at build time |
 | `version` | Yes | Firmware version string (e.g., `"2026.03.001"`) |
-| `url` | Yes | CloudFront URL to the main application firmware binary |
+| `app` | Yes | CloudFront URL to the main application firmware binary |
 | `ui` | No | CloudFront URL to the LittleFS (`ui`) partition image; omitted if not present in the firmware |
 
 ```json
 {
     "type": "FireFly Controller",
     "version": "2026.03.001",
-    "url": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/Controller.ino.bin",
+    "app": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/Controller.ino.bin",
     "ui": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/ui.bin"
 }
 ```
 
 ## Binary Identification
 
-The function uses the `main_binary` field stored in DynamoDB (set by the upload Lambda from the manifest file list) to construct the `url`. For `ui`, it searches the file list for `ui.bin`.
+The function uses the `main_binary` field stored in DynamoDB (set by the upload Lambda from the manifest file list) to construct the `app` URL. For `ui`, it searches the file list for `ui.bin`.
 
 | File | Identified as |
 |---|---|
@@ -57,7 +57,7 @@ The function uses the `main_binary` field stored in DynamoDB (set by the upload 
 | `manifest.json` | Excluded |
 | `*.bootloader.bin` | Excluded — not OTA-updatable |
 | `*.partitions.bin` | Excluded — not OTA-updatable |
-| Any other `*.bin` | Main application firmware (`url` field) |
+| Any other `*.bin` | Main application firmware (`app` field) |
 
 ## Firmware Type
 
