@@ -68,7 +68,7 @@ The flash dialog uses an explicit whitelist of recognised files. Only the files 
 | File | Partition name | Notes |
 |---|---|---|
 | `{application}.ino.bin` | `app0` | Main application binary (e.g. `Hardware-Registration-and-Configuration.ino.bin`) |
-| `www.bin` | `www` | Offset stored at ingestion time |
+| `ui.bin` | `ui` | Offset stored at ingestion time |
 | `config.bin` | `config` | Offset stored at ingestion time |
 
 When `func-s3-firmware-uploaded` processes a ZIP, it parses `partitions.bin` as a sequence of 32-byte ESP32 partition table entries (magic `0xAA50`) and stores the resulting name → offset map in the DynamoDB record as `partition_offsets`. The browser reads this field directly from the firmware record — no ZIP download is required just to determine flash addresses. This means the correct address is used automatically regardless of flash size or hardware revision, and no code changes are required when the partition layout changes.

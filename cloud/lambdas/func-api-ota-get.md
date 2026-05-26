@@ -35,24 +35,24 @@ The response is a manifest compatible with the [BrentIO/esp32FOTA](https://githu
 | `type` | Yes | Firmware type string expected by the device (e.g., `"FireFly Controller"`) — stored in DynamoDB from `manifest.json` at build time |
 | `version` | Yes | Firmware version string (e.g., `"2026.03.001"`) |
 | `url` | Yes | CloudFront URL to the main application firmware binary |
-| `littlefs` | No | CloudFront URL to the LittleFS partition image; omitted if not present in the firmware |
+| `ui` | No | CloudFront URL to the LittleFS (`ui`) partition image; omitted if not present in the firmware |
 
 ```json
 {
     "type": "FireFly Controller",
     "version": "2026.03.001",
     "url": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/Controller.ino.bin",
-    "littlefs": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/www.bin"
+    "ui": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/ui.bin"
 }
 ```
 
 ## Binary Identification
 
-The function uses the `main_binary` field stored in DynamoDB (set by the upload Lambda from the manifest file list) to construct the `url`. For `littlefs`, it searches the file list for `www.bin`.
+The function uses the `main_binary` field stored in DynamoDB (set by the upload Lambda from the manifest file list) to construct the `url`. For `ui`, it searches the file list for `ui.bin`.
 
 | File | Identified as |
 |---|---|
-| `www.bin` | LittleFS partition image (`littlefs` field) |
+| `ui.bin` | LittleFS partition image (`ui` field) |
 | `config.bin` | Excluded — device-specific, not OTA-updatable |
 | `manifest.json` | Excluded |
 | `*.bootloader.bin` | Excluded — not OTA-updatable |

@@ -10,10 +10,10 @@ The partition table is defined per hardware model in [`devices.yaml`](https://gi
 | app0 | app | ota_0 | 0x10000 | 0x640000 | 6.25MB |
 | app1 | app | ota_1 | 0x650000 | 0x640000 | 6.25MB |
 | config | data | spiffs | 0xC90000 | 0x80000 | 512KB |
-| www | data | spiffs | 0xD10000 | 0x2E0000 | 2.875MB |
+| ui | data | spiffs | 0xD10000 | 0x2E0000 | 2.875MB |
 | coredump | data | coredump | 0xFF0000 | 0x10000 | 64KB |
 
-> **Note:** The `spiffs` SubType label is an ESP32 toolchain partition type identifier. The `config` and `www` partitions both use the LittleFS filesystem, not SPIFFS.
+> **Note:** The `spiffs` SubType label is an ESP32 toolchain partition type identifier. The `config` and `ui` partitions both use the LittleFS filesystem, not SPIFFS.
 
 ## How the partition table is created and updated
 
@@ -38,7 +38,7 @@ It should only be formatted and flashed by the [Hardware Registration and Config
 
 The partition size is 512KB.
 
-## `www` partition
+## `ui` partition
 Files stored on this partition are used for web user interface or other blobs of data.
 
 :white_check_mark: It is eligible for OTA updates, and therefore data stored on this partition will be lost during an OTA update of the partition.
