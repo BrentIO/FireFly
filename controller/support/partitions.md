@@ -34,7 +34,11 @@ Data stored within this partition contains configuration data for the controller
 
 It should only be formatted and flashed by the [Hardware Registration and Configuration application](/controller/software/hardware_registration_and_configuration/).
 
-:no_entry_sign: It is ineligible to receive OTA updates via the OTA Update Service, nor via a forced OTA update.  
+:no_entry_sign: It is ineligible to receive OTA updates via the OTA Update Service, nor via a forced OTA update.
+
+This protection is enforced at two levels:
+- **Library level** — the OTA library only permits writes to data filesystem partition types (LittleFS/SPIFFS or FAT). App, NVS, coredump, and other partition types are unreachable regardless of what the update server requests.
+- **Firmware level** — the `config` partition is explicitly blocked by name in the application firmware. Removing it from the block list requires shipping a firmware update first, making accidental overwrites a deliberate two-step process.
 
 The partition size is 512KB.
 
