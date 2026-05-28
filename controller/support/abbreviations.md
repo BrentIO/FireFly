@@ -6,6 +6,7 @@ Abbreviations that can be found in the event log or error display are documented
 | !RC `MAC address` | A rogue client with `MAC address` attempted to connect during provisioning mode |
 | App/UI ver mismatch | The application name, version, or commit hash of the UI (web interface) stored in the `ui` partition does not match the running firmware |
 | Backup auth fail | Configuration backup upload was rejected due to an authentication failure |
+| Backup decrypt fail | A cloud configuration backup could not be decrypted during restore; this typically means the backup is corrupted or was created on a different device whose eFuse master key does not match |
 | Backup enc fail | Configuration backup encryption failed |
 | Backup upload start | A configuration backup upload has begun |
 | Backup uploaded | Configuration backup was uploaded successfully |
