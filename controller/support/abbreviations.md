@@ -40,4 +40,4 @@ Abbreviations that can be found in the event log or error display are documented
 | Cloud registered | Device confirmed as registered with FireFly-Cloud |
 | Cloud reg fail | Cloud registration or verification request failed; cloud may be unreachable, key invalid, or returned an unexpected error |
 | Cloud reg sig vf fail | Cloud registration signature verification failure — the cloud rejected the device's authentication signature during the periodic registration check |
-| App/UI ver mismatch | The application firmware version does not match the UI (web interface) version stored in the `www` partition |
+| App/UI ver mismatch | The application name, version, or commit hash of the UI (web interface) stored in the `ui` partition does not match the running firmware |
