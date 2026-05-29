@@ -47,7 +47,7 @@ Abbreviations that can be found in the event log or error display are documented
 | No I/O setup (eFuse) | I/O cannot be configured because the device identity UUID is not provisioned in eFuse |
 | No PSRAM found | The device did not detect PSRAM at startup; memory-intensive operations may fail |
 | OTA app failed | The OTA application firmware update failed |
-| OTA app update started | An OTA update of the application firmware has begun |
+| OTA app update start | An OTA update of the application firmware has begun |
 | OTA cfg inv proto | The protocol specified in the controller's OTA configuration does not start with either http or https |
 | OTA cfg no cert | The controller's OTA configuration uses HTTPS but the certificate field is missing from the controller's configuration; OTA will not be enabled |
 | OTA cfg no url | The URL field is missing from the OTA object on the controller's configuration; OTA will not be enabled |
@@ -55,7 +55,7 @@ Abbreviations that can be found in the event log or error display are documented
 | OTA parse err `error` | There was an error while trying to parse the controller's configuration for OTA configuration; OTA will not be enabled |
 | OTA ui failed | The OTA `ui` partition update failed |
 | OTA ui finished | The OTA `ui` partition update completed successfully |
-| OTA ui update started | An OTA update of the `ui` partition has begun |
+| OTA ui update start | An OTA update of the `ui` partition has begun |
 | OTA update available | An OTA update is available |
 | OTA update enabled | OTA updates have been enabled |
 | Out ctl | Output controller |
@@ -85,6 +85,7 @@ The following abbreviations are specific to the Hardware Registration and Config
 | Cloud registered | Device confirmed as registered with FireFly-Cloud |
 | Firmware list failed | Failed to fetch the available firmware list from FireFly-Cloud |
 | Firmware list fetched | Successfully fetched the available firmware list from FireFly-Cloud |
-| OTA app finished, rebooting... | The OTA application firmware update completed; device is rebooting |
+| OTA app finished | The OTA application firmware update completed successfully |
+| OTA rebooting | Device is rebooting after an OTA update |
 | Web server started | The Hardware Registration and Configuration web server started successfully |
 | Wrote device identity | Device identity was successfully written to NVS |
