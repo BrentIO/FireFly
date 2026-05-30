@@ -47,6 +47,7 @@ Abbreviations that can be found in the event log or error display are documented
 | No I/O setup (eFuse) | I/O cannot be configured because the device identity UUID is not provisioned in eFuse |
 | No PSRAM found | The device did not detect PSRAM at startup; memory-intensive operations may fail |
 | OTA app failed | The OTA application firmware update failed |
+| OTA app SHA256 fail | The SHA256 digest of the downloaded application firmware binary did not match the expected hash from the OTA manifest; the partition was not activated |
 | OTA app update start | An OTA update of the application firmware has begun |
 | OTA cfg inv proto | The protocol specified in the controller's OTA configuration does not start with either http or https |
 | OTA cfg no cert | The controller's OTA configuration uses HTTPS but the certificate field is missing from the controller's configuration; OTA will not be enabled |
@@ -55,6 +56,7 @@ Abbreviations that can be found in the event log or error display are documented
 | OTA parse err `error` | There was an error while trying to parse the controller's configuration for OTA configuration; OTA will not be enabled |
 | OTA ui failed | The OTA `ui` partition update failed |
 | OTA ui finished | The OTA `ui` partition update completed successfully |
+| OTA ui SHA256 fail | The SHA256 digest of the downloaded `ui` partition binary did not match the expected hash from the OTA manifest; the partition was not activated |
 | OTA ui update start | An OTA update of the `ui` partition has begun |
 | OTA update available | An OTA update is available |
 | OTA update enabled | OTA updates have been enabled |
