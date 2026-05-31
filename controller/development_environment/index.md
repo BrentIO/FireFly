@@ -97,6 +97,8 @@ The following flags must be passed to the compiler regardless of build method (C
 - `4` = Debug
 - `5` = Verbose
 
+When set to `1` or higher, a [telnet debug log server](./telnet_debug_log.md) is available on port 23.
+
 **`DISABLE_ALL_LIBRARY_WARNINGS`** Suppresses diagnostic messages from the FOTA library.
 
 **`FIREFLY_CLOUD_API_ROOT`** The FireFly Cloud API root URL used for all cloud operations (OTA, device registration, backup). Required — the compiler will error if omitted. Set as a full URL including protocol with no trailing slash (e.g., `-DFIREFLY_CLOUD_API_ROOT="https://api.fireflylx.com"`). In CI this value is injected from the `FIREFLY_CLOUD_API_ROOT` [environment variable](#environment-variables).
@@ -118,6 +120,10 @@ Peripheral information and build metadata are defined in `devices.yaml` at the r
 ## Filter Large JSON documents
 
 The Controller [filters large JSON documents](./configuration_json_filtering.md) in order to conserve memory and protect future upgradeability.
+
+## Telnet Debug Log
+
+When built with `CORE_DEBUG_LEVEL` set to `1` or higher, the Controller exposes a [telnet debug log server](./telnet_debug_log.md) on port 23 that streams live ESP32 log output to connected clients — the same output visible on the serial UART.
 
 ## Environment Variables
 
