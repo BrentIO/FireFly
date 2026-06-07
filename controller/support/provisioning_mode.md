@@ -78,11 +78,11 @@ If the target's Ethernet MAC address is not in the source's allowlist, the sourc
 
 #### Step 4 — Token Exchange
 
-The target POSTs its UUID and Ethernet MAC address to `POST /api/provisioning/token`.  The source validates that a controller record exists for the UUID and that the stored `mac` field matches the submitted MAC address.  On success, the source returns a short-lived per-device bearer token.
+The target POSTs its UUID and Ethernet MAC address to `POST /api/provisioning/token`.  The source validates that a controller record file exists for the UUID.  On success, the source returns a short-lived per-device bearer token bound to the submitted MAC address.
 
 The token has a sliding expiry window (5 minutes in production, 30 minutes in debug builds), reset on each authenticated request.  Only one token is active per MAC address at a time; a new POST invalidates any previous token for that MAC.
 
-If the UUID is unknown or the MAC address does not match, the source returns HTTP 404 or 401 and the target continues unprovisioned.
+If the UUID is unknown, the source returns HTTP 404 and the target continues unprovisioned.
 
 #### Step 5 — Cleanup
 
