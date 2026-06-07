@@ -7,7 +7,7 @@ Provisioning Mode allows unprovisioned devices to connect to a Controller via a 
 
 Only one Controller should have Provisioning Mode active at any given time.
 
-When enabled, the Controller broadcasts a WPA2-protected WiFi SSID of `FireFly-Provisioning`.  The SoftAP accepts only one connected device at a time.  Provisioning Mode is automatically disabled after 30 minutes (configurable at compile time via `PROVISIONING_MODE_TTL`).
+When enabled, the Controller broadcasts a WPA2-protected WiFi SSID of `FireFly-Provisioning`.  The SoftAP accepts only one connected device at a time.  Provisioning Mode is automatically disabled after 5 minutes in production builds and 30 minutes in debug builds (configurable at compile time via `PROVISIONING_MODE_TTL`).
 
 Provisioning Mode is enabled via the Configurator UI or by calling `PUT /api/provisioning`.  Enabling it may take several seconds while the Controller's on-board WiFi radio starts and the approved device list is prepared.  Disabling it takes a second or two to disconnect devices and shut down the SoftAP.
 
@@ -68,9 +68,15 @@ If no matching AP is found, the target continues booting without configuration a
 
 #### Step 3 — Target Derives Password and Connects
 
-The target reads the BSSID from the scan result and computes the WPA2 password using the same nibble-interleave algorithm (see [SoftAP Password](#softap-password) below).  It then attempts to connect, with a 10-second timeout.
+The target reads the BSSID from the scan result and computes the WPA2 password using the same nibble-interleave algorithm (see [SoftAP Password](#softap-password) below).
 
-If the target's MAC address is not in the source's allowlist, the source shuts down the SoftAP and logs a warning.  The target continues unprovisioned.
+:::important
+Before associating, the target overrides its WiFi station MAC address with its own **Ethernet MAC address**.  The source Controller's allowlist and all configuration records identify controllers by Ethernet MAC, so this ensures the target presents a consistent identity at every stage of the provisioning flow — WiFi association, the MAC allowlist check, and the HTTP bundle request.  The MAC override is temporary and resets to the factory WiFi MAC on reboot.
+:::
+
+The target then attempts to connect, with a 10-second timeout.
+
+If the target's Ethernet MAC address is not in the source's allowlist, the source shuts down the SoftAP and logs a warning.  The target continues unprovisioned.
 
 #### Step 4 — Nonce Exchange
 
@@ -78,7 +84,7 @@ The target calls `GET /api/provisioning/nonce` to obtain a single-use session no
 
 #### Step 5 — Bundle Retrieval
 
-The target calls `GET /api/provisioning/controller` with its own WiFi MAC address in the `mac-address` header and the nonce in the `x-nonce` header.  The source validates the nonce, finds the matching controller record, invalidates the nonce, and returns the full provisioning bundle containing all controller and client records.
+The target calls `GET /api/provisioning/controller` with its own Ethernet MAC address in the `mac-address` header and the nonce in the `x-nonce` header.  The source validates the nonce, finds the matching controller record, invalidates the nonce, and returns the full provisioning bundle containing all controller and client records.
 
 If no controller record matches the MAC address, the source returns HTTP 404 and the target continues unprovisioned.
 
