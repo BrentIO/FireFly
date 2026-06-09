@@ -54,8 +54,6 @@ Controller Provisioning allows an unconfigured Controller to automatically recei
 
 ### Protocol
 
-[![Controller Provisioning Sequence Diagram](./images/controller-provisioning-sequence.svg)](./images/controller-provisioning-sequence.svg)
-
 #### Step 1 — Enable Provisioning Mode on Source
 
 Enable Provisioning Mode on the source Controller via the Configurator UI or by calling `PUT /api/provisioning`.  The source starts its SoftAP with SSID `FireFly-Provisioning` and a device-unique WPA2 password derived from its BSSID.
@@ -71,26 +69,56 @@ If no matching AP is found, the target continues booting without configuration a
 The target reads the BSSID from the scan result and computes the WPA2 password using the same nibble-interleave algorithm (see [SoftAP Password](#softap-password) below).
 
 :::important
-Before associating, the target overrides its WiFi station MAC address with its own **Ethernet MAC address**.  The source Controller's allowlist and all configuration records identify controllers by Ethernet MAC, so this ensures the target presents a consistent identity at every stage of the provisioning flow — WiFi association, the MAC allowlist check, and the HTTP bundle request.  The MAC override is temporary and resets to the factory WiFi MAC on reboot.
+Before associating, the target overrides its WiFi station MAC address with its own **Ethernet MAC address**.  The source Controller's allowlist and all configuration records identify controllers by Ethernet MAC, so this ensures the target presents a consistent identity at every stage of the provisioning flow — WiFi association, the MAC allowlist check, and the token exchange request.  The MAC override is temporary and resets to the factory WiFi MAC on reboot.
 :::
 
 The target then attempts to connect, with a 10-second timeout.
 
 If the target's Ethernet MAC address is not in the source's allowlist, the source shuts down the SoftAP and logs a warning.  The target continues unprovisioned.
 
-#### Step 4 — Nonce Exchange
+#### Step 4 — Token Exchange
 
-The target calls `GET /api/provisioning/nonce` to obtain a single-use session nonce.
+The target POSTs its UUID and Ethernet MAC address to `POST /api/provisioning/token`.  The source validates that a controller record file exists for the UUID.  On success, the source returns a short-lived per-device bearer token bound to the submitted MAC address.
 
-#### Step 5 — Bundle Retrieval
+The token has a sliding expiry window (5 minutes in production, 30 minutes in debug builds), reset on each authenticated request.  Only one token is active per MAC address at a time; a new POST invalidates any previous token for that MAC.
 
-The target calls `GET /api/provisioning/controller` with its own Ethernet MAC address in the `mac-address` header and the nonce in the `x-nonce` header.  The source validates the nonce, finds the matching controller record, invalidates the nonce, and returns the full provisioning bundle containing all controller and client records.
+If the UUID is unknown, the source returns HTTP 404 and the target continues unprovisioned.
 
-If no controller record matches the MAC address, the source returns HTTP 404 and the target continues unprovisioned.
+#### Step 5 — Cleanup
 
-#### Step 6 — Target Writes Config and Reboots
+After receiving a valid token, the target deletes all existing controller records, client records, and any stored backup.  This ensures the device always ends up in a clean state matching the source.  **Cleanup only occurs after a successful token exchange** — a failed connection attempt will not wipe existing configuration.
 
-The target encrypts and writes each controller and client record to its file system, then reboots into normal operating mode.
+#### Step 6 — Individual Record Retrieval
+
+Using the provisioning token in the `provisioning-token` header, the target calls the regular GET endpoints one record at a time:
+
+1. `GET /api/controllers` — retrieve the list of controller UUIDs
+2. `GET /api/controllers/{uuid}` — retrieve and encrypt-store each controller record
+3. `GET /api/clients` — retrieve the list of client UUIDs
+4. `GET /api/clients/{uuid}` — retrieve and encrypt-store each client record
+5. `GET /backup` — retrieve the backup if one exists (404 is non-fatal)
+
+Each response is encrypted and written to the target's file system immediately, so only one record is held in RAM at a time.
+
+All requests are enforced to arrive via the SoftAP interface — the `provisioning-token` header is refused on the Ethernet interface to prevent captured-token replay attacks.
+
+#### Step 7 — Count Verification and Result Display
+
+After all requests complete, the target compares the number of files written against the number of UUIDs returned in the list responses.  The result is shown on the OLED display and written to the event log:
+
+| Outcome | OLED line 1 | OLED line 2 |
+|---------|-------------|-------------|
+| All counts match, backup received | `Prov OK {X}C {Y}L` | `Prov OK got backup` |
+| All counts match, no backup on source | `Prov OK {X}C {Y}L` | `Prov OK no backup` |
+| Controller count mismatch | `Prov fail C {A}/{B}` | — |
+| Client count mismatch | `Prov fail L {A}/{B}` | — |
+| Backup parse or write failed | `Prov OK {X}C {Y}L` | `Prov bad backup` |
+
+#### Step 8 — Reboot on Success
+
+If all controller and client counts match, and the backup result is either received successfully or not present on the source (404), the target displays the result for 5 seconds and then reboots into normal operating mode.
+
+If any count mismatches or the backup parse fails, the target **does not reboot**.  The OLED remains on the event log page so the operator can see the failure before taking action.
 
 
 ## SoftAP Password
@@ -110,18 +138,19 @@ The password is 12 uppercase hex characters (satisfies the WPA2 8-character mini
 
 :::info Security model
 - **WPA2 (CCMP/AES)** encrypts all traffic between the Controller SoftAP and any connecting device, protecting credentials and configuration payloads in transit
-- **Single-use nonce** prevents replay attacks against provisioning endpoints
-- **SoftAP-only endpoints** — provisioning endpoints reject requests (403) unless they originate from the SoftAP IP address (`192.168.4.1`), preventing Ethernet-connected devices from calling them
+- **Per-device provisioning token** — an OAuth-style bearer token (UUID + MAC → token) scoped to a single device with a sliding expiry window; replaces single-use nonces with a session token that survives multiple requests
+- **SoftAP-only enforcement** — the `provisioning-token` header is rejected with HTTP 403 on the Ethernet interface, preventing a captured token from being replayed from a different network
 - **MAC allowlist** prevents unregistered devices from obtaining any configuration
 - **2 dBm TX power** on both the SoftAP and connecting device limits effective range to 3–5 feet
 - **Single-client SoftAP** prevents two devices from provisioning simultaneously
 - **Provisioning mode required** — endpoints return HTTP 409 if provisioning mode is not active, ensuring the source is never passively serving configuration
+- **Post-token-only cleanup** — the target wipes its existing config only after a valid token is received, protecting against accidental data loss from failed connection attempts
 :::
 
 :::warning
 The SoftAP password is derived from the BSSID, which is visible to any device performing a WiFi scan.  The algorithm is documented and embedded in the firmware.  Physical proximity is the primary barrier against unauthorized access during provisioning.  Provisioning sessions should be conducted in a controlled environment.
 :::
 
-MAC address spoofing remains a theoretical risk: a spoofed MAC will pass the allowlist check at WiFi association time.  However, the attacker would also need to know the correct nonce (freshly generated per session) and call the provisioning endpoint within the same session window.
+MAC address spoofing remains a theoretical risk: a spoofed MAC will pass the allowlist check at WiFi association time.  However, the attacker would also need to know the correct UUID (stored in the target's device identity) and the target's Ethernet MAC to obtain a provisioning token.
 
 See [API Reference](/controller/software/controller/api_reference.md) for the full endpoint documentation.

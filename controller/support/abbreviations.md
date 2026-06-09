@@ -65,9 +65,12 @@ Abbreviations that can be found in the event log or error display are documented
 | Out prt `#` < 1 | The output number specified is less than 1 |
 | Out prt `#` > max | The output number specified in the controller's JSON is greater than the number of outputs defined for the controller |
 | Out prt `#` no id | The output number specified is missing the required `id` field in the JSON configuration |
-| Prov cfg written | A provisioning configuration was successfully written to ConfigFS |
-| Prov client write fail | Failed to write a client configuration file during provisioning |
-| Prov ctlr write fail | Failed to write a controller configuration file during provisioning |
+| Prov bad backup | Backup received during controller provisioning failed JSON validation or could not be written to storage |
+| Prov fail C `A`/`B` | Controller provisioning completed but controller file count mismatched: `A` files written, `B` expected. Device did not reboot. |
+| Prov fail L `A`/`B` | Controller provisioning completed but client file count mismatched: `A` files written, `B` expected. Device did not reboot. |
+| Prov OK `X`C `Y`L | Controller provisioning succeeded: `X` controller files and `Y` client files written |
+| Prov OK got backup | A backup was received and stored during controller provisioning |
+| Prov OK no backup | Controller provisioning completed; donor controller has no backup stored (not an error) |
 | Provisioning active | The device has entered provisioning mode |
 | Provisioning inactive | The device has exited provisioning mode |
 | Rebooting... | Device is about to reboot |
