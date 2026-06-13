@@ -29,7 +29,8 @@ Invoked by **API Gateway** on an HTTP `POST /devices/{uuid}/backup` request (no 
 | `X-Device-Timestamp` | Yes | ISO 8601 UTC timestamp (e.g. `2025-05-09T12:00:00Z`) |
 | `X-Device-Signature` | Yes | Base64-encoded DER ECDSA P-256 signature over SHA-256(nonce \|\| timestamp) |
 | `Content-Type` | Yes | Must be `application/octet-stream` |
-| `If-None-Match` | No | ETag of existing backup; returns 304 if content unchanged |
+| `ETag` | No | Plaintext SHA-256 hex digest of the backup content (read from `/backup.etag` on the device). Stored as S3 object metadata and returned by `GET /devices/{uuid}/backup` so the controller can restore `/backup.etag` after a restore. When absent, the 304 check is skipped. |
+| `If-None-Match` | No | Plaintext SHA-256 ETag of the backup the client believes is already stored (as returned by a previous POST or GET). Only evaluated when the `ETag` request header is also present; returns 304 if it matches the stored S3 metadata ETag. |
 
 ## Request Body
 
@@ -49,7 +50,7 @@ Raw FFCE-format encrypted binary blob (max 512 KB). The blob starts with the 4-b
 | Code | Reason |
 |---|---|
 | `200 OK` | Backup stored successfully |
-| `304 Not Modified` | Backup content identical to existing (ETag match) |
+| `304 Not Modified` | Backup content identical to existing — only returned when both `ETag` and `If-None-Match` request headers are present and `If-None-Match` matches the stored plaintext SHA-256 ETag |
 | `400 Bad Request` | Missing/invalid headers, invalid Base64, or body not valid FFCE format |
 | `401 Unauthorized` | Device UUID not found, signature invalid, or timestamp outside the acceptance window |
 | `403 Forbidden` | `X-Device-UUID` header does not match `{uuid}` path parameter |

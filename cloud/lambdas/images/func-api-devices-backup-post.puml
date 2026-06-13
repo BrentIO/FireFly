@@ -12,7 +12,7 @@ box "AWS" $AWS
     participant "device-backups\nS3 bucket" as S3
 end box
 
-Client -> APIGW++ : POST /devices/{uuid}/backup\nX-Device-UUID: <uuid>\nX-Device-Nonce: <base64 32-byte nonce>\nX-Device-Timestamp: <ISO 8601 UTC>\nX-Device-Signature: <base64 DER ECDSA sig>\nContent-Type: application/octet-stream\nBody: FFCE blob (encrypted backup)
+Client -> APIGW++ : POST /devices/{uuid}/backup\nX-Device-UUID: <uuid>\nX-Device-Nonce: <base64 32-byte nonce>\nX-Device-Timestamp: <ISO 8601 UTC>\nX-Device-Signature: <base64 DER ECDSA sig>\nContent-Type: application/octet-stream\n[ETag: <SHA-256 of plaintext>]\n[If-None-Match: <SHA-256 of stored plaintext>]\nBody: FFCE blob (encrypted backup)
 
 APIGW -> Lambda++ : invoke
 
@@ -61,30 +61,23 @@ alt body invalid or too large
     APIGW --> Client : 400 / 413
 end
 
-Lambda -> Lambda : compute ETag = MD5(body)
+opt ETag and If-None-Match headers both present
+    Lambda -> S3 : HeadObject({uuid})
+    S3 --> Lambda : metadata.etag (or 404)
 
-opt If-None-Match header present and matches ETag
-    Lambda --> APIGW : 304 Not Modified
-    APIGW --> Client : 304 Not Modified
-end
-
-opt no If-None-Match: check existing S3 ETag
-    Lambda -> S3 : HeadObject({uuid}/backup.ffce)
-    S3 --> Lambda : ETag (or 404)
-
-    opt existing ETag matches
-        Lambda --> APIGW : 304 Not Modified
+    opt If-None-Match matches stored metadata ETag
+        Lambda --> APIGW : 304 Not Modified\nETag: "<plaintext-sha256>"
         APIGW --> Client : 304 Not Modified
     end
 end
 
-Lambda -> S3++ : PutObject({uuid}/backup.ffce, body)
+Lambda -> S3++ : PutObject({uuid}, body\n[Metadata: etag=<plaintext-sha256>])
 S3 --> Lambda-- : success
 
 Lambda -> DevicesTable++ : UpdateItem — SET last_backup_date = now
 DevicesTable --> Lambda--
 
-Lambda --> APIGW-- : 200 OK\n{message, last_backup_date}
+Lambda --> APIGW-- : 200 OK\n[ETag: "<plaintext-sha256>"]\n{message, last_backup_date}
 APIGW --> Client-- : 200 OK
 
 @enduml
