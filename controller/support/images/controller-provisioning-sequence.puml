@@ -27,6 +27,7 @@ API -> AP-- : **Start SoftAP**\nWPA2 password = ""nibble-interleave(BSSID)""\nTX
 Target -> Target : **Boot — check for own config file**\nLittleFS: ""/controllers/{uuid}""
 Target -> Target : **Config missing — scan for SSID**\n"""FireFly-Provisioning""" (exact)
 Target -> Target : **Read BSSID from scan result**\ncompute password = ""nibble-interleave(BSSID)""
+Target -> Target : **Override WiFi station MAC**\nwith own Ethernet MAC address
 Target -> AP++ : **Connect using WPA2**\nwith computed password (10 s timeout)
 
 break MAC not in allowlist
@@ -38,47 +39,55 @@ end
 
 AP --> Target-- : Connected (DHCP 192.168.4.x)
 
-Target -> API++ : **Get nonce**\nGET /api/provisioning/nonce
+Target -> API++ : **Token Exchange**\nPOST /api/provisioning/token\n""{ "uuid": "...", "mac": "aa:bb:cc:dd:ee:ff" }""
 
 break Request is not from SoftAP
-    API --> Target: HTTP 403
+    API --> Target : HTTP 403
 end
 
 break Provisioning mode inactive
-    API --> Target: HTTP 409
+    API --> Target : HTTP 409
 end
 
-API --> Target-- : HTTP 200\n""{ "nonce": 3819273645 }""
+API -> API : **Validate UUID**\ncheck device record file exists
 
-Target -> API++ : **Get provisioning bundle**\nGET /api/provisioning/controller\n""mac-address: aa:bb:cc:dd:ee:ff"" (own WiFi MAC)\n""x-nonce: 3819273645""
-
-break Request is not from SoftAP
-    API --> Target: HTTP 403
-end
-
-break Provisioning mode inactive
-    API --> Target: HTTP 409
-end
-
-API -> API : **Validate nonce**\nunused, matches session
-
-break Nonce used or invalid
-    API --> Target: HTTP 401
-end
-
-API -> API : **Find controller record by ""mac-address""**
-
-break No controller with ""mac-address""
-    API --> Target: HTTP 404
+break UUID unknown
+    API --> Target : HTTP 404
     Target -> Target : **Continue unprovisioned**
 end
 
-API -> API : **Invalidate nonce**
-API --> Target-- : HTTP 200\n""{ "controllers": [...], "clients": [...] }""
+API --> Target-- : HTTP 200\n""{ "token": "..." }""
 
-Target -> Target : **Write each controller record**\nencrypted to LittleFS: ""/controllers/{uuid}""
-Target -> Target : **Write each client record**\nencrypted to LittleFS: ""/clients/{uuid}""
-Target -> Target : **Reboot into normal mode**
+Target -> Target : **Cleanup**\nDelete all existing records\nand any stored backup
+
+Target -> API++ : **GET /api/controllers**\n""provisioning-token: {token}""
+API --> Target-- : HTTP 200\n""{ "controllers": ["uuid1", ...] }""
+
+loop for each controller UUID
+    Target -> API++ : **GET /api/controllers/{uuid}**\n""provisioning-token: {token}""
+    API --> Target-- : HTTP 200\n""{controller record}""
+    Target -> Target : **Encrypt and write to LittleFS**\n""/controllers/{uuid}""
+end
+
+Target -> API++ : **GET /api/clients**\n""provisioning-token: {token}""
+API --> Target-- : HTTP 200\n""{ "clients": ["uuid1", ...] }""
+
+loop for each client UUID
+    Target -> API++ : **GET /api/clients/{uuid}**\n""provisioning-token: {token}""
+    API --> Target-- : HTTP 200\n""{client record}""
+    Target -> Target : **Encrypt and write to LittleFS**\n""/clients/{uuid}""
+end
+
+Target -> API++ : **GET /backup**\n""provisioning-token: {token}""
+API --> Target-- : HTTP 200 or 404
+
+Target -> Target : **Count verification**\ncompare files written vs UUID list counts
+
+alt All counts match (backup OK or absent)
+    Target -> Target : **Display result on OLED**\n5-second hold, then reboot into normal mode
+else Count mismatch or backup failure
+    Target -> Target : **Display failure on OLED**\nDo not reboot
+end
 
 User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""
 API --> User : HTTP 202

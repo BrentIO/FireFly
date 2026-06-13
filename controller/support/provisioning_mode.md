@@ -54,6 +54,8 @@ Controller Provisioning allows an unconfigured Controller to automatically recei
 
 ### Protocol
 
+[![Controller Provisioning Sequence Diagram](./images/controller-provisioning-sequence.svg)](./images/controller-provisioning-sequence.svg)
+
 #### Step 1 — Enable Provisioning Mode on Source
 
 Enable Provisioning Mode on the source Controller via the Configurator UI or by calling `PUT /api/provisioning`.  The source starts its SoftAP with SSID `FireFly-Provisioning` and a device-unique WPA2 password derived from its BSSID.
@@ -68,7 +70,7 @@ If no matching AP is found, the target continues booting without configuration a
 
 The target reads the BSSID from the scan result and computes the WPA2 password using the same nibble-interleave algorithm (see [SoftAP Password](#softap-password) below).
 
-:::important
+:::warning
 Before associating, the target overrides its WiFi station MAC address with its own **Ethernet MAC address**.  The source Controller's allowlist and all configuration records identify controllers by Ethernet MAC, so this ensures the target presents a consistent identity at every stage of the provisioning flow — WiFi association, the MAC allowlist check, and the token exchange request.  The MAC override is temporary and resets to the factory WiFi MAC on reboot.
 :::
 
@@ -86,7 +88,7 @@ If the UUID is unknown, the source returns HTTP 404 and the target continues unp
 
 #### Step 5 — Cleanup
 
-After receiving a valid token, the target deletes all existing controller records, client records, and any stored backup.  This ensures the device always ends up in a clean state matching the source.  **Cleanup only occurs after a successful token exchange** — a failed connection attempt will not wipe existing configuration.
+After receiving a valid token, the target deletes all existing records and any stored backup.  This ensures the device always ends up in a clean state matching the source.  **Cleanup only occurs after a successful token exchange** — a failed connection attempt will not wipe existing configuration.
 
 #### Step 6 — Individual Record Retrieval
 
@@ -96,7 +98,7 @@ Using the provisioning token in the `provisioning-token` header, the target call
 2. `GET /api/controllers/{uuid}` — retrieve and encrypt-store each controller record
 3. `GET /api/clients` — retrieve the list of client UUIDs
 4. `GET /api/clients/{uuid}` — retrieve and encrypt-store each client record
-5. `GET /backup` — retrieve the backup if one exists (404 is non-fatal)
+5. `GET /backup` — retrieve the backup if one exists (404 is non-fatal); this endpoint is shared across all device types
 
 Each response is encrypted and written to the target's file system immediately, so only one record is held in RAM at a time.
 
@@ -136,7 +138,6 @@ The password is 12 uppercase hex characters (satisfies the WPA2 8-character mini
 
 ## Security
 
-:::info Security model
 - **WPA2 (CCMP/AES)** encrypts all traffic between the Controller SoftAP and any connecting device, protecting credentials and configuration payloads in transit
 - **Per-device provisioning token** — an OAuth-style bearer token (UUID + MAC → token) scoped to a single device with a sliding expiry window; replaces single-use nonces with a session token that survives multiple requests
 - **SoftAP-only enforcement** — the `provisioning-token` header is rejected with HTTP 403 on the Ethernet interface, preventing a captured token from being replayed from a different network
@@ -145,7 +146,6 @@ The password is 12 uppercase hex characters (satisfies the WPA2 8-character mini
 - **Single-client SoftAP** prevents two devices from provisioning simultaneously
 - **Provisioning mode required** — endpoints return HTTP 409 if provisioning mode is not active, ensuring the source is never passively serving configuration
 - **Post-token-only cleanup** — the target wipes its existing config only after a valid token is received, protecting against accidental data loss from failed connection attempts
-:::
 
 :::warning
 The SoftAP password is derived from the BSSID, which is visible to any device performing a WiFi scan.  The algorithm is documented and embedded in the firmware.  Physical proximity is the primary barrier against unauthorized access during provisioning.  Provisioning sessions should be conducted in a controlled environment.
