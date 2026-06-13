@@ -49,7 +49,7 @@ break Provisioning mode inactive
     API --> Target : HTTP 409
 end
 
-API -> API : **Validate UUID**\ncheck controller record file exists
+API -> API : **Validate UUID**\ncheck device record file exists
 
 break UUID unknown
     API --> Target : HTTP 404
@@ -58,7 +58,7 @@ end
 
 API --> Target-- : HTTP 200\n""{ "token": "..." }""
 
-Target -> Target : **Cleanup**\nDelete all controller records,\nclient records, and any stored backup
+Target -> Target : **Cleanup**\nDelete all existing records\nand any stored backup
 
 Target -> API++ : **GET /api/controllers**\n""provisioning-token: {token}""
 API --> Target-- : HTTP 200\n""{ "controllers": ["uuid1", ...] }""

@@ -88,7 +88,7 @@ If the UUID is unknown, the source returns HTTP 404 and the target continues unp
 
 #### Step 5 — Cleanup
 
-After receiving a valid token, the target deletes all existing controller records, client records, and any stored backup.  This ensures the device always ends up in a clean state matching the source.  **Cleanup only occurs after a successful token exchange** — a failed connection attempt will not wipe existing configuration.
+After receiving a valid token, the target deletes all existing records and any stored backup.  This ensures the device always ends up in a clean state matching the source.  **Cleanup only occurs after a successful token exchange** — a failed connection attempt will not wipe existing configuration.
 
 #### Step 6 — Individual Record Retrieval
 
@@ -98,7 +98,7 @@ Using the provisioning token in the `provisioning-token` header, the target call
 2. `GET /api/controllers/{uuid}` — retrieve and encrypt-store each controller record
 3. `GET /api/clients` — retrieve the list of client UUIDs
 4. `GET /api/clients/{uuid}` — retrieve and encrypt-store each client record
-5. `GET /backup` — retrieve the backup if one exists (404 is non-fatal)
+5. `GET /backup` — retrieve the backup if one exists (404 is non-fatal); this endpoint is shared across all device types
 
 Each response is encrypted and written to the target's file system immediately, so only one record is held in RAM at a time.
 
