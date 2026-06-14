@@ -33,7 +33,7 @@ The following ESP32 Arduino core version is used with this solution. This versio
 <!-- CORE-TABLE-START -->
 | Core | Version |
 | ---- | ------- |
-| [esp32:esp32](https://github.com/espressif/arduino-esp32) | 3.3.8 |
+| [esp32:esp32](https://github.com/espressif/arduino-esp32) | 3.3.10 |
 <!-- CORE-TABLE-END -->
 
 ## Library Versions
@@ -44,14 +44,14 @@ The following library versions are used with this solution. This table is automa
 | ------- | ------- |
 | [Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library) | 1.12.6 |
 | [Adafruit_BusIO](https://github.com/adafruit/Adafruit_BusIO) | 1.17.4 |
-| [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306) | 2.5.16 |
+| [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306) | 2.5.17 |
 | [ArduinoJson](https://github.com/bblanchon/ArduinoJson) | v7.4.3 |
 | [ArduinoStreamUtils](https://github.com/bblanchon/ArduinoStreamUtils) | v1.9.2 |
 | [AsyncTCP](https://github.com/ESP32Async/AsyncTCP) | v3.4.10 |
 | [BrentIO_PCA95x5](https://github.com/BrentIO/PCA95x5) | 2023.10.2 |
 | [BrentIO_PCT2075](https://github.com/BrentIO/PCT2075) | 2023.10.3 |
-| [BrentIO_esp32FOTA](https://github.com/BrentIO/esp32FOTA) | 2026.05.01 |
-| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.0 |
+| [BrentIO_esp32OTA](https://github.com/BrentIO/esp32OTA) | 2026.06.01 |
+| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.1 |
 | [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2 |
 | [LinkedList](https://github.com/ivanseidel/LinkedList) | v1.3.3 |
 | [NTPClient](https://github.com/arduino-libraries/NTPClient) | 3.2.1 |
