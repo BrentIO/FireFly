@@ -67,10 +67,7 @@ end
 
 API --> Client-- : HTTP 200\n""{client}""
 
-Client -> API++ : **GET /backup**\n""provisioning-token: {token}""
-API --> Client-- : HTTP 200 or 404
-
-Client -> Client : **Store config and backup (if any) to LittleFS**
+Client -> Client : **Store config to LittleFS**
 Client -> Client : **Reboot into normal mode**
 
 User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""

@@ -6,7 +6,7 @@ The Controller must be within approximately 3–5 feet of the client during prov
 
 ## Overview
 
-The client scans for a WPA2 SoftAP named `FireFly-Provisioning` broadcast by the Controller. The WPA2 password is derived deterministically from the Controller's BSSID. Once connected, the client exchanges a token with the Controller, fetches its configuration and backup, then reboots into normal operating mode.
+The client scans for a WPA2 SoftAP named `FireFly-Provisioning` broadcast by the Controller. The WPA2 password is derived deterministically from the Controller's BSSID. Once connected, the client exchanges a token with the Controller, fetches its configuration, then reboots into normal operating mode.
 
 The client scans for the SoftAP every 10 seconds until provisioning succeeds.
 
@@ -32,7 +32,7 @@ For each index `i` (0–5):
 
 ## Provisioning Sequence
 
-Once connected to the SoftAP (Controller IP `192.168.4.1`), the client makes three HTTP requests:
+Once connected to the SoftAP (Controller IP `192.168.4.1`), the client makes two HTTP requests:
 
 ### 1. Token exchange
 
@@ -65,16 +65,6 @@ On success (`200 OK`), the response is a JSON object saved to `/config.json` on 
 | `ota.url` | OTA firmware update endpoint URL |
 | `hids` | Input channel mappings |
 
-### 3. Fetch backup
+### 3. Reboot
 
-```
-GET http://192.168.4.1/backup
-Headers:
-  provisioning-token: <token from step 1>
-```
-
-If a backup exists (`200 OK`), it is saved to the client's file system. A `404` response is non-fatal — the client proceeds without a backup.
-
-### 4. Reboot
-
-After saving configuration and any backup, the client disconnects from the SoftAP and reboots into normal operating mode.
+After saving configuration, the client disconnects from the SoftAP and reboots into normal operating mode.

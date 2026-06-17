@@ -44,13 +44,9 @@ The Client calls `GET /api/clients/{uuid}` with the provisioning token in the `p
 
 The `provisioning-token` header is only accepted via the SoftAP interface; it is rejected with HTTP 403 on the Ethernet interface.
 
-#### Step 5 — Backup Retrieval
+#### Step 5 — Client Stores Config and Reboots
 
-The Client calls `GET /backup` with the provisioning token in the `provisioning-token` header.  If a backup exists, it is saved to the client's file system.  A 404 response is non-fatal and the Client proceeds without a backup.
-
-#### Step 6 — Client Stores Config and Reboots
-
-The Client stores the received configuration and any backup to persistent storage and reboots into normal operating mode (connect to WiFi → connect to MQTT → normal operation).
+The Client stores the received configuration to persistent storage and reboots into normal operating mode (connect to WiFi → connect to MQTT → normal operation).
 
 
 ## Controller Provisioning
