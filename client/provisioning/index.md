@@ -6,7 +6,7 @@ The Controller must be within approximately 3–5 feet of the client during prov
 
 ## Overview
 
-The client scans for a WPA2 SoftAP named `FireFly-Provisioning` broadcast by the Controller. The WPA2 password is derived deterministically from the Controller's BSSID. Once connected, the client fetches its configuration via three HTTP calls to the Controller and reboots into normal operating mode.
+The client scans for a WPA2 SoftAP named `FireFly-Provisioning` broadcast by the Controller. The WPA2 password is derived deterministically from the Controller's BSSID. Once connected, the client exchanges a token with the Controller, fetches its configuration, then reboots into normal operating mode.
 
 The client scans for the SoftAP every 10 seconds until provisioning succeeds.
 
@@ -32,23 +32,23 @@ For each index `i` (0–5):
 
 ## Provisioning Sequence
 
-Once connected to the SoftAP (Controller IP `192.168.4.1`), the client makes three HTTP requests:
+Once connected to the SoftAP (Controller IP `192.168.4.1`), the client makes two HTTP requests:
 
-### 1. Fetch nonce
+### 1. Token exchange
 
 ```
-GET http://192.168.4.1/api/provisioning/nonce
+POST http://192.168.4.1/api/provisioning/token
+Body: {"uuid": "<device UUID>", "mac_address": "<device MAC>"}
 ```
 
-No authentication required. Returns a plain-text nonce string used to authenticate the next request.
+Returns a short-lived bearer token bound to the device's MAC address. The token is used to authenticate all subsequent provisioning requests via the `provisioning-token` header. Only accepted over the SoftAP interface (HTTP 403 on Ethernet). If the UUID is unknown, the Controller returns HTTP 404 and the client retries on the next scan cycle.
 
 ### 2. Fetch configuration
 
 ```
-GET http://192.168.4.1/api/provisioning/client
+GET http://192.168.4.1/api/clients/{uuid}
 Headers:
-  mac-address: <device MAC>
-  x-nonce:     <nonce from step 1>
+  provisioning-token: <token from step 1>
 ```
 
 On success (`200 OK`), the response is a JSON object saved to `/config.json` on the `config` partition. The configuration includes:
@@ -65,16 +65,6 @@ On success (`200 OK`), the response is a JSON object saved to `/config.json` on 
 | `ota.url` | OTA firmware update endpoint URL |
 | `hids` | Input channel mappings |
 
-### 3. Fetch CA certificate (optional)
+### 3. Reboot
 
-```
-GET http://192.168.4.1/api/provisioning/certs
-Headers:
-  mac-address: <device MAC>
-```
-
-If the response is `200 OK`, the returned JSON contains `fingerprint` and `pem` fields. The CA certificate is kept only in firmware and is not stored to the `config` partition. If the endpoint returns any other status, the step is skipped and the device proceeds without a CA certificate.
-
-### 4. Reboot
-
-After saving configuration (and optionally the CA certificate), the client disconnects from the SoftAP and reboots into normal operating mode.
+After saving configuration, the client disconnects from the SoftAP and reboots into normal operating mode.

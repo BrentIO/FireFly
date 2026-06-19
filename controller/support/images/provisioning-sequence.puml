@@ -39,33 +39,32 @@ end
 
 AP --> Client-- : Connected (DHCP 192.168.4.x)
 
-Client -> API++ : **Get nonce**\nGET /api/provisioning/nonce
+Client -> API++ : **Token Exchange**\nPOST /api/provisioning/token\n""{ "uuid": "...", "mac_address": "aa:bb:cc:dd:ee:ff" }""
 
 break Request is not from SoftAP
     API --> Client: HTTP 403
 end
 
-API --> Client-- : HTTP 200\n""{ "nonce": 3819273645 }""
+API -> API : **Validate UUID**\ncheck client record exists
 
-Client -> API++ : **Get client payload from its MAC Address**\nGET /api/provisioning/client\n""mac-address: aa:bb:cc:dd:ee:ff""\n""x-nonce: 3819273645"""
-
-break Request is not from SoftAP
-    API --> Client: HTTP 403
-end
-
-API -> API : **Validate nonce**\nunused, matches session
-
-break Nonce used or invalid
-    API --> Client: HTTP 401
-end
-
-API -> API : **Find client record by ""mac-address""**
-
-break No client with ""mac-address""
+break UUID unknown
     API --> Client: HTTP 404
 end
 
-API -> API : **Invalidate nonce**
+API --> Client-- : HTTP 200\n""{ "token": "..." }""
+
+Client -> API++ : **Get client configuration**\nGET /api/clients/{uuid}\n""provisioning-token: {token}""
+
+break Request is not from SoftAP
+    API --> Client: HTTP 403
+end
+
+API -> API : **Validate token**
+
+break Token invalid or expired
+    API --> Client: HTTP 401
+end
+
 API --> Client-- : HTTP 200\n""{client}""
 
 Client -> Client : **Store config to LittleFS**

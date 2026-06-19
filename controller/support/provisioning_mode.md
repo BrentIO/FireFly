@@ -30,17 +30,23 @@ The Client firmware scans for the exact SSID `FireFly-Provisioning`, reads the B
 
 If the connecting device's MAC address is not in the allowlist, Provisioning Mode is shut down automatically and a warning is shown on the OLED display.
 
-#### Step 3 — Nonce Exchange
+#### Step 3 — Token Exchange
 
-The Client calls `GET /api/provisioning/nonce` (no authentication required) to obtain a single-use session nonce.
+The Client POSTs its UUID and MAC address to `POST /api/provisioning/token`.  The Controller validates that a client record exists for the UUID.  On success, it returns a short-lived per-device bearer token bound to the submitted MAC address.
+
+The token has a sliding expiry window (5 minutes in production, 30 minutes in debug builds).  Only one token is active per MAC address at a time; a new POST invalidates any previous token for that MAC.
+
+If the UUID is unknown, the Controller returns HTTP 404 and the Client retries on the next scan cycle.
 
 #### Step 4 — Configuration Retrieval
 
-The Client calls `GET /api/provisioning/client` with its MAC address in the `mac-address` header and the nonce in the `x-nonce` header.  The Controller validates the nonce, locates the matching client record, invalidates the nonce, and returns the full client configuration JSON.
+The Client calls `GET /api/clients/{uuid}` with the provisioning token in the `provisioning-token` header.  The Controller validates the token and returns the full client configuration JSON.
+
+The `provisioning-token` header is only accepted via the SoftAP interface; it is rejected with HTTP 403 on the Ethernet interface.
 
 #### Step 5 — Client Stores Config and Reboots
 
-The Client stores the received configuration to persistent storage (EEPROM or LittleFS) and reboots into normal operating mode (connect to WiFi → connect to MQTT → normal operation).
+The Client stores the received configuration to persistent storage and reboots into normal operating mode (connect to WiFi → connect to MQTT → normal operation).
 
 
 ## Controller Provisioning
