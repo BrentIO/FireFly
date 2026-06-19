@@ -24,6 +24,20 @@ When the web server payload specifies both an application and LittleFS update, t
 
 See the [func-api-ota-get](/cloud/lambdas/func-api-ota-get) Lambda documentation for the response payload format and the [FireFly Cloud OTA Update Flow](/cloud/ota_update_flow) for server-side behavior, response codes, and version sequencing details.
 
+## OTA Check Error Conditions
+
+When a firmware check fails, the controller fires a Home Assistant persistent notification. Notifications use a stable `notification_id` keyed to the device UUID, so repeated failures update the existing notification rather than creating new ones. Error notifications are only fired for `checkForUpdate()` failures, not `execOTA()` errors.
+
+| Error | Cause | Home Assistant notification |
+|-------|-------|----------------------------|
+| Network failure | Could not connect to OTA server | "Could not reach the OTA server. Please verify network connectivity." |
+| `404 Not Found` | No released firmware exists for this device | "No firmware was found for this device. The OTA URL may be incorrect." |
+| `409 Conflict` | Device's current firmware version has been revoked and no newer version is available — manual intervention required | "This device is running a revoked firmware version and cannot update automatically. Manual intervention is required." |
+| `500 Internal Server Error` | OTA server internal error | "The OTA server returned an error. This is likely transient; the device will retry." |
+| JSON parse error | Server returned an unparseable response | "The firmware manifest could not be parsed. The server may have returned an unexpected response." |
+| Application not found in manifest | OTA URL may target the wrong endpoint | "This device was not found in the firmware manifest. The OTA URL may be incorrect." |
+| OTA misconfigured | Current version or application name not set on device | "OTA is not properly configured on this device." |
+
 ## Forced OTA Updates
 OTA updates can also be forced, which is helpful for ensuring a specific version of the firmware or LittleFS are downloaded.
 
