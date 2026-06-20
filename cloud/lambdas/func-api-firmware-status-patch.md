@@ -16,7 +16,7 @@ Any other transition returns `422 Unprocessable Entity`, including the current s
 
 Status transitions have S3 side effects that are performed **before** DynamoDB is updated. If an S3 operation fails, the DynamoDB record is not updated and the transition is aborted.
 
-**`TESTING` → `RELEASED`:** The firmware ZIP is downloaded from the private bucket (`processed/{zip_name}`), extracted, and each file (excluding `config.bin` and `manifest.json`) is uploaded to the public bucket at `{class}/{product_hex}/{application}/{version}/{filename}`. These files are then accessible via the CloudFront distribution.
+**`TESTING` → `RELEASED`:** The firmware ZIP is downloaded from the private bucket (`processed/{zip_name}`), extracted, and each file (excluding `config.bin` and `manifest.json`) is SHA256-verified against the manifest record stored in DynamoDB before upload. A mismatch aborts the transition and returns `500 Internal Server Error`. Verified files are uploaded to the public bucket at `{class}/{product_hex}/{application}/{version}/{filename}` and are then accessible via the CloudFront distribution.
 
 **`RELEASED` → `REVOKED`:** All objects under `{class}/{product_hex}/{application}/{version}/` in the public bucket are moved to `revoked/{class}/{product_hex}/{application}/{version}/`. A bucket policy `Deny` on the `revoked/` prefix makes these files immediately inaccessible. See [Firmware Lifecycle](/cloud/firmware_lifecycle) for retention details.
 
