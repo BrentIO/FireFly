@@ -29,18 +29,23 @@ else TESTING → RELEASED (publishes firmware binaries)
     DynamoDB --> Lambda-- : item\n{pk, version, release_status: "TESTING", ...}
     Lambda -> S3Private++ : GetObject\nprocessed/{zip_name}
     S3Private --> Lambda-- : ZIP contents
-    Lambda -> Lambda : extract files\n(exclude config.bin, manifest.json)
-    Lambda -> S3Public++ : PutObject\n{class}/{product_hex}/{version}/{filename}\n(one per binary file)
-    S3Public --> Lambda-- : success
-    Lambda -> DynamoDB++ : UpdateItem\nKey: {pk, version}\nSET release_status = "RELEASED"
-    DynamoDB --> Lambda-- : success
-    Lambda --> APIGW-- : 200 OK\n{updated firmware record}
-    APIGW --> Client-- : 200 OK\n{updated firmware record}
+    Lambda -> Lambda : extract files (exclude config.bin, manifest.json)\ncompute SHA256 for each file\ncompare against manifest record in DynamoDB
+    alt SHA256 mismatch or file missing from manifest
+        Lambda --> APIGW-- : 500 Internal Server Error
+        APIGW --> Client-- : 500 Internal Server Error
+    else all SHA256s verified
+        Lambda -> S3Public++ : PutObject\n{class}/{product_hex}/{application}/{version}/{filename}\n(one per binary file)
+        S3Public --> Lambda-- : success
+        Lambda -> DynamoDB++ : UpdateItem\nKey: {pk, version}\nSET release_status = "RELEASED"
+        DynamoDB --> Lambda-- : success
+        Lambda --> APIGW-- : 200 OK\n{updated firmware record}
+        APIGW --> Client-- : 200 OK\n{updated firmware record}
+    end
 else RELEASED → REVOKED (moves binaries to revoked/ prefix)
     DynamoDB --> Lambda-- : item\n{release_status: "RELEASED", ...}
-    Lambda -> S3Public++ : ListObjectsV2\n{class}/{product_hex}/{version}/
+    Lambda -> S3Public++ : ListObjectsV2\n{class}/{product_hex}/{application}/{version}/
     S3Public --> Lambda-- : object list
-    Lambda -> S3Public++ : CopyObject + DeleteObject\nfor each binary file\n→ revoked/{class}/{product_hex}/{version}/
+    Lambda -> S3Public++ : CopyObject + DeleteObject\nfor each binary file\n→ revoked/{class}/{product_hex}/{application}/{version}/
     S3Public --> Lambda-- : success
     Lambda -> DynamoDB++ : UpdateItem\nSET release_status = "REVOKED", ttl = now + 10 days
     DynamoDB --> Lambda-- : success

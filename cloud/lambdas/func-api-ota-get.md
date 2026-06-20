@@ -12,7 +12,7 @@ See the [OTA Update Flow](/cloud/ota_update_flow) for full scenario documentatio
 
 ## Invocation
 
-Invoked by **API Gateway** on an HTTP `GET /ota/{class}/{product_hex}` request.
+Invoked by **API Gateway** on an HTTP `GET /ota/{class}/{product_hex}/{application}` request.
 
 ## Sequence Diagram
 
@@ -22,7 +22,7 @@ Invoked by **API Gateway** on an HTTP `GET /ota/{class}/{product_hex}` request.
 
 | Method | Path | Description |
 |---|---|---|
-| `GET` | `/ota/{class}/{product_hex}?current_version={version}` | Returns the OTA manifest for the next released firmware version |
+| `GET` | `/ota/{class}/{product_hex}/{application}?current_version={version}` | Returns the OTA manifest for the next released firmware version |
 
 See the [API Reference](/cloud/api_reference) for full schema documentation.
 
@@ -41,8 +41,8 @@ The response is a manifest compatible with the [BrentIO/esp32FOTA](https://githu
 {
     "type": "FireFly Controller",
     "version": "2026.03.001",
-    "app": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/Controller.ino.bin",
-    "ui": "https://firmware.somewhere.com/controller/0x32322505/2026.03.001/ui.bin"
+    "app": "https://firmware.somewhere.com/controller/0x32322505/controller/2026.03.001/Controller.ino.bin",
+    "ui": "https://firmware.somewhere.com/controller/0x32322505/controller/2026.03.001/ui.bin"
 }
 ```
 
