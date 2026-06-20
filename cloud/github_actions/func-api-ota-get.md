@@ -2,7 +2,7 @@
 
 ## Overview
 
-Manages the Lambda function that serves OTA firmware update checks for devices via `GET /ota/{class}/{product_hex}?current_version={version}`. Returns the next sequential `RELEASED` version after the device's current version, not necessarily the latest. Responds `409 Conflict` when the device is running a `REVOKED` version with no newer release available.
+Manages the Lambda function that serves OTA firmware update checks for devices via `GET /ota/{class}/{product_hex}/{application}?current_version={version}`. Returns the next sequential `RELEASED` version after the device's current version, not necessarily the latest. Responds `409 Conflict` when the device is running a `REVOKED` version with no newer release available.
 
 The `firmware_type` field is embedded in `manifest.json` at CI build time and stored in DynamoDB by the upload Lambda. This function returns it verbatim — no server-side mapping is required.
 

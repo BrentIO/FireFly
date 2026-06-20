@@ -1,7 +1,7 @@
 @startuml
 !include ../../../images/common-sequence.iuml
 
-title GET /ota/{class}/{product_hex}
+title GET /ota/{class}/{product_hex}/{application}
 
 actor Controller
 
@@ -12,14 +12,14 @@ box "AWS" $AWS
     collections "CloudFront" as CF
 end box
 
-Controller -> APIGW++ : GET /ota/{class}/{product_hex}\n?current_version={version}
+Controller -> APIGW++ : GET /ota/{class}/{product_hex}/{application}\n?current_version={version}
 APIGW -> Lambda++ : invoke
 
 alt missing current_version param
     Lambda --> APIGW-- : 400 Bad Request
     APIGW --> Controller-- : 400 Bad Request
 else current_version provided
-    Lambda -> DynamoDB++ : Query pk = {class}#{product_hex}\nfilter release_status = RELEASED
+    Lambda -> DynamoDB++ : Query pk = {class}#{product_hex}#{application}\nfilter release_status = RELEASED
     alt no released firmware found
         DynamoDB --> Lambda-- : (no items)
         Lambda --> APIGW-- : 404 Not Found
@@ -33,7 +33,7 @@ else current_version provided
         Lambda -> Lambda : find oldest RELEASED with version > current_version\nbuild CloudFront URLs from main_binary + www.bin
         Lambda --> APIGW-- : 200 OK\n{"type": "...", "version": "{next}", "url": "...", "littlefs": "..."}
         APIGW --> Controller-- : 200 OK\n{OTA manifest — next version}
-        Controller -> CF++ : GET /{class}/{product_hex}/{version}/{binary}
+        Controller -> CF++ : GET /{class}/{product_hex}/{application}/{version}/{binary}
         CF --> Controller-- : firmware binary
     else already on latest released version
         DynamoDB --> Lambda-- : items (current_version found in RELEASED,\nno newer version exists)
