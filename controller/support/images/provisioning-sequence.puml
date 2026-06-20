@@ -68,6 +68,17 @@ end
 API --> Client-- : HTTP 200\n""{client}""
 
 Client -> Client : **Store config to LittleFS**
+
+Client -> API++ : **Get client CA certificate**\nGET /api/provisioning/certs/client\n""provisioning-token: {token}""
+
+alt No client CA certificate designated
+    API --> Client-- : HTTP 404
+    Client -> Client : **Continue without TLS**
+else success
+    API --> Client-- : HTTP 200\n""{ fingerprint, pem }""
+    Client -> Client : **Save /ca.pem + /ca_fp.txt**
+end
+
 Client -> Client : **Reboot into normal mode**
 
 User -> API++ : **Disable Provisioning Mode**\nDELETE /api/provisioning\n""{visual-token}""

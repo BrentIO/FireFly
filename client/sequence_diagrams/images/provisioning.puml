@@ -6,7 +6,7 @@ title Client Device — Provisioning Flow
 participant "Client\nFirmware" as Client
 participant "Controller\nSoftAP" as AP
 participant "Controller\nHTTP API" as API
-participant "EEPROM" as EE
+participant "LittleFS" as FS
 
 Client -> Client : boot with no stored config
 Client -> Client : scan WiFi for SSID\n"FireFly-Provisioning" (exact match)
@@ -17,24 +17,45 @@ Client -> Client : set TX power to minimum\n(0 dBm / 1 mW)
 Client -> AP++ : connect WPA2 using derived password
 AP --> Client-- : connected (192.168.4.x via DHCP)
 
-Client -> API++ : GET /api/provisioning/nonce
-API --> Client-- : 200 { "nonce": 3819273645 }
+Client -> API++ : **Token Exchange**\nPOST /api/provisioning/token\n""{ "uuid": "...", "mac_address": "aa:bb:cc:dd:ee:ff" }""
 
-Client -> API++ : GET /api/provisioning/client\nmac-address: {own MAC}\nx-nonce: 3819273645
-
-alt MAC not registered on Controller
-    API --> Client-- : 404 Not Found
-    Client -> Client : retry or enter error state
-else nonce invalid or already used
-    API --> Client-- : 401 Unauthorized
-    Client -> Client : retry or enter error state
-else success
-    API --> Client-- : 200 { name, mac, wifi, mqtt, hid config, uuid, ... }
-    Client -> EE++ : store WiFi SSID + password
-    Client -> EE : store MQTT host + port + credentials
-    Client -> EE : store HID (button) configuration
-    Client -> EE-- : store UUID
-    Client -> Client : reboot into normal mode
+break Request is not from SoftAP
+    API --> Client : HTTP 403
 end
+
+break Provisioning mode inactive
+    API --> Client : HTTP 409
+end
+
+API -> API : Validate UUID\ncheck client record exists
+
+break UUID unknown
+    API --> Client : HTTP 404
+end
+
+API --> Client-- : HTTP 200\n""{ "token": "..." }""
+
+Client -> API++ : **Get client configuration**\nGET /api/clients/{uuid}\n""provisioning-token: {token}""
+
+break Token invalid or expired
+    API --> Client: HTTP 401
+end
+
+API --> Client-- : HTTP 200\n""{client config}""
+
+Client -> FS : store config to /config.json
+
+Client -> API++ : **Get client CA certificate**\nGET /api/provisioning/certs/client\n""provisioning-token: {token}""
+
+alt No client CA certificate designated
+    API --> Client-- : HTTP 404
+    Client -> Client : continue without TLS
+else success
+    API --> Client-- : HTTP 200\n""{ fingerprint, pem }""
+    Client -> FS : save /ca.pem + /ca_fp.txt
+end
+
+Client -> Client : disconnect from SoftAP
+Client -> Client : reboot into normal mode
 
 @enduml
