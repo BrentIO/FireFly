@@ -98,12 +98,9 @@ Example state payload for `Update available`:
 ```json
 {
     "installed_version": "2024.8.2",
-    "latest_version":"2024.12.1",
-    "title":"App Release 2024.12.1",
-    "release_summary":"We added awesome new features!",
+    "latest_version": "2024.12.1",
     "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1",
-    "in_progress": false,
-    "update_percentage": 0
+    "in_progress": false
 }
 ```
 
@@ -111,16 +108,27 @@ Example state payload for `Up-to-date`:
 ```json
 {
     "installed_version": "2024.8.2",
-    "latest_version":"2024.8.2",
-    "title":"App Release 2024.8.2",
-    "release_summary":"An early version that was still awesome!",
-    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.8.2",
-    "in_progress": false,
-    "update_percentage": 0
+    "latest_version": "2024.8.2",
+    "in_progress": false
 }
 ```
 
-When the device is updating, the `in_progress` will be set to `true` and the `update_percentage` will be updated with the current progress, which will be reflected in Home Assistant UI.
+When the device is updating, `in_progress` is set to `true` and `update_percentage` is published on each integer-percent change, reflecting live download progress in the Home Assistant UI.
+
+Example state payload for `Update in progress`:
+```json
+{
+    "installed_version": "2024.8.2",
+    "latest_version": "2024.12.1",
+    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1",
+    "in_progress": true,
+    "update_percentage": 42
+}
+```
+
+::: info Forced OTA and `latest_version`
+For forced OTA installs, the controller appends `" (Forced)"` to `latest_version` in all in-progress state publishes (e.g., `"2024.8.2 (Forced)"`). This ensures Home Assistant detects a version difference and renders the install progress bar even when the installed and target versions are identical.
+:::
 
 To perform the update:
 ```text
