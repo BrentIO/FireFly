@@ -9,7 +9,7 @@ Abbreviations that can be found in the event log or error display are documented
 | Backup decrypt fail | A cloud configuration backup could not be decrypted during restore; this typically means the backup is corrupted or was created on a different device whose eFuse master key does not match |
 | Backup enc fail | Configuration backup encryption failed |
 | Backup upload start | A configuration backup upload has begun |
-| Backup uploaded | Configuration backup was uploaded successfully |
+| Backup uploaded OK | Configuration backup was uploaded successfully |
 | Client decrypt fail | A client configuration file on ConfigFS could not be decrypted; this typically means the file is corrupted or the eFuse master key does not match. The affected client will be skipped during provisioning scans |
 | Config decrypt fail | A controller configuration file on ConfigFS could not be decrypted; this typically means the file is corrupted, was written by a different device, or the eFuse master key does not match. The affected function (I/O setup, MQTT, OTA, etc.) will not be configured |
 | configFS mount fail | The `config` LittleFS partition could not be mounted; configuration reads and writes will fail |
