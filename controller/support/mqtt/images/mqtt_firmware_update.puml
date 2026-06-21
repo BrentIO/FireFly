@@ -44,4 +44,11 @@ else Unavailable or non-200 Response
     ha -> ha : **Set Firmware Update Entity**\n""Unavailable""
 end
 
+== Install ==
+
+ha -> mqtt : **Publish install command**\nFireFly/{UUID}/update/set\n""do-update""
+mqtt -> ctl : **Publish install command**\nFireFly/{UUID}/update/set\n""do-update""
+ctl -> cloud : **Download firmware**\nGET /ota/controller/{product_hex}
+ctl -> ctl : **Apply OTA update and restart**
+
 @enduml
