@@ -6,7 +6,7 @@ OTA update will always go to the _next_ firmware release, not the latest.  This 
 
 FireFly Controller supports OTA updates for both the firmware and LittleFS (`ui` partition).  Data stored on the `config` partition is never updatable over OTA.
 
-While the device is performing any type of OTA update, the [OLED display](/controller/support/OLED_screens/#ota-update) will indicate the percentage complete.  Additionally, events will be written to the [Event Log](/controller/support/event_and_error_logs).
+While the device is performing any type of OTA update, the [OLED display](/controller/support/OLED_screens/#ota-update) will indicate the percentage complete.  Additionally, events will be written to the [Event Log](/controller/support/event_and_error_logs) and live download progress is published to the [MQTT update state topic](/controller/support/mqtt/auto_discovery#update).
 
 By default, updates are checked once every 86,400 seconds (daily) at approximately the time the device was originally booted, although the frequency can be overridden with the `FIRMWARE_CHECK_SECONDS` parameter if you compile the code yourself.
 
@@ -42,3 +42,5 @@ When a firmware check fails, the controller fires a Home Assistant persistent no
 OTA updates can also be forced, which is helpful for ensuring a specific version of the firmware or LittleFS are downloaded.
 
 Forced OTA updates use the same certificate selection logic as the OTA Update Service: uploaded certs if present, otherwise the built-in Mozilla bundle.  No certificate field is required in the request payload.
+
+During a forced OTA install, live progress is published to the MQTT update state topic with `in_progress: true` and `update_percentage` on each integer-percent change.  The `latest_version` field in those publishes carries a `" (Forced)"` suffix (e.g., `"2026.06.21 (Forced)"`) so Home Assistant renders the install progress bar even when the installed and target versions are identical.  See the [MQTT auto-discovery documentation](/controller/support/mqtt/auto_discovery#update) for payload examples.
