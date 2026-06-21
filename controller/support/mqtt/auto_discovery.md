@@ -94,40 +94,10 @@ Example state topic:
 FireFly/673be2c4-87cc-41e1-bb4e-96367161b02f/update/state
 ```
 
-Example state payload for `Update available`:
-```json
-{
-    "installed_version": "2024.8.2",
-    "latest_version": "2024.12.1",
-    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1",
-    "in_progress": false
-}
-```
-
-Example state payload for `Up-to-date`:
-```json
-{
-    "installed_version": "2024.8.2",
-    "latest_version": "2024.8.2",
-    "in_progress": false
-}
-```
-
-When the device is updating, `in_progress` is set to `true` and `update_percentage` is published on each integer-percent change, reflecting live download progress in the Home Assistant UI.
-
-Example state payload for `Update in progress`:
-```json
-{
-    "installed_version": "2024.8.2",
-    "latest_version": "2024.12.1",
-    "release_url": "https://github.com/BrentIO/FireFly-Controller/releases/tag/2024.12.1",
-    "in_progress": true,
-    "update_percentage": 42
-}
-```
+When the device is updating, `in_progress` is set to `true`, `update_percentage` is published on each integer-percent change, and `title` identifies the partition currently being flashed (e.g., `"Flashing UI"`, `"Flashing Firmware"`). For complete payload schemas and examples, see the [AsyncAPI specification](/controller/software/controller/api_reference).
 
 ::: info Forced OTA and `latest_version`
-For forced OTA installs, the controller appends `" (Forced)"` to `latest_version` in all in-progress state publishes (e.g., `"2024.8.2 (Forced)"`). This ensures Home Assistant detects a version difference and renders the install progress bar even when the installed and target versions are identical.
+For forced OTA installs, the controller appends `" (Forced)"` to `latest_version` in all in-progress state publishes (e.g., `"2026.06.21 (Forced)"`). This ensures Home Assistant detects a version difference and renders the install progress bar even when the installed and target versions are identical.
 :::
 
 To perform the update:
