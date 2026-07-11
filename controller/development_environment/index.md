@@ -51,7 +51,7 @@ The following library versions are used with this solution. This table is automa
 | [BrentIO_PCA95x5](https://github.com/BrentIO/PCA95x5) | 2023.10.2 |
 | [BrentIO_PCT2075](https://github.com/BrentIO/PCT2075) | 2023.10.3 |
 | [BrentIO_esp32OTA](https://github.com/BrentIO/esp32OTA) | 2026.06.02 |
-| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.1 |
+| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.2 |
 | [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2 |
 | [LinkedList](https://github.com/ivanseidel/LinkedList) | v1.3.3 |
 | [NTPClient](https://github.com/arduino-libraries/NTPClient) | 3.2.1 |
