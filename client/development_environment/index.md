@@ -47,7 +47,7 @@ The following library versions are used with this solution. This table is automa
 | ------- | ------- |
 | [ArduinoJson](https://github.com/bblanchon/ArduinoJson) | v7.4.3 |
 | [ESPAsyncTCP](https://github.com/ESP32Async/ESPAsyncTCP) | v2.0.0 |
-| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.0 |
+| [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) | v3.11.2 |
 | [TBPubSubClient](https://github.com/thingsboard/pubsubclient) | v2.12.1 |
 <!-- LIBRARY-TABLE-END -->
 
