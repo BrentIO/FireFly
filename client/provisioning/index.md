@@ -68,3 +68,7 @@ On success (`200 OK`), the response is a JSON object saved to `/config.json` on 
 ### 3. Reboot
 
 After saving configuration, the client disconnects from the SoftAP and reboots into normal operating mode.
+
+## Re-Entering Provisioning Mode Remotely
+
+Wall-mounted units have no accessible physical reset button. For a unit that's already online, [Remote Factory Reset](/client/support/factory_reset) provides an MQTT-triggered alternative that returns the client to the same unprovisioned/SoftAP-discovery state described above, without requiring physical access to the unit.
