@@ -334,6 +334,10 @@ export default defineConfig({
                     link: '/client/support/ota_updates'
                   },
                   {
+                    text: 'Remote Factory Reset',
+                    link: '/client/support/factory_reset'
+                  },
+                  {
                     text: 'Migrating from v1.14',
                     link: '/client/support/migration_v114'
                   },
