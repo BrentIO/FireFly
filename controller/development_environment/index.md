@@ -55,7 +55,7 @@ The following library versions are used with this solution. This table is automa
 | [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2 |
 | [LinkedList](https://github.com/ivanseidel/LinkedList) | v1.3.3 |
 | [NTPClient](https://github.com/arduino-libraries/NTPClient) | 3.2.1 |
-| [PCA9685_RT](https://github.com/RobTillaart/PCA9685_RT) | 0.7.3 |
+| [PCA9685_RT](https://github.com/RobTillaart/PCA9685_RT) | 0.7.4 |
 | [Regexp](https://github.com/nickgammon/Regexp) | 0.1.1 |
 | [TBPubSubClient](https://github.com/thingsboard/pubsubclient) | v2.12.1 |
 <!-- LIBRARY-TABLE-END -->
